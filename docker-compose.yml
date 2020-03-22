@@ -1,0 +1,40 @@
+---
+version: "3"
+services:
+  app:
+    image: "node:13"
+    volumes:
+      - "node_modules:/app/node_modules"
+      - ".:/app"
+      - "${APP_DEMO_DIR}:/srv/app"
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    environment:
+      STEAM_API_KEY: "${STEAM_API_KEY}"
+    command: npx nodemon
+#   test:
+#     image: "node:13"
+#     volumes:
+#       - ".:/app"
+#     working_dir: /app
+#     command: npm test
+#   main:
+#     restart: on-failure
+#     image: "golang:1.13"
+#     volumes:
+#       - "go-pkg-mod:/go/pkg/mod"
+#       - ".:/app"
+#       - "${APP_DEMO_DIR}:/srv/app"
+#     ports:
+#       - "4000:4000"
+#     working_dir: /app
+#     environment:
+#       GODEBUG: "${GODEBUG}"
+#     command: go run github.com/pilu/fresh
+# volumes:
+#   go-pkg-mod:
+#     driver: local
+volumes:
+  node_modules:
+    driver: local
