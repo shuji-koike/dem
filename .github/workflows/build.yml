@@ -1,0 +1,43 @@
+name: build
+on:
+  push:
+    branches:
+      - master
+      - release/*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "13"
+      - uses: actions/cache@v1
+        id: cache_node_modules
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('package-lock.json') }}
+      - run: npm install
+        if: steps.cache_node_modules.outputs.cache-hit != 'true'
+      - run: npx prettier -c .
+      - run: npx eslint . --ext js --ext ts --ext tsx
+      - run: npm run build
+  build_go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
+        with:
+          go-version: "1.14"
+      - uses: actions/cache@v1
+        id: cache_go_mod
+        with:
+          path: ~/go/pkg/mod
+          key: go_mod-${{ hashFiles('go.sum') }}
+      - run: go get -u
+        if: steps.cache_go_mod.outputs.cache-hit != 'true'
+      - run: go build -o ./static/main .
+      - run: go build -o ./static/main.wasm .
+        env:
+          GOOS: js
+          GOARCH: wasm

@@ -1,0 +1,5 @@
+.*
+/dist
+/static
+/var
+__debug_bin

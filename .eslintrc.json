@@ -1,0 +1,56 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/eslint-recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint", "import"],
+  "settings": {
+    "react": {
+      "version": "16.13"
+    }
+  },
+  "ignorePatterns": ["dist", "static"],
+  "rules": {
+    "no-console": [
+      "error",
+      {
+        "allow": ["error", "warn", "info", "debug"]
+      }
+    ],
+    "react/prop-types": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "never",
+        "alphabetize": { "order": "asc", "caseInsensitive": false },
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "unknown",
+          "parent",
+          "sibling",
+          "index"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+html,
+body,
+body > article {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  color: #eee;
+  background-color: #111;
+  font-family: sans-serif;
+}
+body > article > main {
+  position: relative;
+  box-sizing: border-box;
+  padding: 60px;
+  width: 100%;
+  min-height: 100%;
+}
+section table {
+  width: 100%;
+}
+section table th {
+  text-align: left;
+}
+section svg {
+  max-width: 60vh;
+  background-color: #111;
+  cursor: crosshair;
+}
