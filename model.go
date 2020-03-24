@@ -8,6 +8,7 @@ import (
 
 // Match ...
 type Match struct {
+	TypeName   string `json:"__typename"`
 	TickRate   int
 	FrameRate  int
 	MapName    string
@@ -20,13 +21,14 @@ type Match struct {
 
 // Round ...
 type Round struct {
-	Tick    int
-	Frame   int
-	Round   int
-	Started bool
-	Winner  common.Team
-	Reason  events.RoundEndReason
-	Frames  []Frame
+	TypeName string `json:"__typename"`
+	Tick     int
+	Frame    int
+	Round    int
+	Started  bool
+	Winner   common.Team
+	Reason   events.RoundEndReason
+	Frames   []Frame
 }
 
 // Frame ...

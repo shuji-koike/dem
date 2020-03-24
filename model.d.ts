@@ -14,6 +14,7 @@ declare enum BombState {
 }
 
 interface Match {
+  __typename: "Match";
   TickRate: number;
   FrameRate: number;
   MapName: string;
@@ -25,6 +26,7 @@ interface Match {
 }
 
 interface Round {
+  __typename: "Round";
   Tick: number;
   Frame: number;
   Round: number;

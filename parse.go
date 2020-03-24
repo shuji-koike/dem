@@ -47,6 +47,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 			return
 		}
 		match = Match{
+			TypeName:  "Match",
 			TickRate:  int(math.Round(parser.TickRate())),
 			FrameRate: int(math.Round(header.FrameRate())),
 			MapName:   header.MapName,
@@ -62,10 +63,11 @@ func Parse(reader io.Reader) (match Match, err error) {
 			state.IsMatchStarted(),
 			state.IsWarmupPeriod())
 		round = Round{
-			Tick:   state.IngameTick(),
-			Frame:  parser.CurrentFrame(),
-			Round:  state.TotalRoundsPlayed(),
-			Frames: make([]Frame, 0),
+			TypeName: "Round",
+			Tick:     state.IngameTick(),
+			Frame:    parser.CurrentFrame(),
+			Round:    state.TotalRoundsPlayed(),
+			Frames:   make([]Frame, 0),
 		}
 		bombState = 0
 	})
