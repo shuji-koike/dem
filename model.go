@@ -35,7 +35,6 @@ type Frame struct {
 	Frame   int
 	Players []Player
 	Nades   []Nade
-	Fires   [][]r2.Point
 	Bomb    Bomb
 }
 
@@ -61,6 +60,7 @@ type Nade struct {
 	Thrower int64
 	Team    common.Team
 	Active  bool
+	Flames  []r2.Point
 }
 
 // NadeEvent ...

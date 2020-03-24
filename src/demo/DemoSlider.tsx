@@ -28,11 +28,9 @@ export const DemoSlider: React.FC<{
           label: <MarkerLabel>{tickToTime(e.Tick)}</MarkerLabel>
         })),
       ...round.Frames.filter(e => e.Bomb.State === BombState.Planted)
-        .slice(0)
+        .slice(0, 1)
         .map(e => ({
-          value: round.Frames.findIndex(
-            e => e.Bomb.State === BombState.Planted
-          ),
+          value: findIndex(round.Frames, f => f.Tick > e.Tick),
           label: (
             <Icon
               style={{ color: bombColor(e.Bomb.State) }}
@@ -40,19 +38,15 @@ export const DemoSlider: React.FC<{
           )
         })),
       ...round.Frames.filter(e => e.Bomb.State === BombState.Defused)
-        .slice(0)
-        .map(() => ({
-          value: round.Frames.findIndex(
-            e => e.Bomb.State === BombState.Defused
-          ),
+        .slice(0, 1)
+        .map(e => ({
+          value: findIndex(round.Frames, f => f.Tick > e.Tick),
           label: <Icon style={{ color: TeamColor[3] }} icon={faTools}></Icon>
         })),
       ...round.Frames.filter(e => e.Bomb.State === BombState.Exploded)
-        .slice(0)
+        .slice(0, 1)
         .map(e => ({
-          value: round.Frames.findIndex(
-            e => e.Bomb.State === BombState.Exploded
-          ),
+          value: findIndex(round.Frames, f => f.Tick > e.Tick),
           label: (
             <Icon
               style={{ color: bombColor(e.Bomb.State) }}
@@ -60,12 +54,8 @@ export const DemoSlider: React.FC<{
           )
         })),
       ...match.KillEvents.filter(e => e.Round == currentRound).map(e => ({
-        value: round.Frames.findIndex(f => f.Tick > e.Tick),
-        label: (
-          <Icon
-            style={{ color: teamOpponentColor(e.Team) }}
-            icon={faTimes}></Icon>
-        )
+        value: findIndex(round.Frames, f => f.Tick > e.Tick),
+        label: <Icon style={{ color: TeamColor[e.Team] }} icon={faTimes}></Icon>
       }))
     ],
     [currentRound]
@@ -87,6 +77,11 @@ export const DemoSlider: React.FC<{
     />
   );
 };
+
+function findIndex(frames: Frame[], fn: (f: Frame) => boolean) {
+  const index = frames.findIndex(fn);
+  return index == -1 ? frames.length - 1 : index;
+}
 
 const StyledSlider = styled(Slider)``;
 

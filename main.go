@@ -24,7 +24,7 @@ var port = flag.Int("port", 3000, "port to listen http requests")
 var dir = flag.String("dir", "/srv/app", "demo dir")
 var postfix = flag.String("postfix", ".json.gz", "postfix for gob files")
 var useMemCache = flag.Bool("useMemCache", false, "use memory cache")
-var useFileCache = flag.Bool("useFileCache", true, "use file cache")
+var useFileCache = flag.Bool("useFileCache", false, "use file cache")
 
 var group singleflight.Group
 var cache = sync.Map{}
@@ -76,7 +76,7 @@ func load(path string) (Match, error) {
 			}
 			defer file.Close()
 			match, err = Parse(file)
-			if err == nil && !*dryRun && *useFileCache {
+			if err == nil && !*dryRun {
 				err = goutil.WriteJSON(path+*postfix, match)
 			}
 		}

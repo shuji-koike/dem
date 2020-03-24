@@ -133,10 +133,10 @@ export const MolotovView: React.FC<{
 }> = function({ frame }) {
   return (
     <g>
-      {frame.Fires?.map((e, i) => (
+      {frame.Nades?.filter(e => e.Flames?.length).map((e, i) => (
         <polygon
           key={i}
-          points={e.map(p => p.X + " " + p.Y).join(" ")}
+          points={e.Flames?.map(p => p.X + " " + p.Y).join(" ")}
           stroke="#b50f07"
           strokeWidth="2"
           fill="#8e0c05"

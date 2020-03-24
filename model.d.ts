@@ -39,7 +39,6 @@ interface Frame {
   Frame: number;
   Players: Player[];
   Nades: Nade[] | null;
-  Fires: Point[][] | null;
   Bomb: Bomb;
 }
 
@@ -61,6 +60,7 @@ interface Nade extends Point {
   Thrower: number;
   Team: Team;
   Active: boolean;
+  Flames: Point[] | null;
 }
 
 interface NadeEvent {

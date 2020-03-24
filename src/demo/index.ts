@@ -13,7 +13,7 @@ export enum BombState {
   Exploded = 1 << 4
 }
 
-export type Dict<V> = {
+export type Dict<V = string> = {
   [key: string]: V;
 };
 
@@ -28,6 +28,10 @@ export const TeamColor: Dict<string> = {
   [Team.Terrorists]: "#CC9629",
   [Team.CounterTerrorists]: "#295FCC"
 };
+
+export function teamColor(n: Team): string {
+  return TeamColor[n || 0];
+}
 
 export function teamOpponentColor(n: Team): string {
   return TeamColor[TeamOpponent.get(n) || 0];

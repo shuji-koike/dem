@@ -62,9 +62,10 @@ func Parse(reader io.Reader) (match Match, err error) {
 			state.IsMatchStarted(),
 			state.IsWarmupPeriod())
 		round = Round{
-			Tick:  state.IngameTick(),
-			Frame: parser.CurrentFrame(),
-			Round: state.TotalRoundsPlayed(),
+			Tick:   state.IngameTick(),
+			Frame:  parser.CurrentFrame(),
+			Round:  state.TotalRoundsPlayed(),
+			Frames: make([]Frame, 0),
 		}
 		bombState = 0
 	})
@@ -118,12 +119,16 @@ func Parse(reader io.Reader) (match Match, err error) {
 	})
 
 	parser.RegisterEventHandler(func(e events.Kill) {
+		// log.Printf("%6d| KillEvents\t%#v\n", parser.CurrentFrame(), e)
+		if !round.Started {
+			return
+		}
 		match.KillEvents = append(match.KillEvents, KillEvent{
 			Killer:     getSteamID(e.Killer),
 			Victim:     getSteamID(e.Victim),
 			Assister:   getSteamID(e.Assister),
 			Weapon:     getWeapon(e.Weapon),
-			Team:       getTeam(e.Killer),
+			Team:       getTeam(e.Victim),
 			IsHeadshot: e.IsHeadshot,
 			Penetrated: e.PenetratedObjects,
 			Tick:       state.IngameTick(),
@@ -239,7 +244,13 @@ func Parse(reader io.Reader) (match Match, err error) {
 				arr[i].X = math.Round(x)
 				arr[i].Y = math.Round(y)
 			}
-			frame.Fires = append(frame.Fires, arr)
+			frame.Nades = append(frame.Nades, Nade{
+				ID:      e.EntityID,
+				Thrower: getSteamID(e.Thrower()),
+				Team:    getTeam(e.Thrower()),
+				Active:  true,
+				Flames:  arr,
+			})
 		}
 		round.Frames = append(round.Frames, frame)
 	})
