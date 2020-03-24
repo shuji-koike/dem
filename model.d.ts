@@ -20,7 +20,7 @@ interface Match {
   MapName: string;
   Started: boolean;
   Ended: boolean;
-  Rounds: Round[];
+  Rounds: Round[] | null;
   NadeEvents: NadeEvent[];
   KillEvents: KillEvent[];
 }

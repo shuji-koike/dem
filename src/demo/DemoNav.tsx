@@ -11,7 +11,7 @@ export const DemoNav: React.FC<{
     <StyledTable>
       <tbody>
         <tr>
-          {match.Rounds.map((e, i) => (
+          {match.Rounds?.map((e, i) => (
             <td
               key={e.Frame}
               className={currentRound == i ? "active" : undefined}

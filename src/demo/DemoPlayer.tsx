@@ -15,12 +15,15 @@ export const DemoPlayer: React.FC<{
   const [state, setState] = React.useState({ paused: true });
   const [currentFrame, setCurrentFrameUnsafe] = React.useState<number>(0);
   const [currentRound, setCurrentRoundUnsafe] = React.useState<number>(0);
-  const round = match.Rounds[currentRound];
-  const frame = round.Frames[currentFrame];
+  const round = match.Rounds?.[currentRound];
+  const frame = round?.Frames?.[currentFrame];
   const [cache, setCache] = React.useState<{
     [a: string]: { [b: string]: string } | undefined;
   }>({});
   const ref = React.createRef<HTMLFormElement>();
+  if (!round || !frame) {
+    return null; //TODO
+  }
   React.useEffect(() => ref.current?.focus(), []);
   React.useEffect(() =>
     clearInterval.bind(
@@ -37,7 +40,7 @@ export const DemoPlayer: React.FC<{
   });
   const url =
     "/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids=" +
-    frame.Players?.map(e => e.ID)
+    frame?.Players?.map(e => e.ID)
       .sort()
       .join(",");
   React.useEffect(() => {
@@ -67,11 +70,15 @@ export const DemoPlayer: React.FC<{
     }
   }
   function setCurrentFrame(n: number) {
-    setCurrentFrameUnsafe(Math.min(Math.max(n, 0), round.Frames.length - 1));
+    setCurrentFrameUnsafe(
+      Math.min(Math.max(n, 0), (round?.Frames?.length || 1) - 1)
+    );
   }
   function setCurrentRound(n: number) {
     setCurrentFrameUnsafe(0);
-    setCurrentRoundUnsafe(Math.min(Math.max(n, 0), match.Rounds.length - 1));
+    setCurrentRoundUnsafe(
+      Math.min(Math.max(n, 0), (match?.Rounds?.length || 1) - 1)
+    );
   }
   return (
     <StyledForm ref={ref} tabIndex={0} onKeyDown={onKeyDown} onWheel={onWheel}>
