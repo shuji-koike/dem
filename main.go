@@ -53,10 +53,10 @@ func main() {
 }
 
 func load(path string) (Match, error) {
-	if len(path) < 1 {
+	log.Printf("load: path=%s", path)
+	if len(path) == 0 {
 		return Match{}, errors.New("name is empty")
 	}
-	log.Printf("load: path=%s", path)
 	v, err, _ := group.Do(path, func() (interface{}, error) {
 		var match Match
 		var err error

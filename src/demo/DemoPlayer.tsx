@@ -116,9 +116,11 @@ const StyledForm = styled.form`
   color: #fff;
   font-size: 1rem;
   > main {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vh;
+    height: 100vh;
     max-width: 100vw;
     max-height: 100vw;
   }

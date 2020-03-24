@@ -15,15 +15,14 @@ router.use("/www.hltv.org/results", async (req, res) => {
     .data(e => data.push(e))
     .done(() => {
       data = data
-        .map(a =>
-          Object.assign(a, {
-            text: a.text
-              .split("\n")
-              .join("")
-              .replace(/\s+/g, " "),
-            href: new URL(a.href, url).href
-          })
-        )
+        .map(a => ({
+          ...a,
+          text: a.text
+            .split("\n")
+            .join("")
+            .replace(/\s+/g, " "),
+          href: new URL(a.href, url).href
+        }))
         .filter(({ href }) => /www\.hltv\.org\/matches\/[0-9]+\//.test(href));
       res.send(unionBy(data, "href"));
     });

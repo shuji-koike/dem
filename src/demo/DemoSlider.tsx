@@ -23,50 +23,42 @@ export const DemoSlider: React.FC<{
         []
       )
         .filter((_, i) => !(i % 10))
-        .map<Mark>(e =>
-          Object.assign({
-            value: round.Frames.indexOf(e),
-            label: <MarkerLabel>{tickToTime(e.Tick)}</MarkerLabel>
-          })
-        ),
+        .map<Mark>(e => ({
+          value: round.Frames.indexOf(e),
+          label: <MarkerLabel>{tickToTime(e.Tick)}</MarkerLabel>
+        })),
       ...round.Frames.filter(e => e.Bomb.State === BombState.Planted)
         .slice(0)
-        .map(e =>
-          Object.assign({
-            value: round.Frames.findIndex(
-              e => e.Bomb.State === BombState.Planted
-            ),
-            label: (
-              <Icon
-                style={{ color: bombColor(e.Bomb.State) }}
-                icon={faBomb}></Icon>
-            )
-          })
-        ),
+        .map(e => ({
+          value: round.Frames.findIndex(
+            e => e.Bomb.State === BombState.Planted
+          ),
+          label: (
+            <Icon
+              style={{ color: bombColor(e.Bomb.State) }}
+              icon={faBomb}></Icon>
+          )
+        })),
       ...round.Frames.filter(e => e.Bomb.State === BombState.Defused)
         .slice(0)
-        .map(() =>
-          Object.assign({
-            value: round.Frames.findIndex(
-              e => e.Bomb.State === BombState.Defused
-            ),
-            label: <Icon style={{ color: TeamColor[3] }} icon={faTools}></Icon>
-          })
-        ),
+        .map(() => ({
+          value: round.Frames.findIndex(
+            e => e.Bomb.State === BombState.Defused
+          ),
+          label: <Icon style={{ color: TeamColor[3] }} icon={faTools}></Icon>
+        })),
       ...round.Frames.filter(e => e.Bomb.State === BombState.Exploded)
         .slice(0)
-        .map(e =>
-          Object.assign({
-            value: round.Frames.findIndex(
-              e => e.Bomb.State === BombState.Exploded
-            ),
-            label: (
-              <Icon
-                style={{ color: bombColor(e.Bomb.State) }}
-                icon={faBomb}></Icon>
-            )
-          })
-        ),
+        .map(e => ({
+          value: round.Frames.findIndex(
+            e => e.Bomb.State === BombState.Exploded
+          ),
+          label: (
+            <Icon
+              style={{ color: bombColor(e.Bomb.State) }}
+              icon={faBomb}></Icon>
+          )
+        })),
       ...match.KillEvents.filter(e => e.Round == currentRound).map(e => ({
         value: round.Frames.findIndex(f => f.Tick > e.Tick),
         label: (
