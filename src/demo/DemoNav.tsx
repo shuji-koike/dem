@@ -1,6 +1,6 @@
 import React from "react";
-import { TeamColor } from ".";
 import styled from "styled-components";
+import { TeamColor } from ".";
 
 export const DemoNav: React.FC<{
   match: Match;

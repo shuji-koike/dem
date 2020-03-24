@@ -1,6 +1,6 @@
 import express from "express";
-import osmosis from "osmosis";
 import { unionBy } from "lodash";
+import osmosis from "osmosis";
 
 export const router = express.Router();
 

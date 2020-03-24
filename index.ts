@@ -1,6 +1,6 @@
 import path from "path";
-import express from "express";
 import { config } from "dotenv";
+import express from "express";
 import { router } from "./api";
 
 [{}, { path: path.join(__dirname, ".env.defaults") }].forEach(config);

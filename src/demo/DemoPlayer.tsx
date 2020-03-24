@@ -1,12 +1,12 @@
-import React from "react";
-import styled from "styled-components";
 import axios from "axios";
-import { FrameView, TrailView } from "./FrameView";
-import { PlayerCard } from "./PlayerCard";
-import { MapView } from "./MapView";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
 import { DemoNav } from "./DemoNav";
 import { DemoSlider } from "./DemoSlider";
-import { useHistory } from "react-router-dom";
+import { FrameView, TrailView } from "./FrameView";
+import { MapView } from "./MapView";
+import { PlayerCard } from "./PlayerCard";
 
 export const DemoPlayer: React.FC<{
   match: Match;

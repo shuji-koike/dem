@@ -1,5 +1,5 @@
 import React from "react";
-import { TeamColor, NadeColor, bombColorMatrix } from ".";
+import { NadeColor, TeamColor, bombColorMatrix } from ".";
 
 export const FrameView: React.FC<{
   frame: Frame;

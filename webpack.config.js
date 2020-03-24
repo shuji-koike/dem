@@ -5,7 +5,6 @@ const DEBUG = process.env.NODE_ENV !== "production";
 
 module.exports = {
   mode: ["production", "development"][1],
-  context: __dirname,
   entry: {
     index: [
       path.resolve(__dirname, "src/index.tsx"),
@@ -24,7 +23,7 @@ module.exports = {
   plugins: [
     new (require("html-webpack-plugin"))({
       filename: "index.html",
-      template: path.resolve(__dirname, "index.html"),
+      template: path.resolve(__dirname, "src/index.html"),
       inject: false
     }),
     new webpack.DefinePlugin({

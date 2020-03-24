@@ -1,6 +1,7 @@
 import express from "express";
 
 export const router = express.Router();
+
 router.use((req, res, next) => {
   if (/^text\/html/.test(req.headers["accept"]!)) req.url = "/index.html";
   next();

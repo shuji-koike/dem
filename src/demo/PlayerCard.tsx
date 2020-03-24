@@ -1,6 +1,6 @@
 import React from "react";
-import { TeamColor } from ".";
 import styled from "styled-components";
+import { TeamColor } from ".";
 
 export const PlayerCard: React.FC<{
   player: Player;
@@ -8,7 +8,7 @@ export const PlayerCard: React.FC<{
 }> = function({ player, steam }) {
   return (
     <StyledSection>
-      <a href={steam?.profileurl} target="_blank" rel="noopener noreferrer">
+      <a href={steam?.profileurl} rel="noopener noreferrer">
         <img src={steam?.avatar} />
       </a>
       <div className="name">

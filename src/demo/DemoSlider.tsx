@@ -1,10 +1,10 @@
+import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Slider, { Mark } from "@material-ui/core/Slider";
+import { uniqBy } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { uniqBy } from "lodash";
-import Slider, { Mark } from "@material-ui/core/Slider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faBomb, faTools } from "@fortawesome/free-solid-svg-icons";
-import { BombState, TeamColor, teamOpponentColor, bombColor } from ".";
+import { BombState, TeamColor, bombColor } from ".";
 
 export const DemoSlider: React.FC<{
   match: Match;

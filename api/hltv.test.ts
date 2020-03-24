@@ -1,6 +1,7 @@
 import supertest from "supertest";
+import { router } from "./hltv";
 
-const app = supertest(require("./hltv"));
+const app = supertest(router);
 
 describe("GET /www.hltv.org/results?content=demo", () => {
   it("200", async () => {

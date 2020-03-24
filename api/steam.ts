@@ -1,11 +1,10 @@
-import express from "express";
 import axios from "axios";
+import express from "express";
 
 export const router = express.Router();
 
-const token = process.env["STEAM_API_KEY"];
-
 router.use("/api.steampowered.com", async (req, res) => {
-  const url = "https:/" + req.originalUrl + "&key=" + token;
+  const url =
+    "https:/" + req.originalUrl + "&key=" + process.env["STEAM_API_KEY"];
   axios.get(url).then(({ data }) => res.send(data));
 });
