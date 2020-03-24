@@ -150,6 +150,7 @@ export const MolotovView: React.FC<{
 export const NadeView: React.FC<{
   nade: Nade;
 }> = function({ nade }) {
+  if (!nade.Weapon) return null;
   return nade.Weapon == 505 && nade.Active ? (
     <circle
       cx={nade.X}

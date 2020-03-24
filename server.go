@@ -24,7 +24,6 @@ func (s *Server) Listen(port int) {
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	mux.Handle("/replays/", http.StripPrefix("/replays/", http.FileServer(http.Dir(*dir))))
 	mux.Handle("/", http.FileServer(http.Dir("./static")))
-	mux.Handle("/", mux)
 	goutil.HTTPListenAndServe(mux, port)
 }
 

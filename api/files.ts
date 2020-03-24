@@ -5,6 +5,7 @@ import express from "express";
 import readdir from "recursive-readdir";
 
 const exec = util.promisify(child_process.execFile);
+const exists = util.promisify(fs.exists);
 
 export const router = express.Router();
 
@@ -22,8 +23,8 @@ router.use("/api/files", async (req, res, next) => {
   if (req.url.endsWith(".json")) {
     require("connect-gzip-static")(process.env["APP_DEMO_DIR"])(req, res, next); //FIXME
   } else if (req.url.endsWith(".dem")) {
-    if (fs.existsSync(filePath)) {
-      if (!fs.existsSync(filePath.replace(/\.dem$/, ".dem.json.gz"))) {
+    if (await exists(filePath)) {
+      if (!(await exists(filePath.replace(/\.dem$/, ".dem.json.gz")))) {
         await exec("go", ["run", ".", filePath]);
       }
     }

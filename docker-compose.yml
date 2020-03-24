@@ -6,7 +6,7 @@ services:
     volumes:
       - "node_modules:/app/node_modules"
       - ".:/app"
-      - "${APP_DEMO_DIR}:/srv/app"
+      - "${APP_DEMO_DIR}:/app/var"
     ports:
       - "3000:3000"
     working_dir: /app
@@ -25,7 +25,7 @@ services:
 #     volumes:
 #       - "go-pkg-mod:/go/pkg/mod"
 #       - ".:/app"
-#       - "${APP_DEMO_DIR}:/srv/app"
+#       - "${APP_DEMO_DIR}:/app/var"
 #     ports:
 #       - "4000:4000"
 #     working_dir: /app

@@ -1,8 +1,6 @@
 # build
 
 ```sh
-cp .env.defaults .env
-
 # start dev server on http://localhost:3000/
 npm start
 

@@ -1,7 +1,5 @@
 const path = require("path");
-const { compact } = require("lodash");
 const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const DEBUG = process.env.NODE_ENV !== "production";
 
@@ -9,10 +7,10 @@ module.exports = {
   mode: ["production", "development"][1],
   context: __dirname,
   entry: {
-    index: compact([
-      path.resolve(__dirname, "index.tsx"),
+    index: [
+      path.resolve(__dirname, "src/index.tsx"),
       DEBUG && "webpack-hot-middleware/client"
-    ])
+    ].filter(e => e)
   },
   module: {
     rules: [
@@ -21,21 +19,21 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json", ".css"]
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".css"]
   },
-  plugins: compact([
-    new HtmlWebpackPlugin({
+  plugins: [
+    new (require("html-webpack-plugin"))({
       filename: "index.html",
       template: path.resolve(__dirname, "index.html"),
       inject: false
     }),
     new webpack.DefinePlugin({
       "process.env": {
-        NODE_ENV: DEBUG ? '"development"' : '"production"'
+        NODE_ENV: process.env.NODE_ENV || '"development"'
       }
     }),
     DEBUG && new webpack.HotModuleReplacementPlugin(),
     DEBUG && new webpack.NoEmitOnErrorsPlugin()
-  ]),
+  ].filter(e => e),
   devtool: DEBUG && "inline-source-map"
 };

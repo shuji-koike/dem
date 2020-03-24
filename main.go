@@ -20,7 +20,7 @@ import (
 var dryRun = flag.Bool("dry", false, "dry run")
 var stdin = flag.Bool("stdin", false, "read from stdin")
 var server = flag.Bool("server", false, "start http server")
-var port = flag.Int("port", 3000, "port to listen http requests")
+var port = flag.Int("port", 4000, "port to listen http requests")
 var dir = flag.String("dir", "/srv/app", "demo dir")
 var postfix = flag.String("postfix", ".json.gz", "postfix for gob files")
 var useMemCache = flag.Bool("useMemCache", false, "use memory cache")

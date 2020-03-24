@@ -2,11 +2,11 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "nodemon .",
+    "start": "nodemon",
     "build": "webpack",
     "test": "jest",
-    "lint:prettier": "prettier --write '**/*.{js,ts,tsx}'",
-    "lint:eslint": "eslint . --ext js --ext ts --ext tsx"
+    "lint:prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json}'",
+    "lint:eslint": "eslint . --ext ts --ext tsx"
   },
   "dependencies": {
     "axios": "^0.19.2",
