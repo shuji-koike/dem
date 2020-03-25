@@ -30,9 +30,8 @@ router.use("/api/files", async (req, res, next) => {
     }
     res.redirect(req.originalUrl.replace(/\.dem$/, ".dem.json"));
   } else if (req.path.endsWith(".rar")) {
-    console.log(req.query);
     if (typeof req.query.file == "string") {
-      res.send({});
+      res.send({}); //TODO
     } else {
       const ret = await exec("unrar", ["lb", filePath]);
       res.send(ret.stdout.split("\n").slice(0, -1));

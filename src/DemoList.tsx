@@ -37,15 +37,17 @@ const RarItem: React.FC<{ file: string }> = ({ file }) => {
     axios.get(`/api/files/${file}`).then(({ data }) => setState(data));
   }, [open]);
   return (
-    <span onClick={() => setOpen(!open)}>
-      {file}
-      <ul>
-        {state.map((e, i) => (
-          <li>
-            <Link key={i} to={`/dem/${file}?file=${e}`} children={e} />
-          </li>
-        ))}
-      </ul>
-    </span>
+    <>
+      <span onClick={() => setOpen(!open)}>{file}</span>
+      {open && (
+        <ul>
+          {state.map((e, i) => (
+            <li>
+              <Link key={i} to={`/dem/${file}?file=${e}`} children={e} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 };
