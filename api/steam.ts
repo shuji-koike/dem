@@ -6,5 +6,5 @@ export const router = express.Router();
 router.use("/api.steampowered.com", async (req, res) => {
   const url =
     "https:/" + req.originalUrl + "&key=" + process.env["STEAM_API_KEY"];
-  axios.get(url).then(({ data }) => res.send(data));
+  await axios.get(url).then(({ data }) => res.send(data));
 });

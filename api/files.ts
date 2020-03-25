@@ -20,18 +20,23 @@ router.get("/api/files", async (req, res) => {
 router.use("/api/files", async (req, res, next) => {
   const filePath =
     process.env["APP_DEMO_DIR"] + req.path.replace("/api/files/", ""); //FIXME
-  if (req.url.endsWith(".json")) {
+  if (req.path.endsWith(".json")) {
     require("connect-gzip-static")(process.env["APP_DEMO_DIR"])(req, res, next); //FIXME
-  } else if (req.url.endsWith(".dem")) {
+  } else if (req.path.endsWith(".dem")) {
     if (await exists(filePath)) {
       if (!(await exists(filePath.replace(/\.dem$/, ".dem.json.gz")))) {
         await exec("go", ["run", ".", filePath]);
       }
     }
     res.redirect(req.originalUrl.replace(/\.dem$/, ".dem.json"));
-  } else if (req.url.endsWith(".rar")) {
-    const ret = await exec("unrar", ["lb", filePath]);
-    res.send(ret.stdout.split("\n").slice(0, -1));
+  } else if (req.path.endsWith(".rar")) {
+    console.log(req.query);
+    if (typeof req.query.file == "string") {
+      res.send({});
+    } else {
+      const ret = await exec("unrar", ["lb", filePath]);
+      res.send(ret.stdout.split("\n").slice(0, -1));
+    }
   } else {
     console.error(req.path, filePath);
     res.status(500);
