@@ -13,8 +13,6 @@ import (
 	"golang.org/x/sync/singleflight"
 
 	"github.com/shuji-koike/goutil"
-
-	_ "net/http/pprof"
 )
 
 var dryRun = flag.Bool("dry", false, "dry run")
