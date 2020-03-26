@@ -15,15 +15,16 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from "clsx";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, LinkProps } from "react-router-dom";
 
 // https://git.io/JvUzq
 
 export const Dashboard: React.FC<{
   title?: string;
   initOpen?: boolean;
-  nav: React.ReactNode;
-}> = function({ title, initOpen = true, nav, children }) {
+  nav?: React.ReactNode;
+  menu?: React.ReactNode;
+}> = function({ title, initOpen = false, nav = null, menu = null, children }) {
   const [open, setOpen] = React.useState(initOpen);
   const classes = useStyles();
   return (
@@ -43,14 +44,10 @@ export const Dashboard: React.FC<{
             )}>
             <MenuIcon />
           </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}>
+          <Typography component="h1" variant="h6" color="inherit" noWrap>
             {title}
           </Typography>
+          {nav}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -65,7 +62,7 @@ export const Dashboard: React.FC<{
           </IconButton>
         </div>
         <Divider />
-        {nav}
+        {menu}
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer}></div>
@@ -107,9 +104,6 @@ const useStyles = makeStyles(theme => ({
   menuButtonHidden: {
     display: "none"
   },
-  title: {
-    flexGrow: 1
-  },
   drawerPaper: {
     position: "relative",
     whiteSpace: "nowrap",
@@ -141,11 +135,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const NavItem: React.FC<{
+  icon: IconProp;
+  label?: string;
   to: string;
   exact?: boolean;
+}> = ({ icon, label, ...props }) => (
+  <Typography variant="h6">
+    <NavLink {...props}>
+      {icon && <FontAwesomeIcon icon={icon} />}
+      {label}
+    </NavLink>
+  </Typography>
+);
+
+export const MenuItem: React.FC<{
   icon: IconProp;
   label?: string;
   divider?: boolean;
+  to: string;
+  exact?: boolean;
 }> = ({ icon, label, divider, ...props }) => (
   <ListItem button divider={divider !== false} component={NavLink} {...props}>
     <ListItemIcon>

@@ -31,7 +31,7 @@ const DemoItem: React.FC<{
       <TreeItem
         nodeId={nodeId}
         icon={<Adjust />}
-        label={<Link to={`/dem/${file}`}>{file}</Link>}></TreeItem>
+        label={<Link to={`/files/${file}`}>{file}</Link>}></TreeItem>
     );
   } else if (/\.rar$/.test(file)) {
     return <RarItem file={file} />;
@@ -57,7 +57,7 @@ const RarItem: React.FC<{
               nodeId={e}
               icon={<Adjust />}
               label={
-                <Link key={i} to={`/dem/${file}?file=${e}`}>
+                <Link key={i} to={`/files/${file}?file=${e}`}>
                   {e}
                 </Link>
               }

@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom";
 
 export const Matches: React.FC = function() {
   const [state, setState] = React.useState<any[]>([]);
-  const url = "/www.hltv.org" + useLocation().pathname;
+  const { pathname } = useLocation();
+  const url = "/www.hltv.org" + pathname;
   React.useEffect(() => {
     axios.get(url).then(({ data }) => setState(data));
   }, [url]);

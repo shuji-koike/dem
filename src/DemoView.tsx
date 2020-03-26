@@ -4,8 +4,8 @@ import { useParams, useLocation } from "react-router-dom";
 import { DemoPlayer } from "./demo/DemoPlayer";
 
 export const DemoView: React.FC = function() {
-  const path = useParams<any>()[0];
-  const search = useLocation().search;
+  const path = useParams<{ 0: string }>()[0];
+  const { search } = useLocation();
   const [match, setMatch] = React.useState<Match | null>(null);
   React.useEffect(() => {
     axios.get(`/api/files/${path}${search}`).then(({ data }) => setMatch(data));
