@@ -1,14 +1,13 @@
 const path = require("path");
 const webpack = require("webpack");
-
-const DEBUG = process.env.NODE_ENV !== "production";
+const { NODE_ENV, GITHUB_SHA } = process.env;
 
 module.exports = {
-  mode: ["production", "development"][1],
+  mode: NODE_ENV == "production" ? "production" : "development",
   entry: {
     index: [
       path.resolve(__dirname, "src/index.tsx"),
-      DEBUG && "webpack-hot-middleware/client"
+      NODE_ENV == "development" && "webpack-hot-middleware/client"
     ].filter(e => e)
   },
   module: {
@@ -18,7 +17,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".css"]
+    extensions: [".tsx", ".ts", ".jsx", ".js", ".json", ".css"]
   },
   plugins: [
     new (require("html-webpack-plugin"))({
@@ -28,11 +27,11 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       "process.env": {
-        NODE_ENV: process.env.NODE_ENV || '"development"'
+        GITHUB_SHA: JSON.stringify(GITHUB_SHA)
       }
     }),
-    DEBUG && new webpack.HotModuleReplacementPlugin(),
-    DEBUG && new webpack.NoEmitOnErrorsPlugin()
+    NODE_ENV == "development" && new webpack.HotModuleReplacementPlugin(),
+    NODE_ENV == "development" && new webpack.NoEmitOnErrorsPlugin()
   ].filter(e => e),
-  devtool: DEBUG && "inline-source-map"
+  devtool: NODE_ENV == "development" && "inline-source-map"
 };

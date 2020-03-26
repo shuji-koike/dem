@@ -26,6 +26,7 @@
       "version": "16.13"
     }
   },
+  "ignorePatterns": ["dist"],
   "rules": {
     "no-console": [
       "error",
