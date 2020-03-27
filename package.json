@@ -1,6 +1,6 @@
 {
+  "name": "demhub",
   "private": true,
-  "main": "index.js",
   "scripts": {
     "start": "nodemon",
     "build": "webpack",
