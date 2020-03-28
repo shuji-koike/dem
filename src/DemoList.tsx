@@ -13,13 +13,15 @@ export const DemoList: React.FC = () => {
     axios.get("/api/files").then(({ data }) => setState(data));
   }, []);
   return (
-    <TreeView
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}>
-      {state.map(e => (
-        <DemoItem key={e} nodeId={e} file={e}></DemoItem>
-      ))}
-    </TreeView>
+    <main>
+      <TreeView
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpandIcon={<ChevronRightIcon />}>
+        {state.map(e => (
+          <DemoItem key={e} nodeId={e} file={e}></DemoItem>
+        ))}
+      </TreeView>
+    </main>
   );
 };
 
@@ -42,31 +44,29 @@ const DemoItem: React.FC<{
 const RarItem: React.FC<{
   file: string;
 }> = ({ file }) => {
-  const [state, setState] = React.useState([]);
+  const [data, setData] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
-    open && axios.get(`/api/files/${file}`).then(({ data }) => setState(data));
+    open && axios.get(`/api/files/${file}`).then(({ data }) => setData(data));
   }, [open]);
   return (
-    <>
-      <TreeItem nodeId={file} label={file} onClick={() => setOpen(!open)}>
-        {open ? (
-          state.map((e, i) => (
-            <TreeItem
-              key={e}
-              nodeId={e}
-              icon={<Adjust />}
-              label={
-                <Link key={i} to={`/files/${file}?file=${e}`}>
-                  {e}
-                </Link>
-              }
-            />
-          ))
-        ) : (
-          <></>
-        )}
-      </TreeItem>
-    </>
+    <TreeItem nodeId={file} label={file} onClick={() => setOpen(!open)}>
+      {open ? (
+        data.map((e, i) => (
+          <TreeItem
+            key={e}
+            nodeId={e}
+            icon={<Adjust />}
+            label={
+              <Link key={i} to={`/files/${file}?file=${e}`}>
+                {e}
+              </Link>
+            }
+          />
+        ))
+      ) : (
+        <></>
+      )}
+    </TreeItem>
   );
 };

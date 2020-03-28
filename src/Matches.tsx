@@ -10,10 +10,12 @@ export const Matches: React.FC = function() {
     axios.get(url).then(({ data }) => setState(data));
   }, [url]);
   return (
-    <ul>
-      {state.map(e => (
-        <li key={e.href}>{e.title}</li>
-      ))}
-    </ul>
+    <main>
+      <ul>
+        {state.map(e => (
+          <li key={e.href}>{e.title}</li>
+        ))}
+      </ul>
+    </main>
   );
 };

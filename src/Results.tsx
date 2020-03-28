@@ -12,15 +12,19 @@ export const Results: React.FC = function() {
     axios.get(url).then(({ data }) => setState(data));
   }, [url]);
   return (
-    <ul>
-      {state.map(e => (
-        <li key={e.href}>
-          <a href={e.href} rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faExternalLinkAlt} />
-          </a>
-          <Link to={e.href.replace("https://www.hltv.org", "")}>{e.text}</Link>
-        </li>
-      ))}
-    </ul>
+    <main>
+      <ul>
+        {state.map(e => (
+          <li key={e.href}>
+            <a href={e.href} rel="noopener noreferrer">
+              <FontAwesomeIcon icon={faExternalLinkAlt} />
+            </a>
+            <Link to={e.href.replace("https://www.hltv.org", "")}>
+              {e.text}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </main>
   );
 };

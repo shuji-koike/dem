@@ -13,10 +13,14 @@ export const DemoPage: React.FC = function() {
   }, [path]);
   if (!match) return <span>loading</span>;
   switch (tab) {
-    case "2d":
+    case "demo":
       return <DemoPlayer match={match} />;
     default:
-      return <DebugView match={match}></DebugView>;
+      return (
+        <main>
+          <DebugView match={match}></DebugView>
+        </main>
+      );
   }
 };
 
