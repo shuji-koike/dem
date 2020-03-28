@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export enum Team {
   Unassigned = 0,
   Spectators = 1,
@@ -73,4 +75,15 @@ export function colorToMatrix(hex: string) {
   ]
     .flat()
     .join(" ");
+}
+
+export async function getSteamData(ids: number[]) {
+  const url =
+    "/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids=" +
+    Array.from(new Set(ids)).join(",");
+  const { data } = await axios.get(url);
+  return data.response?.players?.reduce?.(
+    (acc: any, e: any) => (acc[e.steamid] = e),
+    {}
+  );
 }

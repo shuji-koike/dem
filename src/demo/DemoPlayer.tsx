@@ -1,4 +1,3 @@
-import axios from "axios";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -7,6 +6,7 @@ import { DemoSlider } from "./DemoSlider";
 import { FrameView, TrailView } from "./FrameView";
 import { MapView } from "./MapView";
 import { PlayerCard } from "./PlayerCard";
+import { getSteamData } from ".";
 
 export const DemoPlayer: React.FC<{
   match: Match;
@@ -17,13 +17,9 @@ export const DemoPlayer: React.FC<{
   const [currentRound, setCurrentRoundUnsafe] = React.useState<number>(0);
   const round = match.Rounds?.[currentRound];
   const frame = round?.Frames?.[currentFrame];
-  const [cache, setCache] = React.useState<{
-    [a: string]: { [b: string]: string } | undefined;
-  }>({});
+  const [steam, setSteam] = React.useState<any>({});
   const ref = React.createRef<HTMLFormElement>();
-  if (!round || !frame) {
-    return null; //TODO
-  }
+  if (!round || !frame || !frame.Players) return null; //TODO
   React.useEffect(() => ref.current?.focus(), []);
   React.useEffect(() =>
     clearInterval.bind(
@@ -38,18 +34,10 @@ export const DemoPlayer: React.FC<{
     document.body.style.overscrollBehaviorY = "none";
     return () => void (document.body.style.overscrollBehaviorY = "auto");
   });
-  const url =
-    "/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids=" +
-    frame?.Players?.map(e => e.ID)
-      .sort()
-      .join(",");
+  let ids = frame.Players.map(e => e.ID).sort((a, b) => a - b);
   React.useEffect(() => {
-    axios.get(url).then(({ data }) => {
-      const newCache = { ...cache };
-      data.response.players.map((e: any) => (newCache[e.steamid] = e));
-      setCache(newCache);
-    });
-  }, [url]);
+    getSteamData(ids).then(e => setSteam({ ...steam, ...e }));
+  }, [ids]);
   function onKeyDown(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {
       ArrowUp: () => setCurrentRound(currentRound - 1),
@@ -96,7 +84,7 @@ export const DemoPlayer: React.FC<{
       </main>
       <aside>
         {frame.Players?.map(e => (
-          <PlayerCard key={e.ID} player={e} steam={cache[e.ID]} />
+          <PlayerCard key={e.ID} player={e} steam={steam[e.ID]} />
         ))}
       </aside>
       <footer>

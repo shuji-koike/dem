@@ -1,6 +1,7 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import IconButton from "@material-ui/core/IconButton";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -20,6 +21,7 @@ export const Dashboard: React.FC<{
 }> = function({ title, nav = null, menu = null, children }) {
   return (
     <>
+      <CssBaseline />
       <AppBar>
         <Toolbar variant="dense">
           <IconButton edge="start" color="inherit">

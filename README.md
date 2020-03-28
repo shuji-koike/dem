@@ -11,6 +11,11 @@ npm build
 
 - https://github.com/markus-wa/demoinfocs-golang
 - https://github.com/ValveSoftware/csgo-demoinfo/tree/master/demoinfogo
+- https://material-ui.com/components/buttons/
+
+- https://csgostats.gg/
+- https://www.noesis.gg/
+- https://www.behance.net/gallery/87240189/ORION-CSGO-Demo-Manager
 
 <details>
   <summary>memo</summary>
