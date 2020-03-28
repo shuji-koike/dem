@@ -12,7 +12,7 @@ export const DemoPlayer: React.FC<{
   match: Match;
 }> = function({ match }) {
   const history = useHistory();
-  const [state, setState] = React.useState({ paused: true });
+  const [state, setState] = React.useState({ paused: true, wheel: false });
   const [currentFrame, setCurrentFrameUnsafe] = React.useState<number>(0);
   const [currentRound, setCurrentRoundUnsafe] = React.useState<number>(0);
   const round = match.Rounds?.[currentRound];
@@ -63,7 +63,7 @@ export const DemoPlayer: React.FC<{
     dict[e.key]?.();
   }
   function onWheel(e: React.WheelEvent) {
-    if (Math.abs(e.deltaX) < 10) {
+    if (state.wheel && Math.abs(e.deltaX) < 10) {
       if (e.deltaY < 0) setCurrentFrame(currentFrame + 1);
       if (e.deltaY > 0) setCurrentFrame(currentFrame - 1);
       e.stopPropagation();
