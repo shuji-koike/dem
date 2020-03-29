@@ -1,8 +1,8 @@
-import React from "react";
-import { NadeColor, TeamColor, bombColorMatrix } from ".";
+import React from "react"
+import { NadeColor, TeamColor, bombColorMatrix } from "."
 
 export const FrameView: React.FC<{
-  frame: Frame;
+  frame: Frame
 }> = function({ frame }) {
   return (
     <svg viewBox="0 0 1024 1024">
@@ -15,11 +15,11 @@ export const FrameView: React.FC<{
         <NadeView key={e.ID} nade={e}></NadeView>
       ))}
     </svg>
-  );
-};
+  )
+}
 
 export const FramePlayer: React.FC<{
-  player: Player;
+  player: Player
 }> = function({ player }) {
   return (
     <g key={player.ID}>
@@ -79,33 +79,33 @@ export const FramePlayer: React.FC<{
         {player.Name}
       </text>
     </g>
-  );
-};
+  )
+}
 
 export const TrailView: React.FC<{
-  round: Round;
-  currentFrame: number;
+  round: Round
+  currentFrame: number
 }> = function({ round }) {
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null)
   React.useEffect(() => {
-    (async function() {
-      const context = canvasRef?.current?.getContext("2d");
+    ;(async function() {
+      const context = canvasRef?.current?.getContext("2d")
       if (context) {
-        context.clearRect(0, 0, 1024, 1024);
+        context.clearRect(0, 0, 1024, 1024)
         round.Frames.forEach(f => {
           for (const e in f.Players) {
-            context.fillStyle = TeamColor[f.Players[e].Team];
-            context.fillRect(f.Players[e].X, f.Players[e].Y, 1, 1);
+            context.fillStyle = TeamColor[f.Players[e].Team]
+            context.fillRect(f.Players[e].X, f.Players[e].Y, 1, 1)
           }
-        });
+        })
       }
-    })();
-  }, [round]);
-  return <canvas ref={canvasRef} width="1024" height="1024"></canvas>;
-};
+    })()
+  }, [round])
+  return <canvas ref={canvasRef} width="1024" height="1024"></canvas>
+}
 
 export const BombView: React.FC<{
-  frame: Frame;
+  frame: Frame
 }> = function({ frame }) {
   return (
     <g>
@@ -125,11 +125,11 @@ export const BombView: React.FC<{
         />
       </filter>
     </g>
-  );
-};
+  )
+}
 
 export const MolotovView: React.FC<{
-  frame: Frame;
+  frame: Frame
 }> = function({ frame }) {
   return (
     <g>
@@ -144,13 +144,13 @@ export const MolotovView: React.FC<{
         />
       ))}
     </g>
-  );
-};
+  )
+}
 
 export const NadeView: React.FC<{
-  nade: Nade;
+  nade: Nade
 }> = function({ nade }) {
-  if (!nade.Weapon) return null;
+  if (!nade.Weapon) return null
   return nade.Weapon == 505 && nade.Active ? (
     <circle
       cx={nade.X}
@@ -170,5 +170,5 @@ export const NadeView: React.FC<{
       stroke={TeamColor[nade.Team]}
       strokeWidth="2"
     />
-  );
-};
+  )
+}

@@ -4,9 +4,9 @@ type overscrollBehavior =
   | "none"
   | "inherit"
   | "initial"
-  | "unset";
+  | "unset"
 interface CSSStyleDeclaration {
-  overscrollBehavior: overscrollBehavior;
-  overscrollBehaviorX: overscrollBehavior;
-  overscrollBehaviorY: overscrollBehavior;
+  overscrollBehavior: overscrollBehavior
+  overscrollBehaviorX: overscrollBehavior
+  overscrollBehaviorY: overscrollBehavior
 }

@@ -1,5 +1,5 @@
-import React from "react";
-import { parseDemo } from ".";
+import React from "react"
+import { parseDemo } from "."
 
 export const Home: React.FC = () => {
   return (
@@ -9,5 +9,5 @@ export const Home: React.FC = () => {
         onChange={e => Array.from(e.target.files || []).forEach(parseDemo)}
       />
     </main>
-  );
-};
+  )
+}

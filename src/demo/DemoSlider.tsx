@@ -1,17 +1,17 @@
-import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Slider, { Mark } from "@material-ui/core/Slider";
-import { uniqBy } from "lodash";
-import React from "react";
-import styled from "styled-components";
-import { BombState, TeamColor, bombColor } from ".";
+import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Slider, { Mark } from "@material-ui/core/Slider"
+import { uniqBy } from "lodash"
+import React from "react"
+import styled from "styled-components"
+import { BombState, TeamColor, bombColor } from "."
 
 export const DemoSlider: React.FC<{
-  match: Match;
-  round: Round;
-  currentRound: number;
-  currentFrame: number;
-  setCurrentFrame: (i: number) => void;
+  match: Match
+  round: Round
+  currentRound: number
+  currentFrame: number
+  setCurrentFrame: (i: number) => void
 }> = function({ match, round, currentRound, currentFrame, setCurrentFrame }) {
   const marks = React.useMemo(
     () => [
@@ -59,12 +59,12 @@ export const DemoSlider: React.FC<{
       }))
     ],
     [currentRound]
-  );
+  )
   function tickToSecond(tick: number) {
-    return ((tick || 0) - round.Frames[0].Tick) / match.TickRate;
+    return ((tick || 0) - round.Frames[0].Tick) / match.TickRate
   }
   function tickToTime(tick: number) {
-    return new Date(tickToSecond(tick) * 1000).toISOString().substr(14, 5);
+    return new Date(tickToSecond(tick) * 1000).toISOString().substr(14, 5)
   }
   return (
     <StyledSlider
@@ -75,23 +75,23 @@ export const DemoSlider: React.FC<{
       valueLabelDisplay="on"
       valueLabelFormat={e => tickToTime(round.Frames[e].Tick)}
     />
-  );
-};
-
-function findIndex(frames: Frame[], fn: (f: Frame) => boolean) {
-  const index = frames.findIndex(fn);
-  return index == -1 ? frames.length - 1 : index;
+  )
 }
 
-const StyledSlider = styled(Slider)``;
+function findIndex(frames: Frame[], fn: (f: Frame) => boolean) {
+  const index = frames.findIndex(fn)
+  return index == -1 ? frames.length - 1 : index
+}
+
+const StyledSlider = styled(Slider)``
 
 const MarkerLabel = styled.span`
   color: #666;
   font-size: 14px !important;
   letter-spacing: -1px;
-`;
+`
 
 const Icon = styled(FontAwesomeIcon)`
   position: relative;
   top: -21px;
-`;
+`

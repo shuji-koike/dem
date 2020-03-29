@@ -1,6 +1,6 @@
-const path = require("path");
-const webpack = require("webpack");
-const { NODE_ENV, GITHUB_SHA } = process.env;
+const path = require("path")
+const webpack = require("webpack")
+const { NODE_ENV, GITHUB_SHA } = process.env
 
 module.exports = {
   mode: NODE_ENV == "production" ? "production" : "development",
@@ -34,4 +34,4 @@ module.exports = {
     NODE_ENV == "development" && new webpack.NoEmitOnErrorsPlugin()
   ].filter(e => e),
   devtool: NODE_ENV == "development" && "inline-source-map"
-};
+}

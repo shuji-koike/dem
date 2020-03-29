@@ -1,21 +1,21 @@
-import Paper from "@material-ui/core/Paper";
-import Tab from "@material-ui/core/Tab";
-import Tabs from "@material-ui/core/Tabs";
-import axios from "axios";
-import React from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { getScores } from "./demo";
-import { DemoPlayer } from "./demo/DemoPlayer";
+import Paper from "@material-ui/core/Paper"
+import Tab from "@material-ui/core/Tab"
+import Tabs from "@material-ui/core/Tabs"
+import axios from "axios"
+import React from "react"
+import { useParams, useLocation } from "react-router-dom"
+import { getScores } from "./demo"
+import { DemoPlayer } from "./demo/DemoPlayer"
 
 export const DemoPage: React.FC = function() {
-  const path = useParams<{ 0: string }>()[0];
-  const { search } = useLocation();
-  const [match, setMatch] = React.useState<Match | null>(null);
-  const [tab, setTab] = React.useState(0);
+  const path = useParams<{ 0: string }>()[0]
+  const { search } = useLocation()
+  const [match, setMatch] = React.useState<Match | null>(null)
+  const [tab, setTab] = React.useState(0)
   React.useEffect(() => {
-    axios.get(`/api/files/${path}${search}`).then(({ data }) => setMatch(data));
-  }, [path]);
-  if (!match) return <span>loading</span>;
+    axios.get(`/api/files/${path}${search}`).then(({ data }) => setMatch(data))
+  }, [path])
+  if (!match) return <span>loading</span>
 
   return (
     <main>
@@ -42,11 +42,11 @@ export const DemoPage: React.FC = function() {
         }
       </Paper>
     </main>
-  );
-};
+  )
+}
 
 const ScoreBoard: React.FC<{ match: Match }> = ({ match }) => {
-  const scores = getScores(match);
+  const scores = getScores(match)
   return (
     <table>
       <tbody>
@@ -64,8 +64,8 @@ const ScoreBoard: React.FC<{ match: Match }> = ({ match }) => {
         ))}
       </tbody>
     </table>
-  );
-};
+  )
+}
 
 const RoundsView: React.FC<{ match: Match }> = ({ match }) => {
   return (
@@ -80,8 +80,8 @@ const RoundsView: React.FC<{ match: Match }> = ({ match }) => {
         </pre>
       ))}
     </section>
-  );
-};
+  )
+}
 
 const KillsView: React.FC<{ match: Match }> = ({ match }) => {
   return (
@@ -90,8 +90,8 @@ const KillsView: React.FC<{ match: Match }> = ({ match }) => {
         <pre key={`kill-${i}`}>{JSON.stringify(e)}</pre>
       ))}
     </section>
-  );
-};
+  )
+}
 
 const NadesView: React.FC<{ match: Match }> = ({ match }) => {
   return (
@@ -103,8 +103,8 @@ const NadesView: React.FC<{ match: Match }> = ({ match }) => {
         </p>
       ))}
     </section>
-  );
-};
+  )
+}
 
 const DebugView: React.FC<{ match: Match }> = ({ match }) => (
   <section>
@@ -132,4 +132,4 @@ const DebugView: React.FC<{ match: Match }> = ({ match }) => (
       <pre key={`nade-${i}`}>{JSON.stringify(e)}</pre>
     ))}
   </section>
-);
+)

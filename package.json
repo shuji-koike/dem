@@ -65,7 +65,7 @@
     "webpack-hot-middleware": "^2.25.0"
   },
   "prettier": {
-    "trailingComma": "es5",
+    "semi": false,
     "jsxBracketSameLine": true
   }
 }

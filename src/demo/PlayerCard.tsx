@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { TeamColor } from ".";
+import React from "react"
+import styled from "styled-components"
+import { TeamColor } from "."
 
 export const PlayerCard: React.FC<{
-  player: Player;
-  steam: any;
+  player: Player
+  steam: any
 }> = function({ player, steam }) {
   return (
     <StyledSection>
@@ -31,8 +31,8 @@ export const PlayerCard: React.FC<{
         ))}
       </div>
     </StyledSection>
-  );
-};
+  )
+}
 
 const StyledSection = styled.section`
   font-family: monospace;
@@ -74,4 +74,4 @@ const StyledSection = styled.section`
   .inventory > img.active {
     filter: brightness(100%);
   }
-`;
+`

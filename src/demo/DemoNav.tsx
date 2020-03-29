@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import { TeamColor } from ".";
+import React from "react"
+import styled from "styled-components"
+import { TeamColor } from "."
 
 export const DemoNav: React.FC<{
-  match: Match;
-  currentRound: number;
-  setCurrentRound: (i: number) => void;
+  match: Match
+  currentRound: number
+  setCurrentRound: (i: number) => void
 }> = function({ match, currentRound, setCurrentRound }) {
   return (
     <StyledTable>
@@ -23,8 +23,8 @@ export const DemoNav: React.FC<{
         </tr>
       </tbody>
     </StyledTable>
-  );
-};
+  )
+}
 
 const StyledTable = styled.table`
   width: 100%;
@@ -47,4 +47,4 @@ const StyledTable = styled.table`
     background: #333;
     border-bottom-color: #999;
   }
-`;
+`

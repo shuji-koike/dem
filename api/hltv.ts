@@ -1,12 +1,12 @@
-import express from "express";
-import { unionBy } from "lodash";
-import osmosis from "osmosis";
+import express from "express"
+import { unionBy } from "lodash"
+import osmosis from "osmosis"
 
-export const router = express.Router();
+export const router = express.Router()
 
 router.use("/www.hltv.org/results", async (req, res) => {
-  let data: { text: string; href: string }[] = [];
-  const url = "https:/" + req.originalUrl;
+  let data: { text: string; href: string }[] = []
+  const url = "https:/" + req.originalUrl
   osmosis
     .get(url)
     .find("a")
@@ -23,18 +23,18 @@ router.use("/www.hltv.org/results", async (req, res) => {
             .replace(/\s+/g, " "),
           href: new URL(a.href, url).href
         }))
-        .filter(({ href }) => /www\.hltv\.org\/matches\/[0-9]+\//.test(href));
-      res.send(unionBy(data, "href"));
-    });
-});
+        .filter(({ href }) => /www\.hltv\.org\/matches\/[0-9]+\//.test(href))
+      res.send(unionBy(data, "href"))
+    })
+})
 router.use("/www.hltv.org/matches/:id/:title", async (req, res) => {
-  let data = {};
-  const url = "https:/" + req.originalUrl;
+  let data = {}
+  const url = "https:/" + req.originalUrl
   osmosis
     .get(url)
     .set({ href: "div.streams a@href" })
     .data(a => {
-      a.href && console.info(new URL(a.href, url).href);
+      a.href && console.info(new URL(a.href, url).href)
     })
-    .done(() => res.send(data));
-});
+    .done(() => res.send(data))
+})

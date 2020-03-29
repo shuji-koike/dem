@@ -1,14 +1,14 @@
-import { faFile, faHome, faTrophy } from "@fortawesome/free-solid-svg-icons";
-import List from "@material-ui/core/List";
-import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Dashboard, MenuItem, NavItem } from "./Dashboard";
-import { DemoList } from "./DemoList";
-import { DemoPage } from "./DemoPage";
-import { DemoView } from "./DemoView";
-import { Home } from "./Home";
-import { Matches } from "./Matches";
-import { Results } from "./Results";
+import { faFile, faHome, faTrophy } from "@fortawesome/free-solid-svg-icons"
+import List from "@material-ui/core/List"
+import React from "react"
+import { BrowserRouter, Route, Switch } from "react-router-dom"
+import { Dashboard, MenuItem, NavItem } from "./Dashboard"
+import { DemoList } from "./DemoList"
+import { DemoPage } from "./DemoPage"
+import { DemoView } from "./DemoView"
+import { Home } from "./Home"
+import { Matches } from "./Matches"
+import { Results } from "./Results"
 
 export function App() {
   return (
@@ -22,7 +22,7 @@ export function App() {
         </Route>
       </Switch>
     </BrowserRouter>
-  );
+  )
 }
 
 function MainSwitch() {
@@ -34,7 +34,7 @@ function MainSwitch() {
       <Route path="/files" component={DemoList}></Route>
       <Route path="/" exact component={Home}></Route>
     </Switch>
-  );
+  )
 }
 
 function Nav() {
@@ -43,7 +43,7 @@ function Nav() {
       <NavItem icon={faTrophy} to="/results?content=demo" label="Results" />
       <NavItem icon={faFile} to="/files" label="Files" />
     </>
-  );
+  )
 }
 
 function Menu() {
@@ -53,5 +53,5 @@ function Menu() {
       <MenuItem icon={faTrophy} to="/results?content=demo" label="Results" />
       <MenuItem icon={faFile} to="/files" label="Files" />
     </List>
-  );
+  )
 }
