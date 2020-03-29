@@ -1,3 +1,5 @@
+// +build !wasm
+
 package main
 
 import (
@@ -32,9 +34,7 @@ func main() {
 	flag.Parse()
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	log.Printf("main: pid=%d %s %v", os.Getpid(), runtime.GOARCH, os.Args)
-	if runtime.GOARCH == "wasm" {
-		StartWasm()
-	} else if *server {
+	if *server {
 		new(Server).Listen(*port)
 	} else if *stdin {
 		buf, err := ioutil.ReadAll(os.Stdin)

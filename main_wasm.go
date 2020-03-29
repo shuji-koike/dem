@@ -1,19 +1,21 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"log"
+	"syscall/js"
 )
 
 // https://golang.org/pkg/syscall/js/
 
 // StartWasm ...
-func StartWasm() {
-	log.Printf("init")
-	// js.Global().Set("wasmParaeDemo", js.FuncOf(wasmParaeDemo))
+func main() {
+	log.Printf("main: start")
+	js.Global().Set("wasmParaeDemo", js.FuncOf(wasmParaeDemo))
 	select {}
 }
 
-/*
 func wasmParaeDemo(this js.Value, args []js.Value) interface{} {
 	log.Printf("start")
 	if len(args) != 1 {
@@ -32,4 +34,3 @@ func wasmParaeDemo(this js.Value, args []js.Value) interface{} {
 	log.Printf("end")
 	return js.ValueOf(writer.String())
 }
-*/
