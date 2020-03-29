@@ -6,7 +6,7 @@ import { DemoSlider } from "./DemoSlider";
 import { FrameView, TrailView } from "./FrameView";
 import { MapView } from "./MapView";
 import { PlayerCard } from "./PlayerCard";
-import { getSteamData } from ".";
+import { fetchSteamData } from ".";
 
 export const DemoPlayer: React.FC<{
   match: Match;
@@ -36,7 +36,7 @@ export const DemoPlayer: React.FC<{
   });
   let ids = frame.Players.map(e => e.ID).sort((a, b) => a - b);
   React.useEffect(() => {
-    getSteamData(ids).then(e => setSteam({ ...steam, ...e }));
+    fetchSteamData(ids).then(e => setSteam({ ...steam, ...e }));
   }, [ids]);
   function onKeyDown(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {

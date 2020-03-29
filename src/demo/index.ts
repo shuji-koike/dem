@@ -77,7 +77,7 @@ export function colorToMatrix(hex: string) {
     .join(" ");
 }
 
-export async function getSteamData(ids: number[]) {
+export async function fetchSteamData(ids: number[]) {
   const url =
     "/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids=" +
     Array.from(new Set(ids)).join(",");
