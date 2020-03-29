@@ -47,11 +47,14 @@ func Parse(reader io.Reader) (match Match, err error) {
 			return
 		}
 		match = Match{
-			TypeName:  "Match",
-			TickRate:  int(math.Round(parser.TickRate())),
-			FrameRate: int(math.Round(header.FrameRate())),
-			MapName:   header.MapName,
-			Started:   true,
+			TypeName:   "Match",
+			TickRate:   int(math.Round(parser.TickRate())),
+			FrameRate:  int(math.Round(header.FrameRate())),
+			MapName:    header.MapName,
+			Started:    true,
+			Rounds:     make([]Round, 0),
+			KillEvents: make([]KillEvent, 0),
+			NadeEvents: make([]NadeEvent, 0),
 		}
 		log.Printf("%6d| TickRate=%d\tFrameRate=%d\n",
 			parser.CurrentFrame(), match.TickRate, match.FrameRate)

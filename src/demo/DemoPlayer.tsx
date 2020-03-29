@@ -20,6 +20,10 @@ export const DemoPlayer: React.FC<{
   const [steam, setSteam] = React.useState<any>({});
   const ref = React.createRef<HTMLFormElement>();
   if (!round || !frame || !frame.Players) return null; //TODO
+  let ids = frame.Players.map(e => e.ID).sort((a, b) => a - b);
+  React.useEffect(() => {
+    fetchSteamData(ids).then(e => setSteam({ ...steam, ...e }));
+  }, ids);
   React.useEffect(() => ref.current?.focus(), []);
   React.useEffect(() =>
     clearInterval.bind(
@@ -34,10 +38,6 @@ export const DemoPlayer: React.FC<{
     document.body.style.overscrollBehaviorY = "none";
     return () => void (document.body.style.overscrollBehaviorY = "auto");
   });
-  let ids = frame.Players.map(e => e.ID).sort((a, b) => a - b);
-  React.useEffect(() => {
-    fetchSteamData(ids).then(e => setSteam({ ...steam, ...e }));
-  }, [ids]);
   function onKeyDown(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {
       ArrowUp: () => setCurrentRound(currentRound - 1),

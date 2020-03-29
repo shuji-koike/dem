@@ -89,6 +89,7 @@ const NadesView: React.FC<{ match: Match }> = ({ match }) => {
       {match.NadeEvents?.map((e, i) => (
         <p key={`nade-${i}`}>
           <img src={"/static/icons/" + e.Weapon + ".png"} />
+          <span>{e.Thrower}</span>
         </p>
       ))}
     </section>

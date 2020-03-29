@@ -43,7 +43,8 @@ go get -u github.com/pilu/fresh
 ```
 
 ```sh
-GOOS=js GOARCH=wasm go build -o ../demo/static/main.wasm wasm/main.go
+cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./static/wasm_exec.js
+GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
 ```
 
 ```sh

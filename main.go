@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 	"sync"
 
@@ -30,8 +31,10 @@ var cache = sync.Map{}
 func main() {
 	flag.Parse()
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
-	log.Printf("main: pid=%d %v", os.Getpid(), os.Args)
-	if *server {
+	log.Printf("main: pid=%d %s %v", os.Getpid(), runtime.GOARCH, os.Args)
+	if runtime.GOARCH == "wasm" {
+		StartWasm()
+	} else if *server {
 		new(Server).Listen(*port)
 	} else if *stdin {
 		buf, err := ioutil.ReadAll(os.Stdin)

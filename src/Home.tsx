@@ -1,5 +1,13 @@
 import React from "react";
+import { parseDemo } from ".";
 
-export function Home() {
-  return <main></main>;
-}
+export const Home: React.FC = () => {
+  return (
+    <main>
+      <input
+        type="file"
+        onChange={e => Array.from(e.target.files || []).forEach(parseDemo)}
+      />
+    </main>
+  );
+};
