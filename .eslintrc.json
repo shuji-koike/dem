@@ -26,7 +26,7 @@
       "version": "16.13"
     }
   },
-  "ignorePatterns": ["dist"],
+  "ignorePatterns": ["dist", "static"],
   "rules": {
     "no-console": [
       "error",

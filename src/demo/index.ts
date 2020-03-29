@@ -87,3 +87,47 @@ export async function fetchSteamData(ids: number[]) {
     {}
   );
 }
+
+class PlayerScore {
+  ID: number;
+  Name: string = "";
+  Team: Team = 0;
+  kills: number = 0;
+  deaths: number = 0;
+  assists: number = 0;
+  headshots: number = 0;
+  constructor(ID: number) {
+    this.ID = ID;
+  }
+  get headshotPercentage() {
+    return ((this.headshots / this.kills) * 100).toFixed(1) + "%";
+  }
+  get killDeath() {
+    return (this.kills / this.deaths).toFixed(2);
+  }
+}
+
+export function getScores(match: Match) {
+  const dict: { [key: number]: PlayerScore } = {};
+  match.KillEvents.map(e => [e.Killer, e.Assister, e.Victim])
+    .flat()
+    .forEach(e => (dict[e] = new PlayerScore(e)));
+  match.KillEvents.forEach(e => {
+    dict[e.Killer].kills += 1;
+    dict[e.Assister].assists += 1;
+    dict[e.Victim].deaths += 1;
+    dict[e.Killer].headshots += e.IsHeadshot ? 1 : 0;
+  });
+  match.Rounds?.slice(-1)
+    .map(e => e.Frames.slice(-1))
+    .flat()
+    .forEach(e =>
+      e.Players.forEach(e =>
+        Object.assign(dict[e.ID], { Name: e.Name, Team: e.Team })
+      )
+    );
+  return Object.entries(dict)
+    .map(([_, v]) => v)
+    .filter(e => e.ID)
+    .sort((a, b) => (a.Team == b.Team ? b.kills - a.kills : a.Team - b.Team));
+}
