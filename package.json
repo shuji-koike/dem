@@ -13,7 +13,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "osmosis": "^1.1.10",
     "recursive-readdir": "^2.2.2",
     "uuid": "^7.0.3"
