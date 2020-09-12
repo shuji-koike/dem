@@ -1,32 +1,29 @@
 import React from "react"
 import styled from "styled-components"
-import { TeamColor } from "."
+import { teamColor, icon, armorIcon } from "."
 
 export const PlayerCard: React.FC<{
   player: Player
   steam: any
 }> = function ({ player, steam }) {
   return (
-    <StyledSection>
+    <StyledSection player={player}>
       <a href={steam?.profileurl} rel="noopener noreferrer">
-        <img src={steam?.avatar} />
+        <img className="avatar" src={steam?.avatar} />
       </a>
-      <div className="name">
-        <div
-          style={{
-            width: player.Hp + "%",
-            background: TeamColor[player.Team],
-          }}></div>
-        <span>{player.Hp}</span>
-        <span>{player.Name}</span>
-        <span>${player.Money}</span>
+      <div className="Player">
+        <div className="bar"></div>
+        <span className="Hp">{player.Hp}</span>
+        <span className="Name">{player.Name}</span>
+        <span className="Money">${player.Money}</span>
       </div>
-      <div className="inventory">
+      <div className="Weapons">
+        <img src={armorIcon(player)} />
         {player.Weapons?.filter(e => e != 405).map(e => (
           <img
             key={e}
             className={player.Weapon == e ? "active" : ""}
-            src={"/static/icons/" + e + ".png"}
+            src={icon(e)}
           />
         ))}
       </div>
@@ -34,44 +31,56 @@ export const PlayerCard: React.FC<{
   )
 }
 
-const StyledSection = styled.section`
+const StyledSection = styled.section<{ player: Player }>`
   font-family: monospace;
   position: relative;
   margin-bottom: 4px;
   width: 100%;
-  > a > img {
+  .avatar {
     position: absolute;
     border: none;
     width: 50px;
     height: 50px;
   }
-  .name {
+  .Player {
+    display: flex;
     position: relative;
-    height: 22px;
+    height: 20px;
     margin-left: 50px;
     background: #444;
-    cursor: pointer;
   }
-  .name > div {
+  .Player > .bar {
     position: absolute;
     height: 100%;
     z-index: 0;
+    width: ${({ player }) => player.Hp + "%"};
+    background: ${({ player }) => teamColor(player.Team)};
+    filter: brightness(80%);
   }
-  .name > * {
-    position: relative;
+  .Player > span {
     z-index: 1;
+    margin: 0 4px;
   }
-  .inventory {
+  .Player .Hp {
+    width: 2em;
+    text-align: right;
+  }
+  .Player .Name {
+    flex-grow: 4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .Weapons {
     margin-left: 50px;
     height: 28px;
     white-space: nowrap;
   }
-  .inventory > img {
+  .Weapons > img {
     margin: 2px 2px;
     height: 20px;
     filter: brightness(60%);
   }
-  .inventory > img.active {
+  .Weapons > img.active {
     filter: brightness(100%);
   }
 `

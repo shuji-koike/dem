@@ -56,6 +56,7 @@ interface Player extends Point {
   Flashed: number
   Money: number
   Team: Team
+  State: number
   Weapon: number
   Weapons: number[] | null
 }

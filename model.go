@@ -53,6 +53,7 @@ type Player struct {
 	Flashed float32
 	Money   int
 	Team    common.Team
+	State   PlayerState
 	Weapon  common.EquipmentElement
 	Weapons []common.EquipmentElement
 }
@@ -117,4 +118,22 @@ const (
 	BombDefusing
 	BombDefused
 	BombExploded
+)
+
+// PlayerState ...
+type PlayerState = int
+
+// PlayerState ...
+const (
+	HasHelmet = (1 << iota)
+	HasArmor
+	HasDefuseKit
+	HasBomb
+	IsBot
+	IsConnected
+	IsDucking
+	IsDefusing
+	IsPlanting
+	IsReloading
+	IsUnknown
 )

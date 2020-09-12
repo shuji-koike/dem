@@ -248,6 +248,19 @@ func Parse(reader io.Reader) (match Match, err error) {
 				}
 				if p.HasDefuseKit {
 					player.Weapons = append(player.Weapons, common.EqDefuseKit)
+					player.State ^= HasDefuseKit
+				}
+				if p.HasHelmet {
+					player.State ^= HasHelmet
+				}
+				if p.Armor > 0 {
+					player.State ^= HasArmor
+				}
+				if p.IsDucking {
+					player.State ^= IsDucking
+				}
+				if p.IsReloading {
+					player.State ^= IsReloading
 				}
 				sort.Slice(player.Weapons, func(i, j int) bool {
 					return int(player.Weapons[i]) < int(player.Weapons[j])

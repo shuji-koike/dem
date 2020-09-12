@@ -1,5 +1,6 @@
 import child_process from "child_process"
 import fs from "fs"
+import path from "path"
 import util from "util"
 import express from "express"
 import readdir from "recursive-readdir"
@@ -19,17 +20,16 @@ router.get("/api/files", async (req, res) => {
 })
 router.use("/api/files", async (req, res, next) => {
   const filePath =
-    process.env["APP_DEMO_DIR"] + req.path.replace("/api/files/", "") //FIXME
-  if (req.path.endsWith(".json")) {
+    process.env["APP_DEMO_DIR"] +
+    path.posix.normalize(req.path.replace("/api/files/", "/"))
+  if (filePath.endsWith(".json")) {
     require("connect-gzip-static")(process.env["APP_DEMO_DIR"])(req, res, next) //FIXME
-  } else if (req.path.endsWith(".dem")) {
-    if (await exists(filePath)) {
-      if (!(await exists(filePath.replace(/\.dem$/, ".dem.json.gz")))) {
+  } else if (filePath.endsWith(".dem")) {
+    if (await exists(filePath))
+      if (!(await exists(filePath.replace(/\.dem$/, ".dem.json.gz"))))
         await exec("go", ["run", ".", filePath])
-      }
-    }
     res.redirect(req.originalUrl.replace(/\.dem$/, ".dem.json"))
-  } else if (req.path.endsWith(".rar")) {
+  } else if (filePath.endsWith(".rar")) {
     if (typeof req.query.file == "string") {
       res.send({}) //TODO
     } else {
@@ -38,6 +38,6 @@ router.use("/api/files", async (req, res, next) => {
     }
   } else {
     console.error(req.path, filePath)
-    res.status(500)
+    res.status(500).send()
   }
 })

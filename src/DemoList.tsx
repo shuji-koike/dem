@@ -10,7 +10,7 @@ import { Link } from "react-router-dom"
 export const DemoList: React.FC = () => {
   const [state, setState] = React.useState<string[]>([])
   React.useEffect(() => {
-    axios.get("/api/files").then(({ data }) => setState(data))
+    axios.get("/api/files").then(({ data }) => setState(data.sort()))
   }, [])
   return (
     <main>

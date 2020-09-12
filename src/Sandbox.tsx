@@ -20,7 +20,7 @@ export const Sandbox: React.FC = () => {
     }
   }
   return match ? (
-    <DemoPlayer match={match} />
+    <DemoPlayer match={match} tick={0} />
   ) : (
     <main>
       <h1>CSGO Demo 2D Analyzer</h1>

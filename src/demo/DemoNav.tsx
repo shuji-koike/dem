@@ -4,7 +4,7 @@ import { TeamColor } from "."
 
 export const DemoNav: React.FC<{
   match: Match
-  round: Round
+  round?: Round
   onChange: (round: Round) => void
 }> = function ({ match, round, onChange }) {
   return (

@@ -8,10 +8,11 @@ import { BombState, TeamColor, bombColor } from "."
 
 export const DemoSlider: React.FC<{
   match: Match
-  round: Round
-  frame: Frame
-  setCurrentFrame: (i: number) => void
-}> = function ({ match, round, frame, setCurrentFrame }) {
+  round?: Round
+  frame?: Frame
+  setFrame: (e: Frame) => void
+}> = function ({ match, round, frame, setFrame }) {
+  if (!round || !frame) return null
   const marks = React.useMemo(
     () => [
       ...round.Frames.filter(e => e.Bomb.State & BombState.Planted)
@@ -42,11 +43,13 @@ export const DemoSlider: React.FC<{
         })),
       ...round.Frames.filter(
         (e, i, arr) =>
-          !(frameToTime(e) % 5) &&
-          arr.find(f => frameToTime(f) === frameToTime(e)) === e
+          !(frameToTime(match, round, e) % 5) &&
+          arr.find(
+            f => frameToTime(match, round, f) === frameToTime(match, round, e)
+          ) === e
       ).map(e => ({
         value: round.Frames.indexOf(e),
-        label: <MarkerLabel>{labelFormat(e)}</MarkerLabel>,
+        label: <MarkerLabel>{labelFormat(match, round, e)}</MarkerLabel>,
       })),
       ...match.KillEvents.filter(e => e.Round == round.Round).map(e => ({
         value: findIndex(round.Frames, f => f.Tick >= e.Tick),
@@ -57,31 +60,14 @@ export const DemoSlider: React.FC<{
     ],
     [match, round]
   )
-  function tickToSecond(tick: number) {
-    return ((tick || 0) - round.Frames[0].Tick) / match.TickRate
-  }
-  function frameToTime(frame: Frame) {
-    return frame.Bomb.State & BombState.Planted
-      ? Math.floor(
-          (frame.Tick -
-            round.Frames.find(e => e.Bomb.State & BombState.Planted)?.Tick!) /
-            match.TickRate
-        )
-      : round.TimeLimit - tickToSecond(frame.Tick)
-  }
-  function labelFormat(frame: Frame) {
-    return frame.Bomb.State & BombState.Planted
-      ? frameToTime(frame)
-      : new Date(frameToTime(frame) * 1000).toISOString().substr(14, 5)
-  }
   return (
     <Slider
       value={round.Frames.indexOf(frame)}
       max={round.Frames.length - 1}
-      onChange={(_, value) => setCurrentFrame(value as number)}
+      onChange={(_, value) => setFrame(round.Frames[value as number])}
       marks={uniqBy(marks, "value")}
       valueLabelDisplay="auto"
-      valueLabelFormat={e => labelFormat(round.Frames[e])}
+      valueLabelFormat={e => labelFormat(match, round, round.Frames[e])}
     />
   )
 }
@@ -89,6 +75,28 @@ export const DemoSlider: React.FC<{
 function findIndex(frames: Frame[], fn: (f: Frame) => boolean) {
   const index = frames.findIndex(fn)
   return index == -1 ? frames.length - 1 : index
+}
+
+function tickToSecond(match: Match, round: Round, tick: number) {
+  return ((tick || 0) - round.Frames[0].Tick) / match.TickRate
+}
+
+function frameToTime(match: Match, round: Round, frame: Frame) {
+  return frame.Bomb.State & BombState.Planted
+    ? Math.floor(
+        (frame.Tick -
+          round.Frames.find(e => e.Bomb.State & BombState.Planted)?.Tick!) /
+          match.TickRate
+      )
+    : round.TimeLimit - tickToSecond(match, round, frame.Tick)
+}
+
+function labelFormat(match: Match, round: Round, frame: Frame) {
+  return frame.Bomb.State & BombState.Planted
+    ? frameToTime(match, round, frame)
+    : new Date(frameToTime(match, round, frame) * 1000)
+        .toISOString()
+        .substr(14, 5)
 }
 
 const MarkerLabel = styled.span`

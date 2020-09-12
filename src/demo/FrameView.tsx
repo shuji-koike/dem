@@ -6,12 +6,13 @@ import {
   pointToArray,
   rotatePoint,
   teamColor,
+  icon,
 } from "."
 
 export const FrameView: React.FC<{
-  frame: Frame
+  frame?: Frame
 }> = function ({ frame }) {
-  return (
+  return frame ? (
     <>
       <MolotovView frame={frame}></MolotovView>
       {(frame.Players || []).map(e => (
@@ -22,6 +23,8 @@ export const FrameView: React.FC<{
         <NadeView key={e.ID} nade={e}></NadeView>
       ))}
     </>
+  ) : (
+    <></>
   )
 }
 
@@ -90,15 +93,14 @@ export const FramePlayer: React.FC<{
 }
 
 export const TrailView: React.FC<{
-  round: Round
-  currentFrame: number
+  round?: Round
 }> = function ({ round }) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   React.useEffect(() => {
     const context = canvasRef?.current?.getContext?.("2d")
     if (context) {
       context.clearRect(0, 0, 1024, 1024)
-      round.Frames.forEach(f => {
+      round?.Frames.forEach(f => {
         for (const e in f.Players) {
           context.fillStyle = teamColor(f.Players[e].Team)
           context.fillRect(f.Players[e].X, f.Players[e].Y, 1, 1)
@@ -121,7 +123,7 @@ export const BombView: React.FC<{
       <image
         x={frame.Bomb.X - 8}
         y={frame.Bomb.Y - 13}
-        href="/static/icons/404.png"
+        href={icon("404")}
         width="15"
         height="25"
         filter="url(#BombColor)"

@@ -2,4 +2,6 @@
 /dist
 /static
 /var
+package-lock.json
+yarn.lock
 __debug_bin

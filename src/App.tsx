@@ -5,6 +5,7 @@ import { DemoList } from "./DemoList"
 import { DemoPage } from "./DemoPage"
 import { Home } from "./Home"
 import { Layout, MenuItem, NavItem } from "./Layout"
+import { MatchContextProvider } from "./MatchContext"
 import { Matches } from "./Matches"
 import { Results } from "./Results"
 import { Sandbox } from "./Sandbox"
@@ -12,13 +13,15 @@ import { Sandbox } from "./Sandbox"
 export function App() {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route>
-          <Layout nav={<Nav />} menu={<Menu />}>
-            <MainSwitch />
-          </Layout>
-        </Route>
-      </Switch>
+      <MatchContextProvider>
+        <Switch>
+          <Route>
+            <Layout nav={<Nav />} menu={<Menu />}>
+              <MainSwitch />
+            </Layout>
+          </Route>
+        </Switch>
+      </MatchContextProvider>
     </BrowserRouter>
   )
 }
@@ -30,7 +33,6 @@ function MainSwitch() {
       <Route path="/matches" component={Matches}></Route>
       <Route path="/files/*" component={DemoPage}></Route>
       <Route path="/files" component={DemoList}></Route>
-      <Route path="/dem/*" component={DemoPage}></Route>
       <Route path="/demhub" component={Sandbox}></Route>
       <Route path="/" component={Home}></Route>
     </Switch>
@@ -40,8 +42,8 @@ function MainSwitch() {
 function Nav() {
   return (
     <>
-      <NavItem icon={faTrophy} to="/results?content=demo" label="Results" />
       <NavItem icon={faFile} to="/files" label="Files" />
+      <NavItem icon={faTrophy} to="/results" label="Results" />
     </>
   )
 }
@@ -50,8 +52,8 @@ function Menu() {
   return (
     <>
       <MenuItem icon={faHome} to="/" exact label="Home" />
-      <MenuItem icon={faTrophy} to="/results?content=demo" label="Results" />
       <MenuItem icon={faFile} to="/files" label="Files" />
+      <MenuItem icon={faTrophy} to="/results" label="Results" />
     </>
   )
 }

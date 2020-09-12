@@ -4,7 +4,7 @@ import Tabs from "@material-ui/core/Tabs"
 import axios from "axios"
 import React from "react"
 import { useParams, useLocation } from "react-router-dom"
-import { Team, getScores } from "./demo"
+import { Team, getScores, setpos, velocity, sumCache } from "./demo"
 import { DemoPlayer } from "./demo/DemoPlayer"
 import { KillEventView } from "./demo/KillEvent"
 import { MapView } from "./demo/MapView"
@@ -12,10 +12,11 @@ import { NadeEventView } from "./demo/NadeEvent"
 
 export const DemoPage: React.FC = function () {
   const path = useParams<{ 0: string }>()[0]
-  const { search } = useLocation()
+  const { search, hash } = useLocation()
+  const params = new URLSearchParams(hash.slice(1))
   const [match, setMatch] = React.useState<Match | null>(null)
-  const [tab, setTab] = React.useState(0)
-  const [tick, setTick] = React.useState(0)
+  const [tab, setTab] = React.useState(Number(params.get("tab")) || 0)
+  const [tick, setTick] = React.useState(Number(params.get("tick")) || 0)
   React.useEffect(() => {
     axios.get(`/api/files/${path}${search}`).then(({ data }) => setMatch(data))
   }, [path])
@@ -93,7 +94,7 @@ const RoundsView: React.FC<{
       <table>
         <thead>
           <tr>
-            <th>#</th>
+            <th>Round</th>
             <th>Tick</th>
             <th>Winner</th>
             <th>Reason</th>
@@ -104,24 +105,14 @@ const RoundsView: React.FC<{
         </thead>
         <tbody>
           {match.Rounds?.map((e, i) => (
-            <tr key={i}>
+            <tr key={i} onClick={() => setTick(e.Tick)}>
               <td>{e.Round + 1}</td>
-              <td onClick={() => setTick(e.Tick)}>{e.Tick}</td>
+              <td>{e.Tick}</td>
               <td>{e.Winner}</td>
               <td>{e.Reason}</td>
               <td>{e.BombSite || "-"}</td>
-              <td>
-                {e.Frames[0].Players.filter(
-                  e => e.Team == Team.CounterTerrorists
-                )
-                  .map(e => e.Money)
-                  .reduce((a, b) => a + b, 0)}
-              </td>
-              <td>
-                {e.Frames[0].Players.filter(e => e.Team == Team.Terrorists)
-                  .map(e => e.Money)
-                  .reduce((a, b) => a + b, 0)}
-              </td>
+              <td>{sumCache(e.Frames[0], Team.CounterTerrorists)}</td>
+              <td>{sumCache(e.Frames[0], Team.Terrorists)}</td>
             </tr>
           ))}
         </tbody>
@@ -147,14 +138,39 @@ const KillsView: React.FC<{
           />
         ))}
       </MapView>
-      {match.KillEvents?.map((e, i) => (
-        <pre
-          key={i}
-          onMouseOver={() => setSelected(e)}
-          onMouseLeave={() => setSelected(null)}>
-          {JSON.stringify(e)}
-        </pre>
-      ))}
+      <table>
+        <thead>
+          <tr>
+            <th>Round</th>
+            <th>Tick</th>
+            <th>Killer</th>
+            <th>Victim</th>
+            <th>Assister</th>
+            <th>Weapon</th>
+            <th>Team</th>
+            <th>IsHeadshot</th>
+            <th>Penetrated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {match.KillEvents?.map((e, i) => (
+            <tr
+              key={i}
+              onMouseOver={() => setSelected(e)}
+              onMouseLeave={() => setSelected(null)}>
+              <td>{e.Round + 1}</td>
+              <td onClick={() => setTick(e.Tick)}>{e.Tick}</td>
+              <td>{e.Killer}</td>
+              <td>{e.Victim}</td>
+              <td>{e.Assister}</td>
+              <td>{e.Weapon}</td>
+              <td>{e.Team}</td>
+              <td>{e.IsHeadshot.toString()}</td>
+              <td>{e.Penetrated}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </section>
   )
 }
@@ -179,11 +195,11 @@ const NadesView: React.FC<{
       <table>
         <thead>
           <tr>
+            <th>Round</th>
+            <th>Tick</th>
             <th>ID</th>
             <th>Weapon</th>
             <th>Thrower</th>
-            <th>Tick</th>
-            <th>Round</th>
             <th>Team</th>
             <th>Velocity</th>
             <th>Position</th>
@@ -195,28 +211,16 @@ const NadesView: React.FC<{
               key={i}
               onMouseOver={() => setSelected(e)}
               onMouseLeave={() => setSelected(null)}>
+              <td>{e.Round + 1}</td>
+              <td onClick={() => setTick(e.Tick)}>{e.Tick}</td>
               <td>{e.ID}</td>
               <td>{e.Weapon}</td>
               <td>{e.Thrower}</td>
-              <td onClick={() => setTick(e.Tick)}>{e.Tick}</td>
-              <td>{e.Round + 1}</td>
               <td>{e.Team}</td>
-              <td>
-                {Object.entries(e.Velocity)
-                  .map(([, v]) => v)
-                  .map(e => Math.floor(e))
-                  .join(",")}
-              </td>
+              <td>{velocity(e.Velocity)}</td>
               <td>
                 <button
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      [
-                        `setpos ${e.Position.X} ${e.Position.Y} ${e.Position.Z}`,
-                        `setang ${e.Yaw} ${e.Pitch}`,
-                      ].join(";")
-                    )
-                  }>
+                  onClick={() => navigator.clipboard.writeText(setpos(e))}>
                   Copy
                 </button>
               </td>

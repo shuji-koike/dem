@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import axios from "axios"
+import icons from "./icons.json"
 
 export enum Team {
   Unassigned = 0,
@@ -15,6 +16,20 @@ export enum BombState {
   Defusing = 1 << 2,
   Defused = 1 << 3,
   Exploded = 1 << 4,
+}
+
+export enum PlayerState {
+  HasHelmet = 1,
+  HasArmor = 1 << 1,
+  HasDefuseKit = 1 << 2,
+  HasBomb = 1 << 3,
+  IsBot = 1 << 4,
+  IsConnected = 1 << 5,
+  IsDucking = 1 << 6,
+  IsDefusing = 1 << 7,
+  IsPlanting = 1 << 8,
+  IsReloading = 1 << 9,
+  IsUnknown = 1 << 10,
 }
 
 export type Dict<V = string> = {
@@ -87,6 +102,22 @@ export function pointToArray(p: Point) {
   return [p.X, p.Y]
 }
 
+export function findRound(
+  match: Match,
+  tick: number | undefined
+): Round | undefined {
+  if (typeof tick != "number") return
+  return match.Rounds?.find(e => e.Frames[e.Frames.length - 1].Tick > tick)
+}
+
+export function findFrame(
+  match: Match,
+  tick: number | undefined
+): Frame | undefined {
+  if (typeof tick != "number") return
+  return findRound(match, tick)?.Frames.find(e => e.Tick > tick)
+}
+
 export async function fetchSteamData(ids: number[]) {
   const url =
     "/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids=" +
@@ -132,7 +163,7 @@ export function getScores(match: Match) {
     .map(e => e.Frames.slice(-1))
     .flat()
     .forEach(e =>
-      e.Players.forEach(e =>
+      e?.Players.forEach(e =>
         Object.assign(dict[e.ID], { Name: e.Name, Team: e.Team })
       )
     )
@@ -140,4 +171,38 @@ export function getScores(match: Match) {
     .map(([, v]) => v)
     .filter(e => e.ID)
     .sort((a, b) => (a.Team == b.Team ? b.kills - a.kills : a.Team - b.Team))
+}
+
+export function sumCache(frame: Frame, team: Team) {
+  return frame.Players.filter(e => e.Team === team)
+    .map(e => e.Money)
+    .reduce((a, b) => a + b, 0)
+}
+
+export function setpos(e: { Position: Vector; Yaw: number; Pitch: number }) {
+  return [
+    `setpos ${e.Position.X} ${e.Position.Y} ${e.Position.Z}`,
+    `setang ${e.Yaw} ${e.Pitch}`,
+  ].join(";")
+}
+
+export function velocity(vector: Vector) {
+  return Object.values(vector)
+    .map(e => Math.floor(e))
+    .join(",")
+}
+
+export function icon(name: string | number) {
+  return (
+    icons.canvas.sprites.find(e => e.name == name)?.src ||
+    `/static/icons/${name}.png`
+  )
+}
+
+export function armorIcon(player: Player) {
+  return (
+    (player.State & PlayerState.HasHelmet && icon(403)) ||
+    (player.State & PlayerState.HasArmor && icon(402)) ||
+    "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+  )
 }

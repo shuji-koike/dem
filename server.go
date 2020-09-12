@@ -13,8 +13,7 @@ import (
 )
 
 // Server ...
-type Server struct {
-}
+type Server struct{}
 
 // Listen ...
 func (s *Server) Listen(port int) {

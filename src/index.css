@@ -24,7 +24,7 @@ section table th {
   text-align: left;
 }
 section svg {
-  max-width: 60vh;
+  max-width: 40vh;
   background-color: #111;
   cursor: crosshair;
 }
