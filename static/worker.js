@@ -1,3 +1,5 @@
+import "./wasm_exec"
+
 onmessage = async function ({ data: [cmd, ...args] }) {
   if (cmd == "wasmParaseDemo") {
     await initWasm()
@@ -13,10 +15,9 @@ self.wasmLogger = function (log) {
 }
 
 async function initWasm() {
-  self.importScripts("/static/wasm_exec.js")
   const go = new Go()
   const { instance } = await WebAssembly.instantiateStreaming(
-    fetch("/static/main.wasm"),
+    fetch((await import("./main.wasm?url")).default),
     go.importObject
   )
   go.run(instance)

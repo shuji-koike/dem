@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
-
 import axios from "axios"
-import icons from "./icons.json"
+import icons from "../../static/icons.json"
 
 export enum Team {
   Unassigned = 0,
@@ -48,12 +46,18 @@ export const TeamColor: Dict<string> = {
   [Team.CounterTerrorists]: "#295FCC",
 }
 
-export function teamColor(n: Team): string {
-  return TeamColor[n || 0]
+export interface SteamUser {
+  steamid: string
+  profileurl: string
+  avatar: string
 }
 
-export function teamOpponentColor(n: Team): string {
-  return TeamColor[TeamOpponent.get(n) || 0]
+export function teamColor(team: Team): string {
+  return TeamColor[team ?? throwDataError()] ?? throwDataError()
+}
+
+export function teamOpponentColor(team: Team): string {
+  return teamColor(TeamOpponent.get(team) ?? throwDataError())
 }
 
 export const NadeColor: Dict<string> = {
@@ -65,7 +69,7 @@ export const NadeColor: Dict<string> = {
   506: "purple", // EqHE
 }
 
-export function bombColor(state: BombState) {
+export function bombColor(state: BombState): string {
   return (
     {
       [BombState.Planting]: "#FFFF00",
@@ -77,7 +81,7 @@ export function bombColor(state: BombState) {
   )
 }
 
-export function colorToMatrix(hex: string) {
+export function colorToMatrix(hex: string): string {
   const [r, g, b] = (hex.slice(1).match(/.{2}/g) || []).map(
     a => parseInt(a, 16) / 255
   )
@@ -98,8 +102,12 @@ export function rotatePoint(p: Point, r: number, d: number): Point {
   }
 }
 
-export function pointToArray(p: Point) {
+export function pointToTuple(p: Point): [number, number] {
   return [p.X, p.Y]
+}
+
+export function pointsToString(arr: Point[]): string {
+  return arr.map(pointToTuple).flat().join(" ")
 }
 
 export function findRound(
@@ -107,7 +115,9 @@ export function findRound(
   tick: number | undefined
 ): Round | undefined {
   if (typeof tick != "number") return
-  return match.Rounds?.find(e => e.Frames[e.Frames.length - 1].Tick > tick)
+  return match.Rounds?.find(
+    e => (e.Frames[e.Frames.length - 1]?.Tick ?? 0) > tick
+  )
 }
 
 export function findFrame(
@@ -118,25 +128,31 @@ export function findFrame(
   return findRound(match, tick)?.Frames.find(e => e.Tick > tick)
 }
 
-export async function fetchSteamData(ids: number[]) {
+export async function fetchSteamData(
+  ids: number[]
+): Promise<Record<string, SteamUser>> {
+  if (!import.meta.env.VITE_STEAM_API) return {}
   const url =
     "/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids=" +
     Array.from(new Set(ids)).join(",")
-  const { data } = await axios.get(url)
-  return data.response?.players?.reduce?.(
-    (acc: any, e: any) => (acc[e.steamid] = e),
+  const { data } = await axios.get<{
+    response?: { players?: SteamUser[] }
+  }>(url)
+  if (!data.response?.players) throw Error()
+  return data.response.players.reduce?.(
+    (acc, e) => ({ ...acc, [e.steamid]: e }),
     {}
   )
 }
 
 class PlayerScore {
   ID: number
-  Name: string = ""
+  Name = ""
   Team: Team = 0
-  kills: number = 0
-  assists: number = 0
-  deaths: number = 0
-  headshots: number = 0
+  kills = 0
+  assists = 0
+  deaths = 0
+  headshots = 0
   constructor(ID: number) {
     this.ID = ID
   }
@@ -148,16 +164,18 @@ class PlayerScore {
   }
 }
 
-export function getScores(match: Match) {
+export function getScores(match: Match): PlayerScore[] {
   const dict: { [key: number]: PlayerScore } = {}
   match.KillEvents.map(e => [e.Killer, e.Assister, e.Victim])
     .flat()
     .forEach(e => (dict[e] = new PlayerScore(e)))
   match.KillEvents.forEach(e => {
-    dict[e.Killer].kills += 1
-    dict[e.Assister].assists += 1
-    dict[e.Victim].deaths += 1
-    dict[e.Killer].headshots += e.IsHeadshot ? 1 : 0
+    /* eslint-disable @typescript-eslint/no-non-null-assertion */
+    dict[e.Killer]!.kills += 1
+    dict[e.Assister]!.assists += 1
+    dict[e.Victim]!.deaths += 1
+    dict[e.Killer]!.headshots += e.IsHeadshot ? 1 : 0
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
   })
   match.Rounds?.slice(-1)
     .map(e => e.Frames.slice(-1))
@@ -173,36 +191,44 @@ export function getScores(match: Match) {
     .sort((a, b) => (a.Team == b.Team ? b.kills - a.kills : a.Team - b.Team))
 }
 
-export function sumCache(frame: Frame, team: Team) {
+export function sumCache(frame: Frame, team: Team): number {
   return frame.Players.filter(e => e.Team === team)
     .map(e => e.Money)
     .reduce((a, b) => a + b, 0)
 }
 
-export function setpos(e: { Position: Vector; Yaw: number; Pitch: number }) {
+export function setpos(e: {
+  Position: Vector
+  Yaw: number
+  Pitch: number
+}): string {
   return [
     `setpos ${e.Position.X} ${e.Position.Y} ${e.Position.Z}`,
     `setang ${e.Yaw} ${e.Pitch}`,
   ].join(";")
 }
 
-export function velocity(vector: Vector) {
+export function velocity(vector: Vector): string {
   return Object.values(vector)
     .map(e => Math.floor(e))
     .join(",")
 }
 
-export function icon(name: string | number) {
-  return (
-    icons.canvas.sprites.find(e => e.name == name)?.src ||
-    `/static/icons/${name}.png`
-  )
+export function icon(name: string | number): string {
+  return icons.canvas.sprites.find(e => e.name == name)?.src || EmptyImage
 }
 
-export function armorIcon(player: Player) {
+export function armorIcon(player: Player): string {
   return (
     (player.State & PlayerState.HasHelmet && icon(403)) ||
     (player.State & PlayerState.HasArmor && icon(402)) ||
-    "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+    EmptyImage
   )
+}
+
+export const EmptyImage =
+  "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+
+function throwDataError<T>(): T {
+  throw new Error("DataError")
 }

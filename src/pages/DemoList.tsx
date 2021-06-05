@@ -7,7 +7,7 @@ import axios from "axios"
 import React from "react"
 import { Link } from "react-router-dom"
 
-export const DemoList: React.FC = () => {
+export const DemoList: React.VFC = () => {
   const [state, setState] = React.useState<string[]>([])
   React.useEffect(() => {
     axios.get("/api/files").then(({ data }) => setState(data.sort()))
@@ -25,7 +25,7 @@ export const DemoList: React.FC = () => {
   )
 }
 
-const DemoItem: React.FC<{
+const DemoItem: React.VFC<{
   file: string
   nodeId: string
 }> = ({ file, nodeId }) => {
@@ -42,13 +42,13 @@ const DemoItem: React.FC<{
   return <TreeItem nodeId={nodeId} label={file}></TreeItem>
 }
 
-const RarItem: React.FC<{
+const RarItem: React.VFC<{
   file: string
 }> = ({ file }) => {
   const [data, setData] = React.useState([])
   const [open, setOpen] = React.useState(false)
   React.useEffect(() => {
-    open && axios.get(`/api/files/${file}`).then(({ data }) => setData(data))
+    if (open) axios.get(`/api/files/${file}`).then(({ data }) => setData(data))
   }, [open])
   return (
     <TreeItem nodeId={file} label={file} onClick={() => setOpen(!open)}>

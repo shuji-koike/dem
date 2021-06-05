@@ -2,11 +2,11 @@ import React from "react"
 import styled from "styled-components"
 import { TeamColor } from "."
 
-export const DemoNav: React.FC<{
+export const DemoNav: React.VFC<{
   match: Match
   round?: Round
   onChange: (round: Round) => void
-}> = function ({ match, round, onChange }) {
+}> = ({ match, round, onChange }) => {
   return (
     <>
       {match.Rounds?.map(e => (
@@ -41,6 +41,7 @@ const StyledSpan = styled.span`
   }
   &.active {
     font-weight: bold;
+    text-decoration: underline;
     filter: brightness(150%);
   }
 `

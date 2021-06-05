@@ -1,23 +1,23 @@
 import { faFile, faHome, faTrophy } from "@fortawesome/free-solid-svg-icons"
 import React from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
-import { DemoList } from "./DemoList"
-import { DemoPage } from "./DemoPage"
-import { Home } from "./Home"
 import { Layout, MenuItem, NavItem } from "./Layout"
-import { MatchContextProvider } from "./MatchContext"
-import { Matches } from "./Matches"
-import { Results } from "./Results"
-import { Sandbox } from "./Sandbox"
+import { DemoList } from "./pages/DemoList"
+import { DemoPage } from "./pages/DemoPage"
+import { Home } from "./pages/Home"
+import { MatchList } from "./pages/MatchList"
+import { Results } from "./pages/Results"
+import { SampleMatch, Sandbox } from "./pages/Sandbox"
+import { MatchContextProvider } from "./store/MatchContext"
 
-export function App() {
+export const App: React.VFC = () => {
   return (
     <BrowserRouter>
       <MatchContextProvider>
         <Switch>
           <Route>
-            <Layout nav={<Nav />} menu={<Menu />}>
-              <MainSwitch />
+            <Layout nav={nav} menu={menu}>
+              {routes}
             </Layout>
           </Route>
         </Switch>
@@ -26,34 +26,30 @@ export function App() {
   )
 }
 
-function MainSwitch() {
-  return (
-    <Switch>
-      <Route path="/results" component={Results}></Route>
-      <Route path="/matches" component={Matches}></Route>
-      <Route path="/files/*" component={DemoPage}></Route>
-      <Route path="/files" component={DemoList}></Route>
-      <Route path="/demhub" component={Sandbox}></Route>
-      <Route path="/" component={Home}></Route>
-    </Switch>
-  )
-}
+const routes = (
+  <Switch>
+    <Route path="/results" component={Results}></Route>
+    <Route path="/matches" component={MatchList}></Route>
+    <Route path="/files/*" component={DemoPage}></Route>
+    <Route path="/files" component={DemoList}></Route>
+    <Route path="/sample" component={SampleMatch}></Route>
+    <Route path="/sandbox" component={Sandbox}></Route>
+    <Route path="/" component={Home}></Route>
+  </Switch>
+)
 
-function Nav() {
-  return (
-    <>
-      <NavItem icon={faFile} to="/files" label="Files" />
-      <NavItem icon={faTrophy} to="/results" label="Results" />
-    </>
-  )
-}
+const nav = (
+  <>
+    <NavItem icon={faHome} to="/" label="Home" />
+    <NavItem icon={faFile} to="/files" label="Files" />
+    <NavItem icon={faTrophy} to="/results" label="Results" />
+  </>
+)
 
-function Menu() {
-  return (
-    <>
-      <MenuItem icon={faHome} to="/" exact label="Home" />
-      <MenuItem icon={faFile} to="/files" label="Files" />
-      <MenuItem icon={faTrophy} to="/results" label="Results" />
-    </>
-  )
-}
+const menu = (
+  <>
+    <MenuItem icon={faHome} to="/" exact label="Home" />
+    <MenuItem icon={faFile} to="/files" label="Files" />
+    <MenuItem icon={faTrophy} to="/results" label="Results" />
+  </>
+)

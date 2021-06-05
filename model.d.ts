@@ -1,18 +1,8 @@
-/* eslint-disable no-unused-vars */
-
 declare enum Team {
   Unassigned = 0,
   Spectators = 1,
   Terrorists = 2,
   CounterTerrorists = 3,
-}
-
-declare enum BombState {
-  Planting = 1,
-  Planted = 1 << 1,
-  Defusing = 1 << 2,
-  Defused = 1 << 3,
-  Exploded = 1 << 4,
 }
 
 interface Match {

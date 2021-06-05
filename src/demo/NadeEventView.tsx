@@ -1,7 +1,7 @@
 import React from "react"
 import { TeamColor } from "."
 
-export const NadeEventView: React.FC<{
+export const NadeEventView: React.VFC<{
   event: NadeEvent
   selected?: boolean
   onClick?: (event: NadeEvent) => void
@@ -18,8 +18,8 @@ export const NadeEventView: React.FC<{
         stroke="rgba(255,255,255,0.25)"
         strokeWidth={active ? 2 : 0.25}></path>
       <circle
-        cx={event.Trajectory?.[0].X}
-        cy={event.Trajectory?.[0].Y}
+        cx={event.Trajectory?.[0]?.X}
+        cy={event.Trajectory?.[0]?.Y}
         r={active ? 4 : 2}
         fill={TeamColor[event.Team]}></circle>
       {event.Trajectory?.slice(-1)?.map((p, i) => (

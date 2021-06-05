@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/golang/geo/r2"
 	"github.com/golang/geo/r3"
-	"github.com/markus-wa/demoinfocs-golang/common"
-	"github.com/markus-wa/demoinfocs-golang/events"
+	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs/common"
+	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs/events"
 )
 
 // Match ...
@@ -46,7 +46,7 @@ type Frame struct {
 // Player ...
 type Player struct {
 	r2.Point
-	ID      int64
+	ID      uint64
 	Name    string
 	Yaw     float64
 	Hp      int
@@ -54,16 +54,16 @@ type Player struct {
 	Money   int
 	Team    common.Team
 	State   PlayerState
-	Weapon  common.EquipmentElement
-	Weapons []common.EquipmentElement
+	Weapon  common.EquipmentType
+	Weapons []common.EquipmentType
 }
 
 // Nade ...
 type Nade struct {
 	r2.Point
 	ID      int
-	Weapon  common.EquipmentElement
-	Thrower int64
+	Weapon  common.EquipmentType
+	Thrower uint64
 	Team    common.Team
 	Active  bool
 	Flames  []r2.Point
@@ -72,8 +72,8 @@ type Nade struct {
 // NadeEvent ...
 type NadeEvent struct {
 	ID         int
-	Weapon     common.EquipmentElement
-	Thrower    int64
+	Weapon     common.EquipmentType
+	Thrower    uint64
 	Team       common.Team
 	Position   r3.Vector
 	Velocity   r3.Vector
@@ -88,10 +88,10 @@ type NadeEvent struct {
 // KillEvent ...
 type KillEvent struct {
 	r2.Point
-	Killer     int64
-	Victim     int64
-	Assister   int64
-	Weapon     common.EquipmentElement
+	Killer     uint64
+	Victim     uint64
+	Assister   uint64
+	Weapon     common.EquipmentType
 	Team       common.Team
 	IsHeadshot bool
 	Penetrated int

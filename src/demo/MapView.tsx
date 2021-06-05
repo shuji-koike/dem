@@ -1,7 +1,9 @@
 import React from "react"
+import { assetsMapRadar } from "../assets"
 
-export const MapView: React.FC<{
+export const MapView: React.VFC<{
   match: Match
+  children?: React.ReactNode
 }> = ({ match, children }) => {
   return (
     <svg viewBox="0 0 1024 1024">
@@ -15,7 +17,7 @@ export const MapView: React.FC<{
         y={0}
         width={1024}
         height={1024}
-        href={"/static/maps/" + match.MapName + "_radar.png"}
+        href={assetsMapRadar[match.MapName]}
         filter="url(#grayscale)"></image>
       {children}
     </svg>

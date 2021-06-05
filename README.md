@@ -7,12 +7,25 @@ npm start
 npm build
 ```
 
+```sh
+# go list -m -u all
+go get -u
+# go mod tidy
+go build .
+
+cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./static/wasm_exec.js
+GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
+```
+
 # links
 
 - https://github.com/markus-wa/demoinfocs-golang
 - https://github.com/ValveSoftware/csgo-demoinfo/tree/master/demoinfogo
 - https://material-ui.com/components/buttons/
 - https://material-ui.com/api/slider/
+
+- https://web.dev/file-system-access/
+- https://wicg.github.io/file-system-access/
 
 - https://csgostats.gg/
 - https://www.noesis.gg/
@@ -40,11 +53,6 @@ ORDER BY COUNT(_) DESC
 
 ```sh
 go get -u github.com/pilu/fresh
-```
-
-```sh
-cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./static/wasm_exec.js
-GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
 ```
 
 ```sh

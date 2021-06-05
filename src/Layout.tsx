@@ -1,4 +1,4 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core" // eslint-disable-line no-unused-vars
+import { IconProp } from "@fortawesome/fontawesome-svg-core"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Drawer } from "@material-ui/core"
 import AppBar from "@material-ui/core/AppBar"
@@ -27,14 +27,15 @@ export const LayoutContext = React.createContext<{
   setLayout: (layout: LayoutState) => void
 }>({
   layout: new LayoutState(),
-  setLayout: () => {},
+  setLayout: () => undefined,
 })
 
-export const Layout: React.FC<{
+export const Layout: React.VFC<{
   title?: string
   nav?: React.ReactNode
   menu?: React.ReactNode
-}> = function ({ title, nav, menu, children }) {
+  children: React.ReactNode
+}> = ({ title, nav, menu, children }) => {
   const [layout, setLayout] = React.useState(new LayoutState())
   const MenuButton = () => (
     <IconButton
@@ -67,8 +68,9 @@ export const Layout: React.FC<{
   )
 }
 
-export const HeaderSlot: React.FC<{
-  deps?: ReadonlyArray<any>
+export const HeaderSlot: React.VFC<{
+  deps?: ReadonlyArray<unknown>
+  children: React.ReactNode
 }> = ({ deps, children }) => {
   const { layout, setLayout } = React.useContext(LayoutContext)
   React.useEffect(() => {
@@ -78,7 +80,7 @@ export const HeaderSlot: React.FC<{
   return <></>
 }
 
-export const NavItem: React.FC<{
+export const NavItem: React.VFC<{
   icon: IconProp
   label?: string
   to: string
@@ -92,7 +94,7 @@ export const NavItem: React.FC<{
   </Typography>
 )
 
-export const MenuItem: React.FC<{
+export const MenuItem: React.VFC<{
   icon: IconProp
   label?: string
   divider?: boolean

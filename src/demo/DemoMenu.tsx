@@ -1,14 +1,15 @@
 import React from "react"
-import { Filter } from "./DemoPlayer" // eslint-disable-line no-unused-vars
+import { Filter } from "./DemoPlayer"
 import { PlayerCard } from "./PlayerCard"
+import { SteamUser } from "."
 
-export const DemoMenu: React.FC<{
+export const DemoMenu: React.VFC<{
   round?: Round
   frame?: Frame
-  steam: any
+  steam: Record<string, SteamUser>
   filter: Filter
   setFilter: (e: Filter) => void
-}> = function ({ round, frame, steam, filter, setFilter }) {
+}> = ({ round, frame, steam, filter, setFilter }) => {
   const [tab, setTab] = React.useState(0)
   const [all, setAll] = React.useState(false)
   React.useEffect(() => {
@@ -24,6 +25,7 @@ export const DemoMenu: React.FC<{
         break
     }
   }, [tab, round, all])
+  if (!round) return <></>
   return (
     <>
       <nav>

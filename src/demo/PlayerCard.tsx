@@ -1,11 +1,11 @@
 import React from "react"
 import styled from "styled-components"
-import { teamColor, icon, armorIcon } from "."
+import { SteamUser, teamColor, icon, armorIcon } from "."
 
-export const PlayerCard: React.FC<{
+export const PlayerCard: React.VFC<{
   player: Player
-  steam: any
-}> = function ({ player, steam }) {
+  steam?: SteamUser
+}> = ({ player, steam }) => {
   return (
     <StyledSection player={player}>
       <a href={steam?.profileurl} rel="noopener noreferrer">
@@ -19,9 +19,9 @@ export const PlayerCard: React.FC<{
       </div>
       <div className="Weapons">
         <img src={armorIcon(player)} />
-        {player.Weapons?.filter(e => e != 405).map(e => (
+        {player.Weapons?.filter(e => e != 405).map((e, i) => (
           <img
-            key={e}
+            key={i}
             className={player.Weapon == e ? "active" : ""}
             src={icon(e)}
           />
@@ -41,6 +41,7 @@ const StyledSection = styled.section<{ player: Player }>`
     border: none;
     width: 50px;
     height: 50px;
+    background: #333;
   }
   .Player {
     display: flex;

@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "es6": true,
@@ -6,8 +7,9 @@
   },
   "extends": [
     "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/eslint-recommended"
+    "plugin:react-hooks/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -21,21 +23,22 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "import"],
+  "plugins": ["@typescript-eslint", "import", "react", "react-hooks"],
   "settings": {
     "react": {
-      "version": "16.13"
+      "version": "detect"
     }
   },
   "ignorePatterns": ["dist", "static"],
   "rules": {
-    "no-console": [
+    "@typescript-eslint/consistent-type-assertions": [
       "error",
-      {
-        "allow": ["error", "warn", "info", "debug"]
-      }
+      { "assertionStyle": "never" }
     ],
+    "@typescript-eslint/no-empty-function": ["off"],
+    "no-console": ["error", { "allow": ["debug", "info", "warn", "error"] }],
     "react/prop-types": "off",
+    "react-hooks/exhaustive-deps": "off",
     "import/order": [
       "error",
       {

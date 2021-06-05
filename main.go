@@ -23,9 +23,9 @@ var stdin = flag.Bool("stdin", false, "read from stdin")
 var server = flag.Bool("server", false, "start http server")
 var port = flag.Int("port", 4000, "port to listen http requests")
 var dir = flag.String("dir", "/srv/app", "demo dir")
-var postfix = flag.String("postfix", ".json.gz", "postfix for gob files")
+var postfix = flag.String("postfix", ".json.gz", "postfix for cache files")
 var useMemCache = flag.Bool("useMemCache", false, "use memory cache")
-var useFileCache = flag.Bool("useFileCache", false, "use file cache")
+var useFileCache = flag.Bool("useFileCache", true, "use file cache")
 
 var group singleflight.Group
 var cache = sync.Map{}
@@ -71,7 +71,8 @@ func load(path string) (Match, error) {
 			}
 		}
 		if !*useFileCache || os.IsNotExist(err) {
-			file, err := os.Open(path)
+			var file *os.File
+			file, err = os.Open(path)
 			if err != nil {
 				return match, err
 			}

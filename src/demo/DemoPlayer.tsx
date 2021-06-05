@@ -5,31 +5,32 @@ import { DemoMenu } from "./DemoMenu"
 import { DemoNav } from "./DemoNav"
 import { DemoSlider } from "./DemoSlider"
 import { FrameView, TrailView } from "./FrameView"
-import { KillEventView } from "./KillEvent"
+import { KillEventView } from "./KillEventView"
 import { MapView } from "./MapView"
-import { NadeEventView } from "./NadeEvent"
-import { fetchSteamData, findRound, findFrame } from "."
+import { NadeEventView } from "./NadeEventView"
+import { SteamUser, fetchSteamData, findRound, findFrame } from "."
 
-export const DemoPlayer: React.FC<{
+export const DemoPlayer: React.VFC<{
   match: Match
   tick?: number
-  onExit?: () => void
-}> = function ({ match, tick, onExit }) {
-  const [state, setState] = React.useState({ paused: true, wheel: false })
+  setTick?: (tick: number | undefined) => void
+}> = ({ match, tick = 0, setTick }) => {
+  const [state, setState] = React.useState({ paused: true, wheel: true })
   const [round, setRound] = React.useState(findRound(match, tick))
   const [frame, setFrame] = React.useState(findFrame(match, tick))
-  const [steam, setSteam] = React.useState<any>({})
+  const [steam, setSteam] = React.useState<Record<string, SteamUser>>({})
   const [filter, setFilter] = React.useState<Filter>({})
   const ref = React.createRef<HTMLFormElement>()
   const currentRound = round?.Round || 0
   const currentFrame = frame ? round?.Frames.indexOf(frame) || 0 : 0
-  let ids = frame?.Players.map(e => e.ID).sort((a, b) => a - b)
+  const ids = frame?.Players.map(e => e.ID).sort()
+  const idsDep = ids?.join() // prevent eslint from crashing
   React.useEffect(() => {
     if (frame && !round?.Frames.includes(frame)) setFrame(round?.Frames[0])
   }, [round])
   React.useEffect(() => {
-    ids && fetchSteamData(ids).then(e => setSteam({ ...steam, ...e }))
-  }, [ids?.join()])
+    if (ids) fetchSteamData(ids).then(e => setSteam({ ...steam, ...e }))
+  }, [idsDep])
   React.useEffect(() => ref.current?.focus(), [ref.current])
   React.useEffect(() =>
     clearInterval.bind(
@@ -41,8 +42,8 @@ export const DemoPlayer: React.FC<{
     )
   )
   React.useEffect(() => {
-    document.body.style.overscrollBehaviorY = "none"
-    return () => void (document.body.style.overscrollBehaviorY = "auto")
+    document.body.style.overscrollBehavior = "none"
+    return () => void (document.body.style.overscrollBehavior = "auto")
   })
   function setCurrentFrame(n: number) {
     const frame = round?.Frames[n]
@@ -55,9 +56,9 @@ export const DemoPlayer: React.FC<{
       setRound(round)
     }
   }
-  function setTick(tick: number) {
-    setRound(findRound(match, tick))
-    setFrame(findFrame(match, tick))
+  function changeTick({ Tick }: { Tick: number }) {
+    setRound(findRound(match, Tick))
+    setFrame(findFrame(match, Tick))
   }
   function onKeyDown(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {
@@ -65,8 +66,8 @@ export const DemoPlayer: React.FC<{
       ArrowDown: () => setCurrentRound(currentRound + 1),
       ArrowLeft: () => setCurrentFrame(currentFrame - 1),
       ArrowRight: () => setCurrentFrame(currentFrame + 1),
-      Escape: () => onExit?.(),
-      q: () => onExit?.(),
+      Escape: () => setTick?.(undefined),
+      q: () => setTick?.(undefined),
       x: () => console.info(frame),
       " ": () => setState({ ...state, paused: !state.paused }),
     }
@@ -84,20 +85,20 @@ export const DemoPlayer: React.FC<{
       <HeaderSlot deps={[currentRound]}>
         <DemoNav match={match} round={round} onChange={setRound} />
       </HeaderSlot>
-      <main>
+      <article>
         <MapView match={match}>
           <TrailView round={round} />
           <FrameView frame={frame} />
           {filter.kills &&
             match.KillEvents?.filter(filter.kills).map((e, i) => (
-              <KillEventView key={i} event={e} onClick={e => setTick(e.Tick)} />
+              <KillEventView key={i} event={e} onClick={changeTick} />
             ))}
           {filter.nades &&
             match.NadeEvents?.filter(filter.nades).map((e, i) => (
-              <NadeEventView key={i} event={e} onClick={e => setTick(e.Tick)} />
+              <NadeEventView key={i} event={e} onClick={changeTick} />
             ))}
         </MapView>
-      </main>
+      </article>
       <aside>
         <DemoMenu
           round={round}
@@ -112,7 +113,8 @@ export const DemoPlayer: React.FC<{
           match={match}
           round={round}
           frame={frame}
-          setFrame={setFrame}></DemoSlider>
+          setFrame={setFrame}
+        />
         <pre>
           index:{currentFrame}, frame:{frame?.Frame}, tick:{frame?.Tick}
         </pre>
@@ -131,7 +133,7 @@ const StyledForm = styled.form`
   position: relative;
   outline: none;
   color: #fff;
-  > main {
+  > article {
     position: fixed;
     top: 0;
     left: 0;

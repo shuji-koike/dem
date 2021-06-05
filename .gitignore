@@ -1,7 +1,11 @@
 .*
+/functions/lib
 /dist
 /static
 /var
+/csgo
+node_modules
 package-lock.json
 yarn.lock
 __debug_bin
+*.log

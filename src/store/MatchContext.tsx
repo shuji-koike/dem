@@ -9,14 +9,21 @@ interface MatchState {
   setTick: (tick: number) => void
 }
 
-export const MatchContext = React.createContext<MatchState>({} as any)
+export const MatchContext = React.createContext<MatchState>({
+  match: null,
+  setMatch() {},
+  tick: 0,
+  setTick() {},
+})
 
-export const MatchContextProvider: React.FC = ({ children }) => {
+export const MatchContextProvider: React.VFC<{
+  children: React.ReactNode
+}> = ({ children }) => {
   const path = useParams<{ 0: string | undefined }>()?.[0]
   const [match, setMatch] = React.useState<Match | null>(null)
   const [tick, setTick] = React.useState(0)
   React.useEffect(() => {
-    path && axios.get(`/api/files/${path}`).then(({ data }) => setMatch(data))
+    if (path) axios.get(`/api/files/${path}`).then(({ data }) => setMatch(data))
   }, [path])
   return (
     <MatchContext.Provider value={{ match, setMatch, tick, setTick }}>

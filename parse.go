@@ -10,10 +10,10 @@ import (
 
 	"github.com/golang/geo/r2"
 	"github.com/golang/geo/r3"
-	"github.com/markus-wa/demoinfocs-golang"
-	"github.com/markus-wa/demoinfocs-golang/common"
-	"github.com/markus-wa/demoinfocs-golang/events"
-	"github.com/markus-wa/demoinfocs-golang/metadata"
+	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs"
+	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs/common"
+	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs/events"
+	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs/metadata"
 )
 
 var debug = log.New(ioutil.Discard, "", log.LstdFlags)
@@ -39,7 +39,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 		if p == nil {
 			return r2.Point{}
 		}
-		return normalize(p.Position)
+		return normalize(p.Position())
 	}
 
 	state := parser.GameState()
@@ -111,18 +111,18 @@ func Parse(reader io.Reader) (match Match, err error) {
 
 	parser.RegisterEventHandler(func(e events.GrenadeProjectileThrow) {
 		debug.Printf("%6d| GrenadeProjectileThrow\t%d\n", parser.CurrentFrame(),
-			e.Projectile.EntityID)
-		nades[e.Projectile.EntityID] = NadeEvent{
-			Position: e.Projectile.Thrower.Position,
-			Velocity: e.Projectile.Thrower.Velocity,
-			Yaw:      e.Projectile.Thrower.ViewDirectionX,
-			Pitch:    e.Projectile.Thrower.ViewDirectionY,
+			e.Projectile.UniqueID())
+		nades[int(e.Projectile.UniqueID())] = NadeEvent{
+			Position: e.Projectile.Thrower.Position(),
+			Velocity: e.Projectile.Thrower.Velocity(),
+			Yaw:      e.Projectile.Thrower.ViewDirectionX(),
+			Pitch:    e.Projectile.Thrower.ViewDirectionY(),
 		}
 	})
 
 	parser.RegisterEventHandler(func(e events.FlashExplode) {
 		debug.Printf("%6d| FlashExplode\t%d\t%d\t%d\n", parser.CurrentFrame(),
-			e.GrenadeEntityID, e.Thrower.Team, e.Thrower.SteamID)
+			e.GrenadeEntityID, e.Thrower.Team, e.Thrower.SteamID64)
 		proj, ok := state.GrenadeProjectiles()[e.GrenadeEntityID]
 		if !ok {
 			warn.Printf("%6d| FlashExplode\tProjectileNotFound", parser.CurrentFrame())
@@ -140,7 +140,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 		match.NadeEvents = append(match.NadeEvents, NadeEvent{
 			ID:         e.GrenadeEntityID,
 			Weapon:     e.GrenadeType,
-			Thrower:    e.Thrower.SteamID,
+			Thrower:    uint64(e.Thrower.SteamID64),
 			Team:       e.Thrower.Team,
 			Position:   nade.Position,
 			Velocity:   nade.Velocity,
@@ -155,7 +155,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 
 	parser.RegisterEventHandler(func(e events.PlayerFlashed) {
 		debug.Printf("%6d| PlayerFlashed\t%d\t%d\t%d\n", parser.CurrentFrame(),
-			e.Projectile.EntityID, e.Attacker.Team, e.Player.Team)
+			e.Projectile.Entity.ID(), e.Attacker.Team, e.Player.Team)
 	})
 
 	parser.RegisterEventHandler(func(e events.Kill) {
@@ -188,14 +188,14 @@ func Parse(reader io.Reader) (match Match, err error) {
 
 	parser.RegisterEventHandler(func(e events.BombEventIf) {
 		debug.Printf("%6d| BombEventIf\t%#v\n", parser.CurrentFrame(), e)
-		switch e.(type) {
+		switch bombEvent := e.(type) {
 		case events.BombPlantBegin:
 			bomb.State |= BombPlanting
 		case events.BombPlantAborted:
 			bomb.State ^= BombPlanting
 		case events.BombPlanted:
 			bomb.State = BombPlanted
-			round.BombSite = string(e.(events.BombPlanted).Site)
+			round.BombSite = string(bombEvent.Site)
 		case events.BombDefuseStart:
 			bomb.State |= BombDefusing
 		case events.BombDefuseAborted:
@@ -231,32 +231,32 @@ func Parse(reader io.Reader) (match Match, err error) {
 				continue
 			}
 			player := Player{
-				ID:    p.SteamID,
+				ID:    p.SteamID64,
 				Name:  p.Name,
 				Team:  p.Team,
-				Money: p.Money,
+				Money: p.Money(),
 			}
 			if p.IsAlive() {
-				player.Point = normalize(p.Position)
-				player.Yaw = math.Round(float64(p.ViewDirectionX))
-				player.Hp = p.Hp
+				player.Point = normalize(p.Position())
+				player.Yaw = math.Round(float64(p.ViewDirectionX()))
+				player.Hp = p.Health() // TODO
 				if p.ActiveWeapon() != nil {
-					player.Weapon = p.ActiveWeapon().Weapon
+					player.Weapon = p.ActiveWeapon().Type
 				}
 				for _, w := range p.Weapons() {
-					player.Weapons = append(player.Weapons, w.Weapon)
+					player.Weapons = append(player.Weapons, w.Type)
 				}
-				if p.HasDefuseKit {
+				if p.HasDefuseKit() {
 					player.Weapons = append(player.Weapons, common.EqDefuseKit)
 					player.State ^= HasDefuseKit
 				}
-				if p.HasHelmet {
+				if p.HasHelmet() {
 					player.State ^= HasHelmet
 				}
-				if p.Armor > 0 {
+				if p.Armor() > 0 {
 					player.State ^= HasArmor
 				}
-				if p.IsDucking {
+				if p.IsDucking() {
 					player.State ^= IsDucking
 				}
 				if p.IsReloading {
@@ -270,7 +270,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 			}
 			if p.FlashDuration > 0 {
 				d := p.FlashDuration
-				d -= float32(state.IngameTick()-p.FlashTick) / float32(header.TickRate())
+				d -= float32(state.IngameTick()-p.FlashTick) / float32(header.FrameRate())
 				if d > 0 {
 					player.Flashed = d
 				}
@@ -284,34 +284,27 @@ func Parse(reader io.Reader) (match Match, err error) {
 			})
 		}
 		for _, e := range state.GrenadeProjectiles() {
-			active := false
-			if e.Weapon == common.EqSmoke {
-				prop := state.Entities()[e.EntityID].FindProperty("m_nSmokeEffectTickBegin")
-				if prop.Value().IntVal != 0 {
-					active = true
-				}
-			}
 			frame.Nades = append(frame.Nades, Nade{
-				ID:      e.EntityID,
-				Weapon:  e.Weapon,
-				Point:   normalize(e.Position),
+				ID:      int(e.UniqueID()),
+				Weapon:  e.WeaponInstance.Type,
+				Point:   normalize(e.Position()),
 				Thrower: getSteamID(e.Thrower),
 				Team:    getTeam(e.Thrower),
-				Active:  active,
+				Active:  getNadeIsActive(e),
 			})
 			sort.Slice(frame.Nades, func(i, j int) bool {
 				return frame.Nades[i].ID < frame.Nades[j].ID
 			})
 		}
 		for _, e := range state.Infernos() {
-			arr := e.Active().ConvexHull2D()
+			arr := e.Fires().ConvexHull2D()
 			for i, f := range arr {
 				x, y := mapMetadata.TranslateScale(f.X, f.Y)
 				arr[i].X = math.Round(x)
 				arr[i].Y = math.Round(y)
 			}
 			frame.Nades = append(frame.Nades, Nade{
-				ID:      e.EntityID,
+				ID:      int(e.UniqueID()),
 				Thrower: getSteamID(e.Thrower()),
 				Team:    getTeam(e.Thrower()),
 				Active:  true,
@@ -326,7 +319,10 @@ func Parse(reader io.Reader) (match Match, err error) {
 	})
 
 	err = parser.ParseToEnd()
-	if err != nil {
+	if err == demoinfocs.ErrUnexpectedEndOfDemo {
+		log.Printf("%6d| ErrUnexpectedEndOfDemo\n", parser.CurrentFrame())
+		err = nil
+	} else if err != nil {
 		log.Printf("%6d| ParseError\t%s\n", parser.CurrentFrame(), err.Error())
 	} else {
 		log.Printf("%6d| ParseToEnd\n", parser.CurrentFrame())
@@ -334,11 +330,11 @@ func Parse(reader io.Reader) (match Match, err error) {
 	return
 }
 
-func getSteamID(p *common.Player) int64 {
+func getSteamID(p *common.Player) uint64 {
 	if p == nil {
 		return 0
 	}
-	return p.SteamID
+	return p.SteamID64
 }
 func getTeam(p *common.Player) common.Team {
 	if p == nil {
@@ -346,9 +342,18 @@ func getTeam(p *common.Player) common.Team {
 	}
 	return p.Team
 }
-func getWeapon(p *common.Equipment) common.EquipmentElement {
+func getWeapon(p *common.Equipment) common.EquipmentType {
 	if p == nil {
 		return common.EqUnknown
 	}
-	return p.Weapon
+	return p.Type
+}
+func getNadeIsActive(e *common.GrenadeProjectile) bool {
+	if e.WeaponInstance.Type == common.EqSmoke {
+		prop, ok := e.Entity.PropertyValue("m_nSmokeEffectTickBegin")
+		if ok && prop.IntVal != 0 {
+			return true
+		}
+	}
+	return false
 }

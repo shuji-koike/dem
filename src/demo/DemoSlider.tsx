@@ -6,13 +6,13 @@ import React from "react"
 import styled from "styled-components"
 import { BombState, TeamColor, bombColor } from "."
 
-export const DemoSlider: React.FC<{
+export const DemoSlider: React.VFC<{
   match: Match
   round?: Round
   frame?: Frame
-  setFrame: (e: Frame) => void
-}> = function ({ match, round, frame, setFrame }) {
-  if (!round || !frame) return null
+  setFrame: (e: Frame | undefined) => void
+}> = ({ match, round, frame, setFrame }) => {
+  if (!round || !frame) throw new Error()
   const marks = React.useMemo(
     () => [
       ...round.Frames.filter(e => e.Bomb.State & BombState.Planted)
@@ -64,7 +64,9 @@ export const DemoSlider: React.FC<{
     <Slider
       value={round.Frames.indexOf(frame)}
       max={round.Frames.length - 1}
-      onChange={(_, value) => setFrame(round.Frames[value as number])}
+      onChange={(_, value) => {
+        if (typeof value === "number") setFrame(round.Frames[value])
+      }}
       marks={uniqBy(marks, "value")}
       valueLabelDisplay="auto"
       valueLabelFormat={e => labelFormat(match, round, round.Frames[e])}
@@ -78,20 +80,19 @@ function findIndex(frames: Frame[], fn: (f: Frame) => boolean) {
 }
 
 function tickToSecond(match: Match, round: Round, tick: number) {
-  return ((tick || 0) - round.Frames[0].Tick) / match.TickRate
+  return ((tick || 0) - (round.Frames[0]?.Tick ?? 0)) / match.TickRate
 }
 
-function frameToTime(match: Match, round: Round, frame: Frame) {
+function frameToTime(match: Match, round: Round, frame: Frame): number {
+  const tick =
+    round.Frames.find(e => e.Bomb.State & BombState.Planted)?.Tick ?? NaN
   return frame.Bomb.State & BombState.Planted
-    ? Math.floor(
-        (frame.Tick -
-          round.Frames.find(e => e.Bomb.State & BombState.Planted)?.Tick!) /
-          match.TickRate
-      )
+    ? Math.floor((frame.Tick - tick) / match.TickRate)
     : round.TimeLimit - tickToSecond(match, round, frame.Tick)
 }
 
-function labelFormat(match: Match, round: Round, frame: Frame) {
+function labelFormat(match: Match, round: Round, frame: Frame | undefined) {
+  if (!frame) return ""
   return frame.Bomb.State & BombState.Planted
     ? frameToTime(match, round, frame)
     : new Date(frameToTime(match, round, frame) * 1000)

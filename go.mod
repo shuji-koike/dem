@@ -1,10 +1,10 @@
-module github.com/shuji-koike/demhub
+module github.com/shuji-koike/csgo
 
-go 1.14
+go 1.16
 
 require (
-	github.com/golang/geo v0.0.0-20200319012246-673a6f80352d
-	github.com/markus-wa/demoinfocs-golang v1.10.0
+	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551
+	github.com/markus-wa/demoinfocs-golang/v2 v2.9.0
 	github.com/shuji-koike/goutil v1.0.0
-	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 )

@@ -1,7 +1,7 @@
 import React from "react"
 import { teamOpponentColor, teamColor } from "."
 
-export const KillEventView: React.FC<{
+export const KillEventView: React.VFC<{
   event: KillEvent
   selected?: boolean
   onClick?: (event: KillEvent) => void
