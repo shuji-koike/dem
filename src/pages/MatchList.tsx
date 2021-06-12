@@ -16,6 +16,7 @@ export const MatchList: React.VFC = () => {
   }, [url])
   return (
     <main>
+      <h1>Matches</h1>
       <ul>
         {state.map(e => (
           <li key={e.href}>{e.title}</li>

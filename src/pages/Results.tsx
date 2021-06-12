@@ -13,6 +13,7 @@ export const Results: React.VFC = () => {
   }, [url])
   return (
     <main>
+      <h1>Results</h1>
       <ul>
         {state.map(e => (
           <li key={e.href}>

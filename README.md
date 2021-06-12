@@ -1,10 +1,13 @@
 # build
 
 ```sh
-# start dev server on http://localhost:3000/
-npm start
+# http://localhost:3000/
+yarn start
 
-npm build
+# http://localhost:6006/
+yarn storybook
+
+yarn build
 ```
 
 ```sh
@@ -15,6 +18,11 @@ go build .
 
 cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./static/wasm_exec.js
 GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
+```
+
+```sh
+gsutil cors set storage.cors.json gs://sandbox-0825.appspot.com
+firebase deploy --only storage:rules
 ```
 
 # links

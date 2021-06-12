@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
-import { HeaderSlot } from "../Layout"
+import { HeaderSlot } from "../app"
+import { storagePut } from "../store/io"
 import { DemoMenu } from "./DemoMenu"
 import { DemoNav } from "./DemoNav"
 import { DemoSlider } from "./DemoSlider"
@@ -107,6 +108,9 @@ export const DemoPlayer: React.VFC<{
           filter={filter}
           setFilter={setFilter}
         />
+        <button type="button" onClick={() => storagePut("sandbox/test", match)}>
+          Save
+        </button>
       </aside>
       <footer>
         <DemoSlider

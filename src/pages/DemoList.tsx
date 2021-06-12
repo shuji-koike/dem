@@ -1,24 +1,20 @@
-import Adjust from "@material-ui/icons/Adjust"
-import ChevronRightIcon from "@material-ui/icons/ChevronRight"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import TreeItem from "@material-ui/lab/TreeItem"
-import TreeView from "@material-ui/lab/TreeView"
-import axios from "axios"
+import { Adjust, ChevronRight, ExpandMore } from "@material-ui/icons"
+import { TreeItem, TreeView } from "@material-ui/lab"
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
+import { storageList, fetchFiles } from "../store/io"
 
 export const DemoList: React.VFC = () => {
-  const [state, setState] = React.useState<string[]>([])
-  React.useEffect(() => {
-    axios.get("/api/files").then(({ data }) => setState(data.sort()))
-  }, [])
+  const [state, setState] = React.useState<string[]>()
+  React.useEffect(() => void storageList("sandbox").then(setState), [])
   return (
     <main>
+      <h1>Matches</h1>
       <TreeView
-        defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpandIcon={<ChevronRightIcon />}>
-        {state.map(e => (
-          <DemoItem key={e} nodeId={e} file={e}></DemoItem>
+        defaultCollapseIcon={<ExpandMore />}
+        defaultExpandIcon={<ChevronRight />}>
+        {state?.map(e => (
+          <DemoItem key={e} nodeId={e} file={e} />
         ))}
       </TreeView>
     </main>
@@ -29,27 +25,31 @@ const DemoItem: React.VFC<{
   file: string
   nodeId: string
 }> = ({ file, nodeId }) => {
-  if (/\.dem$/.test(file)) {
+  const history = useHistory()
+  if (/\.dem$/.test(file))
     return (
       <TreeItem
         nodeId={nodeId}
         icon={<Adjust />}
-        label={<Link to={`/files/${file}`}>{file}</Link>}></TreeItem>
+        label={<Link to={`/files/${file}`}>{file}</Link>}
+      />
     )
-  } else if (/\.rar$/.test(file)) {
-    return <RarItem file={file} />
-  }
-  return <TreeItem nodeId={nodeId} label={file}></TreeItem>
+  else if (/\.rar$/.test(file)) return <RarItem file={file} />
+  return (
+    <TreeItem
+      nodeId={nodeId}
+      label={file}
+      onClick={() => history.push(`files/${file}`)}
+    />
+  )
 }
 
 const RarItem: React.VFC<{
   file: string
 }> = ({ file }) => {
-  const [data, setData] = React.useState([])
+  const [data, setData] = React.useState<string[]>([])
   const [open, setOpen] = React.useState(false)
-  React.useEffect(() => {
-    if (open) axios.get(`/api/files/${file}`).then(({ data }) => setData(data))
-  }, [open])
+  React.useEffect(() => void (open && fetchFiles(file).then(setData)), [open])
   return (
     <TreeItem nodeId={file} label={file} onClick={() => setOpen(!open)}>
       {open ? (

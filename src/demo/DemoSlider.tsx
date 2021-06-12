@@ -1,6 +1,6 @@
 import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Slider from "@material-ui/core/Slider"
+import { Slider } from "@material-ui/core"
 import { uniqBy } from "lodash"
 import React from "react"
 import styled from "styled-components"

@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
+import axios from "axios"
+import firebase from "firebase/app"
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import GoWorker from "../../static/worker.js?worker"
 
@@ -11,18 +12,25 @@ export async function pickDir(): Promise<File[]> {
 }
 
 export async function openDemo(
-  file: File | string | null,
+  file: File | Response | string | null | undefined,
   onOutput?: (arr: string[]) => void
 ): Promise<Match | null> {
-  if (typeof file === "string") return fetch(file).then(parseJson)
-  if (file?.name.endsWith(".json")) return file.text().then(parseJson)
-  if (file?.name.endsWith(".dem")) return parseDemo(file, onOutput)
+  if (typeof file === "string") {
+    if (/^(public|private|sandbox)/.test(file)) return storageFetch(file)
+    return fetch(file).then(parseJson)
+  }
+  if (file instanceof Response) return parseJson(file)
+  if (file instanceof File && file.name.endsWith(".json"))
+    return file.text().then(parseJson)
+  if (file instanceof File && file.name.endsWith(".dem"))
+    return parseDemo(file, onOutput)
   return null
 }
 
 export function parseJson(data: Response | string): Promise<Match> {
   if (typeof data === "string") return JSON.parse(data)
-  return data.json()
+  if (data instanceof Response) return data.json()
+  throw new Error()
 }
 
 export function parseDemo(
@@ -45,6 +53,36 @@ export function parseDemo(
       }
     }
   })
+}
+
+export async function storageList(path = ""): Promise<string[]> {
+  return Promise.all(
+    (await firebase.storage().ref(path).list()).items.map(e => e.fullPath)
+  )
+}
+
+export async function storagePut(
+  path: string,
+  data: string | Match
+): Promise<void> {
+  if (typeof data === "object") data = JSON.stringify(data)
+  await firebase
+    .storage()
+    .ref(path)
+    .putString(data, undefined, { contentType: "application/json" })
+    .then(console.debug)
+}
+
+export async function storageFetch(path: string): Promise<Match | null> {
+  return firebase
+    .storage()
+    .ref(path)
+    .getDownloadURL()
+    .then(e => (typeof e === "string" ? fetch(e).then(parseJson) : null))
+}
+
+export function fetchFiles(file = ""): Promise<string[]> {
+  return axios.get(`/api/files/${file}`).then(({ data }) => data.sort?.())
 }
 
 export function setStorage(match: Match | null): Match | null {

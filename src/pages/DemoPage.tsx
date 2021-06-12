@@ -1,27 +1,14 @@
-import axios from "axios"
 import React from "react"
-import { useParams, useLocation } from "react-router-dom"
-import { DemoPlayer } from "../demo/DemoPlayer"
-import { DemoTabView } from "../demo/DemoTabView"
+import { useParams } from "react-router-dom"
+import { Match } from "../demo/Match"
+import { openDemo, storageFetch } from "../store/io"
 
-export const DemoPage: React.VFC = () => {
-  const path = useParams<{ 0: string }>()[0]
-  const { search, hash } = useLocation()
-  const params = new URLSearchParams(hash.slice(1))
+export const DemoPage: React.VFC<{ path?: string }> = ({ path }) => {
+  const params = useParams<{ 0: string }>()
   const [match, setMatch] = React.useState<Match | null>(null)
-  const [tab, setTab] = React.useState(parseInt(params.get("tab") ?? "0"))
-  const [tick, setTick] = React.useState<number | undefined>(
-    parseInt(params.get("tick") ?? "0")
-  )
   React.useEffect(() => {
-    axios.get(`/api/files/${path}${search}`).then(({ data }) => setMatch(data))
-  }, [path])
-  if (!match) return <span>loading</span>
-  return Number.isInteger(tick) ? (
-    <DemoPlayer match={match} tick={tick} setTick={setTick} />
-  ) : (
-    <main>
-      <DemoTabView match={match} setTick={setTick} tab={tab} setTab={setTab} />
-    </main>
-  )
+    if (path) openDemo(path).then(setMatch)
+    else if (params[0]) storageFetch(params[0]).then(setMatch)
+  }, [])
+  return <Match match={match} />
 }
