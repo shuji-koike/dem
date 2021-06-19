@@ -17,6 +17,9 @@ body > article > main {
   width: 100%;
   min-height: 100%;
 }
+p {
+  margin: 0.5rem 0;
+}
 section table {
   width: 100%;
 }
@@ -27,4 +30,9 @@ section svg {
   max-width: 40vh;
   background-color: #111;
   cursor: crosshair;
+}
+p > span + span,
+p > span + img,
+p > img + span {
+  margin-left: 0.5rem;
 }

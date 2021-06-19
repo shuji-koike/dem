@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import { HeaderSlot } from "../app"
-import { storagePut } from "../store/io"
+import { DebugNav } from "./DebugNav"
 import { DemoMenu } from "./DemoMenu"
 import { DemoNav } from "./DemoNav"
 import { DemoSlider } from "./DemoSlider"
@@ -9,29 +9,23 @@ import { FrameView, TrailView } from "./FrameView"
 import { KillEventView } from "./KillEventView"
 import { MapView } from "./MapView"
 import { NadeEventView } from "./NadeEventView"
-import { SteamUser, fetchSteamData, findRound, findFrame } from "."
+import { findRound, findFrame } from "."
 
 export const DemoPlayer: React.VFC<{
   match: Match
   tick?: number
   setTick?: (tick: number | undefined) => void
-}> = ({ match, tick = 0, setTick }) => {
+}> = ({ match, tick, setTick }) => {
   const [state, setState] = React.useState({ paused: true, wheel: true })
   const [round, setRound] = React.useState(findRound(match, tick))
   const [frame, setFrame] = React.useState(findFrame(match, tick))
-  const [steam, setSteam] = React.useState<Record<string, SteamUser>>({})
   const [filter, setFilter] = React.useState<Filter>({})
   const ref = React.createRef<HTMLFormElement>()
   const currentRound = round?.Round || 0
   const currentFrame = frame ? round?.Frames.indexOf(frame) || 0 : 0
-  const ids = frame?.Players.map(e => e.ID).sort()
-  const idsDep = ids?.join() // prevent eslint from crashing
   React.useEffect(() => {
     if (frame && !round?.Frames.includes(frame)) setFrame(round?.Frames[0])
   }, [round])
-  React.useEffect(() => {
-    if (ids) fetchSteamData(ids).then(e => setSteam({ ...steam, ...e }))
-  }, [idsDep])
   React.useEffect(() => ref.current?.focus(), [ref.current])
   React.useEffect(() =>
     clearInterval.bind(
@@ -57,9 +51,10 @@ export const DemoPlayer: React.VFC<{
       setRound(round)
     }
   }
-  function changeTick({ Tick }: { Tick: number }) {
+  function changeTick({ Tick }: { Tick: number | undefined }) {
     setRound(findRound(match, Tick))
     setFrame(findFrame(match, Tick))
+    setTick?.(Tick)
   }
   function onKeyDown(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {
@@ -82,7 +77,12 @@ export const DemoPlayer: React.VFC<{
     }
   }
   return (
-    <StyledForm ref={ref} tabIndex={0} onKeyDown={onKeyDown} onWheel={onWheel}>
+    <StyledForm
+      ref={ref}
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+      onWheel={onWheel}
+      onSubmit={e => e.preventDefault()}>
       <HeaderSlot deps={[currentRound]}>
         <DemoNav match={match} round={round} onChange={setRound} />
       </HeaderSlot>
@@ -102,23 +102,24 @@ export const DemoPlayer: React.VFC<{
       </article>
       <aside>
         <DemoMenu
-          round={round}
-          frame={frame}
-          steam={steam}
-          filter={filter}
-          setFilter={setFilter}
-        />
-        <button type="button" onClick={() => storagePut("sandbox/test", match)}>
-          Save
-        </button>
-      </aside>
-      <footer>
-        <DemoSlider
           match={match}
           round={round}
           frame={frame}
-          setFrame={setFrame}
+          setTick={Tick => changeTick({ Tick })}
+          filter={filter}
+          setFilter={setFilter}
         />
+        <DebugNav match={match} round={round} frame={frame} />
+      </aside>
+      <footer>
+        {round && frame && (
+          <DemoSlider
+            match={match}
+            round={round}
+            frame={frame}
+            setFrame={setFrame}
+          />
+        )}
         <pre>
           index:{currentFrame}, frame:{frame?.Frame}, tick:{frame?.Tick}
         </pre>

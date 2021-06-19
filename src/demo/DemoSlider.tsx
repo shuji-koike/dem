@@ -4,15 +4,14 @@ import { Slider } from "@material-ui/core"
 import { uniqBy } from "lodash"
 import React from "react"
 import styled from "styled-components"
-import { BombState, TeamColor, bombColor } from "."
+import { BombState, teamColor, bombColor } from "."
 
 export const DemoSlider: React.VFC<{
   match: Match
-  round?: Round
-  frame?: Frame
+  round: Round
+  frame: Frame
   setFrame: (e: Frame | undefined) => void
 }> = ({ match, round, frame, setFrame }) => {
-  if (!round || !frame) throw new Error()
   const marks = React.useMemo(
     () => [
       ...round.Frames.filter(e => e.Bomb.State & BombState.Planted)
@@ -29,7 +28,7 @@ export const DemoSlider: React.VFC<{
         .slice(0, 1)
         .map(e => ({
           value: round.Frames.indexOf(e),
-          label: <Icon style={{ color: TeamColor[3] }} icon={faTools}></Icon>,
+          label: <Icon style={{ color: teamColor(3) }} icon={faTools}></Icon>,
         })),
       ...round.Frames.filter(e => e.Bomb.State & BombState.Exploded)
         .slice(0, 1)
@@ -54,7 +53,7 @@ export const DemoSlider: React.VFC<{
       ...match.KillEvents.filter(e => e.Round == round.Round).map(e => ({
         value: findIndex(round.Frames, f => f.Tick >= e.Tick),
         label: (
-          <Icon style={{ color: TeamColor[e.Team] }} icon={faTimes}></Icon>
+          <Icon style={{ color: teamColor(e.Team) }} icon={faTimes}></Icon>
         ),
       })),
     ],

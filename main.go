@@ -31,9 +31,9 @@ var group singleflight.Group
 var cache = sync.Map{}
 
 func main() {
+	log.Printf("main: pid=%d %s %v", os.Getpid(), runtime.GOARCH, os.Args)
 	flag.Parse()
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
-	log.Printf("main: pid=%d %s %v", os.Getpid(), runtime.GOARCH, os.Args)
 	if *server {
 		new(Server).Listen(*port)
 	} else if *stdin {
@@ -46,7 +46,10 @@ func main() {
 	} else {
 		for _, path := range os.Args[1:] {
 			if !strings.HasPrefix(path, "-") {
-				load(path)
+				_, err := load(path)
+				if err != nil {
+					log.Printf("main: error on load %s", err.Error())
+				}
 			}
 		}
 	}
@@ -67,6 +70,7 @@ func load(path string) (Match, error) {
 		if *useFileCache {
 			err = goutil.ReadJSON(path+*postfix, &match)
 			if err != nil && !os.IsNotExist(err) {
+				log.Printf("load: skip parse. file exists.")
 				return match, err
 			}
 		}
