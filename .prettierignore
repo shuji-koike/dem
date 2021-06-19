@@ -1,3 +1,5 @@
+dist
+build
 static/wasm_exec.js
 static/*.json
 **/icons.json

@@ -24,6 +24,7 @@ export async function openDemo(
     return file.text().then(parseJson)
   if (file instanceof File && file.name.endsWith(".dem"))
     return parseDemo(file, onOutput)
+  console.warn("openDemo", "unsupported file type!")
   return null
 }
 
@@ -83,6 +84,11 @@ export async function storageFetch(path: string): Promise<Match | null> {
 
 export function fetchFiles(file = ""): Promise<string[]> {
   return axios.get(`/api/files/${file}`).then(({ data }) => data.sort?.())
+}
+
+export function fileTypeFilter(file: unknown): boolean {
+  if (file instanceof File) return /\.(dem|json)(\.gz)?$/i.test(file.name)
+  return false
 }
 
 export interface SteamUser {

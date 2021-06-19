@@ -1,5 +1,0 @@
-{
-  "exec": "ts-node .",
-  "ext": "js,mjs,json,ts,jsx,tsx,graphql",
-  "watch": ["./api"]
-}

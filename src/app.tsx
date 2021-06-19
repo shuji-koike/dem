@@ -194,18 +194,11 @@ const AuthButton: React.VFC = () => {
           </Menu>
         ) : (
           <Menu open anchorEl={anchorEl} onClose={close}>
-            <MenuItem onClick={close}>Sign up</MenuItem>
             <MenuItem onClick={() => signIn("steam").then(close)}>
               Sign in with Steam
             </MenuItem>
             <MenuItem onClick={() => signIn("google").then(close)}>
               Sign in with Google
-            </MenuItem>
-            <MenuItem onClick={() => signIn("facebook").then(close)}>
-              Sign in with Facebook
-            </MenuItem>
-            <MenuItem onClick={() => signIn("twitter").then(close)}>
-              Sign in with Twitter
             </MenuItem>
             <MenuItem onClick={() => signIn("github").then(close)}>
               Sign in with Github

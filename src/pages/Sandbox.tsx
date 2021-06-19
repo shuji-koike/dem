@@ -3,7 +3,7 @@ import React from "react"
 import { isChrome } from "react-device-detect"
 import { useHistory } from "react-router"
 import { Match } from "../demo/Match"
-import { openDemo, pickDir } from "../store/io"
+import { openDemo, pickDir, fileTypeFilter } from "../store/io"
 
 export const Sandbox: React.VFC = () => {
   const [match, setMatch] = React.useState<Match | null>(null)
@@ -37,11 +37,13 @@ export const Sandbox: React.VFC = () => {
           {output.join("\n")}
         </pre>
       )}
-      {files.length > 0 && (
+      {files.length > 0 && output.length < 1 && (
         <ul>
-          {files.map(file => (
-            <li key={file.name} style={{ cursor: "pointer" }}>
-              onClick={() => openDemo(file, setOutput).then(setMatch)}
+          {files.filter(fileTypeFilter).map(file => (
+            <li
+              key={file.name}
+              style={{ cursor: "pointer" }}
+              onClick={() => openDemo(file, setOutput).then(setMatch)}>
               {file.name}
             </li>
           ))}

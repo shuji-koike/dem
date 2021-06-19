@@ -36,9 +36,9 @@ export const DemoMenu: React.VFC<{
   return (
     <StyledDemoMenu>
       <nav>
-        <button onClick={() => setTab(0)}>Players</button>
-        <button onClick={() => setTab(1)}>Kills</button>
-        <button onClick={() => setTab(2)}>Nades</button>
+        <button onClick={() => setTab(1)}>Players</button>
+        <button onClick={() => setTab(2)}>Kills</button>
+        <button onClick={() => setTab(3)}>Nades</button>
         <label>
           <input
             type="checkbox"
@@ -87,10 +87,15 @@ const StyledDemoMenu = styled.div`
 
 const PlayerLabel: React.VFC<{
   player: Player | null
-}> = React.memo(function PlayerLabel({ player }) {
+  onClick?: () => unknown
+}> = ({ player, onClick }) => {
   if (!player) return <></>
-  return <StyledPlayerLabel player={player}>{player.Name}</StyledPlayerLabel>
-})
+  return (
+    <StyledPlayerLabel player={player} onClick={onClick}>
+      {player.Name}
+    </StyledPlayerLabel>
+  )
+}
 
 const StyledPlayerLabel = styled.span<{ player: Player }>`
   font-weight: bold;
