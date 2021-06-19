@@ -1,47 +1,98 @@
 import React from "react"
+import styled from "styled-components"
 import { Filter } from "./DemoPlayer"
 import { PlayerCard } from "./PlayerCard"
-import { SteamUser } from "."
+import { findPlayer, icon, SteamUser, teamColor } from "."
 
 export const DemoMenu: React.VFC<{
+  match: Match
   round?: Round
   frame?: Frame
-  steam: Record<string, SteamUser>
+  setTick?: (tick: number | undefined) => void
+  steam?: Record<string, SteamUser>
   filter: Filter
   setFilter: (e: Filter) => void
-}> = ({ round, frame, steam, filter, setFilter }) => {
-  const [tab, setTab] = React.useState(0)
-  const [all, setAll] = React.useState(false)
+}> = ({ match, round, frame, setTick, steam, filter, setFilter }) => {
+  const [tab, setTab] = React.useState(1)
   React.useEffect(() => {
     switch (tab) {
-      case 0:
-        setFilter({ players: () => true })
-        break
       case 1:
-        setFilter({ kills: e => all || !round || e.Round === round.Round })
+        setFilter({
+          players: () => true,
+          kills: e => e.Round === round?.Round,
+          nades: e => e.Round === round?.Round,
+        })
         break
       case 2:
-        setFilter({ nades: e => all || !round || e.Round === round.Round })
+        setFilter({
+          kills: e => !round || e.Round === round?.Round,
+        })
+        break
+      case 3:
+        setFilter({ nades: e => !round || e.Round === round?.Round })
         break
     }
-  }, [tab, round, all])
-  if (!round) return <></>
+  }, [tab, round])
   return (
-    <>
+    <StyledDemoMenu>
       <nav>
-        <span onClick={() => setTab(0)}>Players</span>
-        <span onClick={() => setTab(1)}>Kills</span>
-        <span onClick={() => setTab(2)}>Nades</span>
-        <input
-          type="checkbox"
-          checked={all}
-          onChange={e => setAll(e.target.checked)}
-        />
+        <button onClick={() => setTab(0)}>Players</button>
+        <button onClick={() => setTab(1)}>Kills</button>
+        <button onClick={() => setTab(2)}>Nades</button>
+        <label>
+          <input
+            type="checkbox"
+            defaultChecked={!round}
+            disabled={!round}
+            onClick={() => setTick?.(undefined)}
+          />
+          All
+        </label>
       </nav>
-      {filter.players &&
-        frame?.Players.filter(filter.players).map(e => (
-          <PlayerCard key={e.ID} player={e} steam={steam[e.ID]} />
-        ))}
-    </>
+      <section onWheelCapture={e => e.stopPropagation()}>
+        {filter.players &&
+          frame?.Players.filter(filter.players).map(e => (
+            <PlayerCard key={e.ID} player={e} steam={steam?.[e.ID]} />
+          ))}
+        {filter.kills &&
+          match.KillEvents.filter(filter.kills).map((e, i) => (
+            <p key={i} onClick={() => setTick?.(e.Tick)}>
+              <PlayerLabel player={findPlayer(match, e.Killer)} />
+              <img height={16} src={icon(e.Weapon)} />
+              {!!e.Penetrated && <span>(P)</span>}
+              {e.IsHeadshot && <span>(H)</span>}
+              <PlayerLabel player={findPlayer(match, e.Victim)} />
+            </p>
+          ))}
+        {filter.nades &&
+          match.NadeEvents.filter(filter.nades).map((e, i) => (
+            <p key={i} onClick={() => setTick?.(e.Tick)}>
+              <img height={16} src={icon(e.Weapon)} />
+              <PlayerLabel player={findPlayer(match, e.Thrower)} />
+            </p>
+          ))}
+      </section>
+    </StyledDemoMenu>
   )
 }
+
+const StyledDemoMenu = styled.div`
+  max-height: calc(100vh - 60px - 100px);
+  overflow-y: auto;
+  > nav {
+    position: sticky;
+    top: 0;
+  }
+`
+
+const PlayerLabel: React.VFC<{
+  player: Player | null
+}> = React.memo(function PlayerLabel({ player }) {
+  if (!player) return <></>
+  return <StyledPlayerLabel player={player}>{player.Name}</StyledPlayerLabel>
+})
+
+const StyledPlayerLabel = styled.span<{ player: Player }>`
+  font-weight: bold;
+  color: ${p => teamColor(p.player.Team)};
+`

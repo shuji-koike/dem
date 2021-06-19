@@ -149,4 +149,13 @@ volumes:
     driver: local
 ```
 
+```tsx
+const ids = frame?.Players.map(e => e.ID).sort()
+const idsDep = ids?.join() // prevent eslint from crashing
+const [steam, setSteam] = React.useState<Record<string, SteamUser>>({})
+React.useEffect(() => {
+  if (ids) fetchSteamData(ids).then(e => setSteam({ ...steam, ...e }))
+}, [idsDep])
+```
+
 </details>

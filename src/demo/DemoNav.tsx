@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { TeamColor } from "."
+import { teamColor } from "."
 
 export const DemoNav: React.VFC<{
   match: Match
@@ -13,7 +13,7 @@ export const DemoNav: React.VFC<{
         <StyledSpan
           key={e.Tick}
           className={e == round ? "active" : undefined}
-          style={{ color: TeamColor[e.Winner] }}
+          style={{ color: teamColor(e.Winner) }}
           onClick={() => onChange(e)}>
           {e.Round + 1}
         </StyledSpan>

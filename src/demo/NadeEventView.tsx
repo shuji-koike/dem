@@ -1,5 +1,5 @@
 import React from "react"
-import { TeamColor } from "."
+import { teamColor } from "."
 
 export const NadeEventView: React.VFC<{
   event: NadeEvent
@@ -21,7 +21,7 @@ export const NadeEventView: React.VFC<{
         cx={event.Trajectory?.[0]?.X}
         cy={event.Trajectory?.[0]?.Y}
         r={active ? 4 : 2}
-        fill={TeamColor[event.Team]}></circle>
+        fill={teamColor(event.Team)}></circle>
       {event.Trajectory?.slice(-1)?.map((p, i) => (
         <g
           key={i}
@@ -34,7 +34,7 @@ export const NadeEventView: React.VFC<{
             cy={p.Y}
             r={active ? 4 : 2}
             fill="#fff"
-            stroke={TeamColor[event.Team]}
+            stroke={teamColor(event.Team)}
             strokeWidth={1.5}></circle>
         </g>
       ))}

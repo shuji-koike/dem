@@ -125,17 +125,48 @@ func Parse(reader io.Reader) (match Match, err error) {
 			e.GrenadeEntityID, e.Thrower.Team, e.Thrower.SteamID64)
 		proj, ok := state.GrenadeProjectiles()[e.GrenadeEntityID]
 		if !ok {
-			warn.Printf("%6d| FlashExplode\tProjectileNotFound", parser.CurrentFrame())
+			warn.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
 			return
 		}
 		trajectory := make([]r2.Point, len(proj.Trajectory))
 		for i := range proj.Trajectory {
 			trajectory[i] = normalize(proj.Trajectory[i])
 		}
-		nade, ok := nades[e.GrenadeEntityID]
+		nade, ok := nades[int(e.Grenade.UniqueID())]
 		if !ok {
-			warn.Printf("%6d| FlashExplode\tNadeEvent", parser.CurrentFrame())
+			warn.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
+		}
+		match.NadeEvents = append(match.NadeEvents, NadeEvent{
+			ID:         e.GrenadeEntityID,
+			Weapon:     e.GrenadeType,
+			Thrower:    uint64(e.Thrower.SteamID64),
+			Team:       e.Thrower.Team,
+			Position:   nade.Position,
+			Velocity:   nade.Velocity,
+			Yaw:        nade.Yaw,
+			Pitch:      nade.Pitch,
+			Trajectory: trajectory,
+			Tick:       state.IngameTick(),
+			Frame:      parser.CurrentFrame(),
+			Round:      state.TotalRoundsPlayed(),
+		})
+	})
+
+	parser.RegisterEventHandler(func(e events.SmokeExpired) {
+		debug.Printf("%6d| SmokeExpired\t%d\t%d\t%d\n", parser.CurrentFrame(),
+			e.GrenadeEntityID, e.Thrower.Team, e.Thrower.SteamID64)
+		proj, ok := state.GrenadeProjectiles()[e.GrenadeEntityID]
+		if !ok {
+			warn.Printf("%6d| SmokeExpired\tProjectile Not Found", parser.CurrentFrame())
 			return
+		}
+		trajectory := make([]r2.Point, len(proj.Trajectory))
+		for i := range proj.Trajectory {
+			trajectory[i] = normalize(proj.Trajectory[i])
+		}
+		nade, ok := nades[int(e.Grenade.UniqueID())]
+		if !ok {
+			warn.Printf("%6d| SmokeExpired\tProjectile Not Found", parser.CurrentFrame())
 		}
 		match.NadeEvents = append(match.NadeEvents, NadeEvent{
 			ID:         e.GrenadeEntityID,

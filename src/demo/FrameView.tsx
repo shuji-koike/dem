@@ -29,7 +29,7 @@ export const FrameView: React.VFC<{ frame?: Frame }> = ({ frame }) => {
 
 export const FramePlayer: React.VFC<{ player: Player }> = ({ player }) => {
   return (
-    <g>
+    <g onClick={() => console.debug(JSON.stringify(player))}>
       {!player.Hp ? (
         <path
           d={[

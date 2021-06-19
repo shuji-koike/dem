@@ -6,6 +6,5 @@
 /csgo
 node_modules
 package-lock.json
-yarn.lock
 __debug_bin
 *.log

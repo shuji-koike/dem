@@ -1,4 +1,3 @@
-import axios from "axios"
 import icons from "../../static/icons.json"
 
 export enum Team {
@@ -30,37 +29,31 @@ export enum PlayerState {
   IsUnknown = 1 << 10,
 }
 
-export type Dict<V = string> = {
-  [key: string]: V
-}
-
-export const TeamOpponent: Map<Team, Team> = new Map([
+export const teamOpponentMap: ReadonlyMap<Team, Team> = new Map([
   [Team.Terrorists, Team.CounterTerrorists],
   [Team.CounterTerrorists, Team.Terrorists],
 ])
 
-export const TeamColor: Dict<string> = {
-  [Team.Unassigned]: "#F00",
-  [Team.Spectators]: "#0F0",
-  [Team.Terrorists]: "#CC9629",
-  [Team.CounterTerrorists]: "#295FCC",
-}
-
-export interface SteamUser {
-  steamid: string
-  profileurl: string
-  avatar: string
-}
+export const teamColorMap: ReadonlyMap<Team, string> = new Map([
+  [Team.Unassigned, "#F00"],
+  [Team.Spectators, "#0F0"],
+  [Team.Terrorists, "#CC9629"],
+  [Team.CounterTerrorists, "#295FCC"],
+])
 
 export function teamColor(team: Team): string {
-  return TeamColor[team ?? throwDataError()] ?? throwDataError()
+  return teamColorMap.get(team) ?? throwDataError()
+}
+
+export function teamOpponent(team: Team): Team {
+  return teamOpponentMap.get(team) ?? throwDataError()
 }
 
 export function teamOpponentColor(team: Team): string {
-  return teamColor(TeamOpponent.get(team) ?? throwDataError())
+  return teamColor(teamOpponent(team))
 }
 
-export const NadeColor: Dict<string> = {
+export const NadeColor: Record<string, string> = {
   501: "gray", // EqDecoy
   502: "red", // EqMolotov
   503: "red", // EqIncendiary
@@ -128,21 +121,20 @@ export function findFrame(
   return findRound(match, tick)?.Frames.find(e => e.Tick > tick)
 }
 
-export async function fetchSteamData(
-  ids: number[]
-): Promise<Record<string, SteamUser>> {
-  if (!import.meta.env.VITE_STEAM_API) return {}
-  const url =
-    "/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids=" +
-    Array.from(new Set(ids)).join(",")
-  const { data } = await axios.get<{
-    response?: { players?: SteamUser[] }
-  }>(url)
-  if (!data.response?.players) throw Error()
-  return data.response.players.reduce?.(
-    (acc, e) => ({ ...acc, [e.steamid]: e }),
-    {}
-  )
+export function findPlayer(match: Match, ID: number): Player | null {
+  if (!match.Rounds) return null
+  for (const round of match.Rounds)
+    for (const frame of round.Frames) {
+      const player = frame.Players.find(e => e.ID === ID)
+      if (player) return player
+    }
+  return null
+}
+
+export interface SteamUser {
+  steamid: string
+  profileurl: string
+  avatar: string
 }
 
 class PlayerScore {
