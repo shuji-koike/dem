@@ -3,12 +3,12 @@
   "version": "0.0.0-alpha",
   "private": true,
   "engines": {
-    "node": "14"
+    "node": "16"
   },
   "scripts": {
     "start": "vite serve",
     "build": "vite build",
-    "test": "jest",
+    "test": "tsc --noEmit",
     "lint": "eslint --cache --fix . && prettier --write --loglevel warn .",
     "storybook": "start-storybook -p 6006"
   },
@@ -16,15 +16,13 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@shuji-koike/boilerplate": "^1.0.0-beta.1",
-    "@shuji-koike/eslint-config": "^1.0.0-beta.2",
-    "@shuji-koike/vite-react": "^1.0.0-beta.5",
-    "@storybook/addon-actions": "^6.3.4",
-    "@storybook/addon-essentials": "^6.3.4",
-    "@storybook/addon-knobs": "^6.3.0",
-    "@storybook/addon-links": "^6.3.4",
-    "@storybook/react": "^6.3.4",
-    "vite": "2.3.8"
+    "@babel/core": "^7.16.0",
+    "@shuji-koike/boilerplate": "^1.0.0-beta.6",
+    "@shuji-koike/eslint-config": "^1.0.0-beta.6",
+    "@shuji-koike/vite-react": "^1.0.0-beta.6",
+    "@types/lodash": "^4.14.177",
+    "@types/material-ui": "^0.21.12",
+    "@types/wicg-file-system-access": "^2020.9.4",
+    "vite": "^2.6.14"
   }
 }

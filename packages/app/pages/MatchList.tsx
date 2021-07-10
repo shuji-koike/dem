@@ -2,6 +2,8 @@ import axios from "axios"
 import React from "react"
 import { useLocation } from "react-router-dom"
 
+import { HeaderSlot } from "../components/layout"
+
 interface Data {
   href: string
   title: string
@@ -16,7 +18,9 @@ export const MatchList: React.VFC = () => {
   }, [url])
   return (
     <main>
-      <h1>Matches</h1>
+      <HeaderSlot>
+        <h1>Matches</h1>
+      </HeaderSlot>
       <ul>
         {state.map((e) => (
           <li key={e.href}>{e.title}</li>

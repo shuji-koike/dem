@@ -92,29 +92,6 @@ export function fileTypeFilter(file: unknown): boolean {
   return false
 }
 
-export interface SteamUser {
-  steamid: string
-  profileurl: string
-  avatar: string
-}
-
-export async function fetchSteamData(
-  ids: number[]
-): Promise<Record<string, SteamUser>> {
-  if (!import.meta.env.VITE_STEAM_API) return {}
-  const url =
-    "/api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids=" +
-    Array.from(new Set(ids)).join(",")
-  const { data } = await axios.get<{
-    response?: { players?: SteamUser[] }
-  }>(url)
-  if (!data.response?.players) throw Error()
-  return data.response.players.reduce?.(
-    (acc, e) => ({ ...acc, [e.steamid]: e }),
-    {}
-  )
-}
-
 export function setStorage(match: Match | null): Match | null {
   localStorage.setItem("$MATCH:$TMP", JSON.stringify(match))
   return match

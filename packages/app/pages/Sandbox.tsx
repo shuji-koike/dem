@@ -3,6 +3,7 @@ import React from "react"
 import { isChrome } from "react-device-detect"
 import { useHistory } from "react-router"
 
+import { HeaderSlot } from "../components/layout"
 import { Match } from "../demo/Match"
 import { openDemo, pickDir, fileTypeFilter } from "../io"
 
@@ -15,7 +16,9 @@ export const Sandbox: React.VFC = () => {
     <Match match={match} />
   ) : (
     <main>
-      <h1>CSGO Demo Viewer</h1>
+      <HeaderSlot>
+        <h1>CSGO Demo Viewer</h1>
+      </HeaderSlot>
       {isChrome || (
         <Alert color="warning">Only Google Chrome is supported!</Alert>
       )}

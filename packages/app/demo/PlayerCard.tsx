@@ -1,88 +1,55 @@
+import { Avatar } from "@material-ui/core"
+import {
+  Box,
+  Flex,
+  FlexProps,
+  ProgressBar,
+  Text,
+  Truncate,
+} from "@primer/components"
 import React from "react"
 import styled from "styled-components"
 
-import { SteamUser, teamColor, icon, armorIcon } from "."
+import { teamColor, icon, armorIcon } from "."
+import { SteamUser } from "../store/steam"
 
-export const PlayerCard: React.VFC<{
-  player: Player
-  steam?: SteamUser
-}> = ({ player, steam }) => {
+const PlayerCardBase: React.VFC<
+  FlexProps & {
+    player: Player
+    steamUser?: SteamUser
+  }
+> = ({ player, steamUser, ...props }) => {
   return (
-    <StyledSection player={player}>
-      <a href={steam?.profileurl} rel="noopener noreferrer">
-        <img className="avatar" src={steam?.avatar} />
+    <Flex {...props} alignItems="center" style={{ gap: 8 }}>
+      <a href={steamUser?.profileurl} rel="noopener noreferrer">
+        <Avatar src={steamUser?.avatar} />
       </a>
-      <div className="Player">
-        <div className="bar"></div>
-        <span className="Hp">{player.Hp}</span>
-        <span className="Name">{player.Name}</span>
-        <span className="Money">${player.Money}</span>
-      </div>
-      <div className="Weapons">
-        <img src={armorIcon(player)} />
-        {player.Weapons?.filter((e) => e !== 405).map((e, i) => (
-          <img
-            key={i}
-            className={player.Weapon === e ? "active" : ""}
-            src={icon(e)}
-          />
-        ))}
-      </div>
-    </StyledSection>
+      <Box flexGrow={1}>
+        <Flex style={{ gap: 8 }}>
+          <Text fontWeight="bold">{player.Hp}</Text>
+          <Box flexGrow={1}>
+            <Text color={teamColor(player.Team)} fontWeight="bold">
+              <Truncate title="">{player.Name}</Truncate>
+            </Text>
+          </Box>
+          <Text fontWeight="bold" textAlign="right" color="#131">
+            ${player.Money}
+          </Text>
+        </Flex>
+        <ProgressBar progress={player.Hp} barSize="small" />
+        <Flex flexWrap="wrap" style={{ gap: 8 }}>
+          <img src={armorIcon(player)} />
+          {player.Weapons?.filter((e) => e !== 405).map((e, i) => (
+            <img
+              key={i}
+              style={{ height: 20, opacity: player.Weapon === e ? 1 : 0.5 }}
+              src={icon(e)}
+            />
+          ))}
+        </Flex>
+      </Box>
+    </Flex>
   )
 }
 
-const StyledSection = styled.section<{ player: Player }>`
-  font-family: monospace;
-  position: relative;
-  margin-bottom: 4px;
-  width: 100%;
-  .avatar {
-    position: absolute;
-    border: none;
-    width: 50px;
-    height: 50px;
-    background: #333;
-  }
-  .Player {
-    display: flex;
-    position: relative;
-    height: 20px;
-    margin-left: 50px;
-    background: #444;
-  }
-  .Player > .bar {
-    position: absolute;
-    height: 100%;
-    z-index: 0;
-    width: ${({ player }) => player.Hp + "%"};
-    background: ${({ player }) => teamColor(player.Team)};
-    filter: brightness(80%);
-  }
-  .Player > span {
-    z-index: 1;
-    margin: 0 4px;
-  }
-  .Player .Hp {
-    width: 2em;
-    text-align: right;
-  }
-  .Player .Name {
-    flex-grow: 4;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .Weapons {
-    margin-left: 50px;
-    height: 28px;
-    white-space: nowrap;
-  }
-  .Weapons > img {
-    margin: 2px 2px;
-    height: 20px;
-    filter: brightness(60%);
-  }
-  .Weapons > img.active {
-    filter: brightness(100%);
-  }
-`
+export const PlayerCard = styled(PlayerCardBase)``

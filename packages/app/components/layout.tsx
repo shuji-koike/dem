@@ -8,23 +8,19 @@ import {
 } from "@material-ui/core"
 import { ChevronLeft, Menu } from "@material-ui/icons"
 import React from "react"
+import ReactDOM from "react-dom"
 import { NavLink, useLocation } from "react-router-dom"
 
 import { AuthButton } from "./auth"
 
-class LayoutState {
-  showHeader = true
-  showDrawer = false
-  nav: React.ReactNode = null
+interface LayoutState {
+  hideHeader?: boolean
+  showDrawer?: boolean
+  nav?: React.ReactNode
+  setLayout?: (state: LayoutState) => void
 }
 
-export const LayoutContext = React.createContext<{
-  layout: LayoutState
-  setLayout: (layout: LayoutState) => void
-}>({
-  layout: new LayoutState(),
-  setLayout: () => undefined,
-})
+export const LayoutContext = React.createContext<LayoutState>({})
 
 // https://git.io/JvUzq
 export const Layout: React.VFC<{
@@ -34,12 +30,12 @@ export const Layout: React.VFC<{
   children: React.ReactNode
 }> = ({ title, nav, menu, children }) => {
   const location = useLocation()
-  const [layout, setLayout] = React.useState(new LayoutState())
+  const [layout, setLayout] = React.useState<LayoutState>({})
   React.useEffect(() => setLayout({ ...layout, showDrawer: false }), [location])
   return (
-    <LayoutContext.Provider value={{ layout, setLayout }}>
+    <LayoutContext.Provider value={{ ...layout, setLayout }}>
       <CssBaseline />
-      <AppBar color="transparent" style={{ top: layout.showHeader ? 0 : -60 }}>
+      <AppBar color="transparent" style={{ top: layout.hideHeader ? -60 : 0 }}>
         <Toolbar variant="dense">
           <MenuButton />
           {title && (
@@ -48,6 +44,7 @@ export const Layout: React.VFC<{
             </Typography>
           )}
           {layout.nav ?? nav}
+          <div id="header-portal"></div>
           <div style={{ flexGrow: 1 }}></div>
           <AuthButton />
         </Toolbar>
@@ -67,26 +64,21 @@ export const Layout: React.VFC<{
 }
 
 const MenuButton: React.VFC = () => {
-  const { layout, setLayout } = React.useContext(LayoutContext)
+  const { showDrawer, ...layout } = React.useContext(LayoutContext)
   return (
     <IconButton
       edge="start"
       color="inherit"
-      onClick={() => setLayout({ ...layout, showDrawer: !layout.showDrawer })}
+      onClick={() => layout.setLayout?.({ ...layout, showDrawer: !showDrawer })}
     >
-      {layout.showDrawer ? <ChevronLeft /> : <Menu />}
+      {showDrawer ? <ChevronLeft /> : <Menu />}
     </IconButton>
   )
 }
 
 export const HeaderSlot: React.VFC<{
-  deps?: ReadonlyArray<unknown>
   children: React.ReactNode
-}> = ({ deps, children }) => {
-  const { layout, setLayout } = React.useContext(LayoutContext)
-  React.useEffect(() => {
-    setLayout({ ...layout, nav: children })
-    return () => setLayout({ ...layout, nav: null })
-  }, deps)
-  return <></>
+}> = ({ children }) => {
+  const container = document.getElementById("header-portal")
+  return container ? ReactDOM.createPortal(children, container) : null
 }

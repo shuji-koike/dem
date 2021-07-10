@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@primer/components"
 import React from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 
@@ -14,13 +15,15 @@ import { MatchContextProvider } from "./store/MatchContext"
 export const App: React.VFC = () => {
   return (
     <BrowserRouter>
-      <MatchContextProvider>
-        <Switch>
-          <Route>
-            <Layout menu={menu}>{routes}</Layout>
-          </Route>
-        </Switch>
-      </MatchContextProvider>
+      <ThemeProvider>
+        <MatchContextProvider>
+          <Switch>
+            <Route>
+              <Layout menu={menu}>{routes}</Layout>
+            </Route>
+          </Switch>
+        </MatchContextProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }

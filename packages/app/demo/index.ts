@@ -131,12 +131,6 @@ export function findPlayer(match: Match, ID: number): Player | null {
   return null
 }
 
-export interface SteamUser {
-  steamid: string
-  profileurl: string
-  avatar: string
-}
-
 class PlayerScore {
   ID: number
   Name = ""

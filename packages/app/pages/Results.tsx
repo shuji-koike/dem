@@ -4,6 +4,8 @@ import axios from "axios"
 import React from "react"
 import { Link, useLocation } from "react-router-dom"
 
+import { HeaderSlot } from "../components/layout"
+
 export const Results: React.VFC = () => {
   const [state, setState] = React.useState<{ href: string; text: string }[]>([])
   const { pathname, search } = useLocation()
@@ -13,7 +15,9 @@ export const Results: React.VFC = () => {
   }, [url])
   return (
     <main>
-      <h1>Results</h1>
+      <HeaderSlot>
+        <h1>Results</h1>
+      </HeaderSlot>
       <ul>
         {state.map((e) => (
           <li key={e.href}>

@@ -3,6 +3,7 @@ import { TreeItem, TreeView } from "@material-ui/lab"
 import React from "react"
 import { Link, useHistory } from "react-router-dom"
 
+import { HeaderSlot } from "../components/layout"
 import { storageList, fetchFiles } from "../io"
 
 export const DemoList: React.VFC = () => {
@@ -10,7 +11,9 @@ export const DemoList: React.VFC = () => {
   React.useEffect(() => void storageList("sandbox").then(setState), [])
   return (
     <main>
-      <h1>Matches</h1>
+      <HeaderSlot>
+        <h1>Matches</h1>
+      </HeaderSlot>
       <TreeView
         defaultCollapseIcon={<ExpandMore />}
         defaultExpandIcon={<ChevronRight />}
