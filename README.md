@@ -21,7 +21,7 @@ GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
 ```
 
 ```sh
-gsutil cors set storage.cors.json gs://sandbox-0825.appspot.com
+gsutil cors set storage.cors.json gs://csgo-tokyo.appspot.com
 firebase deploy --only storage:rules
 ```
 
@@ -150,11 +150,11 @@ volumes:
 ```
 
 ```tsx
-const ids = frame?.Players.map(e => e.ID).sort()
+const ids = frame?.Players.map((e) => e.ID).sort()
 const idsDep = ids?.join() // prevent eslint from crashing
 const [steam, setSteam] = React.useState<Record<string, SteamUser>>({})
 React.useEffect(() => {
-  if (ids) fetchSteamData(ids).then(e => setSteam({ ...steam, ...e }))
+  if (ids) fetchSteamData(ids).then((e) => setSteam({ ...steam, ...e }))
 }, [idsDep])
 ```
 

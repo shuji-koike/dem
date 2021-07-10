@@ -5,55 +5,5 @@
     "es6": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
-  ],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
-  },
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
-  "plugins": ["@typescript-eslint", "import", "react", "react-hooks"],
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
-  "ignorePatterns": ["dist", "static"],
-  "rules": {
-    "@typescript-eslint/consistent-type-assertions": [
-      "error",
-      { "assertionStyle": "never" }
-    ],
-    "@typescript-eslint/no-empty-function": ["off"],
-    "no-console": ["error", { "allow": ["debug", "info", "warn", "error"] }],
-    "react/prop-types": "off",
-    "react-hooks/exhaustive-deps": "off",
-    "import/order": [
-      "error",
-      {
-        "newlines-between": "never",
-        "alphabetize": { "order": "asc", "caseInsensitive": false },
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "unknown",
-          "parent",
-          "sibling",
-          "index"
-        ]
-      }
-    ]
-  }
+  "extends": ["@shuji-koike/eslint-config"]
 }

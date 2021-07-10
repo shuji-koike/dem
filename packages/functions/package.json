@@ -1,0 +1,24 @@
+{
+  "name": "@shuji-koike/csgo-functions",
+  "version": "0.0.0-alpha",
+  "private": true,
+  "engines": {
+    "node": "14"
+  },
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "serve": "yarn build && firebase emulators:start --only functions",
+    "shell": "yarn build && firebase functions:shell",
+    "start": "yarn shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^9.10.0",
+    "firebase-functions": "^3.14.1"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.3.0"
+  }
+}

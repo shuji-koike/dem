@@ -1,5 +1,3 @@
 {
-  "arrowParens": "avoid",
-  "jsxBracketSameLine": true,
   "semi": false
 }

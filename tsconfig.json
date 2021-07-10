@@ -16,5 +16,5 @@
     "noPropertyAccessFromIndexSignature": true,
     "jsx": "react"
   },
-  "exclude": ["dist", "static"]
+  "exclude": ["**/dist", "**/static", "**/build"]
 }

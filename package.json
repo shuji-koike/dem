@@ -6,57 +6,25 @@
     "node": "14"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite serve",
     "build": "vite build",
     "test": "jest",
-    "lint": "eslint . --fix --cache --ext .jsx,.js,.tsx,.ts && prettier --write --loglevel warn .",
+    "lint": "eslint --cache --fix . && prettier --write --loglevel warn .",
     "storybook": "start-storybook -p 6006"
   },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "dotenv": "^10.0.0",
-    "firebase": "^8.6.8",
-    "lodash": "^4.17.21"
-  },
   "workspaces": [
-    "functions"
+    "packages/*"
   ],
   "devDependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.35",
-    "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.14",
-    "@material-ui/core": "^4.11.4",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "^4.0.0-alpha.58",
-    "@primer/octicons-react": "^14.2.2",
-    "@storybook/addon-actions": "^6.2.9",
-    "@storybook/addon-essentials": "^6.2.9",
-    "@storybook/addon-knobs": "^6.2.9",
-    "@storybook/addon-links": "^6.2.9",
-    "@storybook/react": "^6.2.9",
-    "@types/lodash": "^4.14.170",
-    "@types/material-ui": "^0.21.8",
-    "@types/react": "^17.0.11",
-    "@types/react-dom": "^17.0.8",
-    "@types/react-router-dom": "^5.1.7",
-    "@types/styled-components": "^5.1.10",
-    "@types/wicg-file-system-access": "^2020.9.1",
-    "@typescript-eslint/eslint-plugin": "^4.27.0",
-    "@typescript-eslint/parser": "^4.27.0",
-    "@vitejs/plugin-react-refresh": "^1.3.3",
-    "eslint": "^7.29.0",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "firebase-functions-test": "^0.3.0",
-    "prettier": "^2.3.1",
-    "react": "^17.0.2",
-    "react-device-detect": "^1.17.0",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0",
-    "styled-components": "^5.3.0",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.3.4",
-    "vite": "^2.3.7"
+    "@babel/core": "^7.14.6",
+    "@shuji-koike/boilerplate": "^1.0.0-beta.1",
+    "@shuji-koike/eslint-config": "^1.0.0-beta.2",
+    "@shuji-koike/vite-react": "^1.0.0-beta.5",
+    "@storybook/addon-actions": "^6.3.4",
+    "@storybook/addon-essentials": "^6.3.4",
+    "@storybook/addon-knobs": "^6.3.0",
+    "@storybook/addon-links": "^6.3.4",
+    "@storybook/react": "^6.3.4",
+    "vite": "2.3.8"
   }
 }

@@ -1,4 +1,4 @@
-import "../src/index.css"
+import "../packages/app/index.css"
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -11,4 +11,4 @@ export const parameters = {
   },
 }
 
-export const decorators = [story => story()]
+export const decorators = [(story) => story()]

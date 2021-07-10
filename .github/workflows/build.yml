@@ -15,9 +15,8 @@ jobs:
           key: node_modules-14-${{ hashFiles('package.json', 'yarn.lock') }}
       - run: yarn install --frozen-lockfile
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
-      - run: yarn prettier -v
       - run: yarn prettier -c .
-      - run: yarn eslint . --ext js --ext ts --ext tsx
+      - run: yarn eslint .
       - run: yarn tsc
       - run: touch static/main.wasm
       - run: yarn vite build
