@@ -1,13 +1,10 @@
 #root {
   position: relative;
   color: #eee;
-  background-color: #111;
   font-family: sans-serif;
 }
 #root > main {
-  position: relative;
-  box-sizing: border-box;
-  padding: 60px 72px 0;
+  padding: 60px 75px 0;
 }
 p {
   margin: 0.5rem 0;

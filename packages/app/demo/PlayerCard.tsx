@@ -1,55 +1,52 @@
-import { Avatar } from "@material-ui/core"
-import {
-  Box,
-  Flex,
-  FlexProps,
-  ProgressBar,
-  Text,
-  Truncate,
-} from "@primer/components"
+import { css } from "@emotion/react"
+import { Avatar, Box, ProgressBar, Text, Truncate } from "@primer/components"
 import React from "react"
-import styled from "styled-components"
 
 import { teamColor, icon, armorIcon } from "."
-import { SteamUser } from "../store/steam"
+import { SteamUser } from "../hooks"
 
-const PlayerCardBase: React.VFC<
-  FlexProps & {
-    player: Player
-    steamUser?: SteamUser
-  }
-> = ({ player, steamUser, ...props }) => {
+export const PlayerCard: React.VFC<{
+  player: Player
+  steamUser?: SteamUser
+}> = ({ player, steamUser }) => {
   return (
-    <Flex {...props} alignItems="center" style={{ gap: 8 }}>
-      <a href={steamUser?.profileurl} rel="noopener noreferrer">
-        <Avatar src={steamUser?.avatar} />
+    <Box display="flex" gridGap={1}>
+      <a href={steamUser?.profileurl} target="_blank" rel="noopener noreferrer">
+        {steamUser && <Avatar size={40} square src={steamUser.avatar} />}
       </a>
       <Box flexGrow={1}>
-        <Flex style={{ gap: 8 }}>
-          <Text fontWeight="bold">{player.Hp}</Text>
-          <Box flexGrow={1}>
-            <Text color={teamColor(player.Team)} fontWeight="bold">
-              <Truncate title="">{player.Name}</Truncate>
+        <Box display="flex" gridGap={2}>
+          <Box minWidth={30} textAlign="right">
+            <Text fontWeight="bold" color="gray">
+              {player.Hp}
             </Text>
+          </Box>
+          <Box flexGrow={1}>
+            <Truncate title={player.Name}>
+              <Text color={teamColor(player.Team)} fontWeight="bold">
+                {player.Name}
+              </Text>
+            </Truncate>
           </Box>
           <Text fontWeight="bold" textAlign="right" color="#131">
             ${player.Money}
           </Text>
-        </Flex>
+        </Box>
         <ProgressBar progress={player.Hp} barSize="small" />
-        <Flex flexWrap="wrap" style={{ gap: 8 }}>
+        <Box display="flex" gridGap={2} marginTop={1} minHeight="20px">
           <img src={armorIcon(player)} />
           {player.Weapons?.filter((e) => e !== 405).map((e, i) => (
             <img
               key={i}
-              style={{ height: 20, opacity: player.Weapon === e ? 1 : 0.5 }}
               src={icon(e)}
+              css={css`
+                height: 20px;
+                opacity: ${player.Weapon === e ? 1 : 0.5};
+              `}
             />
           ))}
-        </Flex>
+        </Box>
       </Box>
-    </Flex>
+    </Box>
   )
 }
-
-export const PlayerCard = styled(PlayerCardBase)``

@@ -1,4 +1,6 @@
+import { getApp } from "firebase/app"
 import { getAuth, User } from "firebase/auth"
+import { httpsCallable, getFunctions } from "firebase/functions"
 import { useEffect, useState } from "react"
 
 export function useAuth(): User | null {
@@ -14,4 +16,28 @@ export function useAuthSuspense(): User {
       getAuth().onAuthStateChanged(() => resolve())
     })
   return user
+}
+
+export interface SteamUser {
+  steamid: string
+  profileurl: string
+  avatar: string
+}
+
+export type SteamUsers = Record<string, SteamUser>
+
+export function useSteamUsers(ids: number[] = []): SteamUsers {
+  const data = { steamids: [...new Set(ids)].sort().join(",") }
+  const [state, setState] = useState<SteamUsers>({})
+  useEffect(() => {
+    httpsCallable<{ steamids: string }, { players: SteamUser[] }>(
+      getFunctions(getApp(), "asia-northeast1"),
+      "getPlayerSummaries"
+    )(data)
+      .then(({ data }) =>
+        data.players.reduce((acc, e) => ({ ...acc, [e.steamid]: e }), {})
+      )
+      .then(setState)
+  }, [ids.join(",")])
+  return state
 }

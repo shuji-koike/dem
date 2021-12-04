@@ -62,9 +62,9 @@ export const FramePlayer: React.VFC<{ player: Player }> = ({ player }) => {
           <circle
             cx={player.X}
             cy={player.Y}
-            r="16"
+            r="12"
             fill="white"
-            style={{ fillOpacity: player.Flashed ? 0.5 : 0 }}
+            fillOpacity={player.Flashed ? 0.5 : 0}
           />
           <path
             d={[
@@ -141,9 +141,10 @@ export const MolotovView: React.VFC<{ frame: Frame }> = ({ frame }) => {
           key={i}
           points={pointsToString(nade.Flames || [])}
           stroke={teamColor(nade.Team)}
+          strokeOpacity={0.75}
           strokeWidth="2"
           fill="#8e0c05"
-          style={{ fillOpacity: 0.5 }}
+          fillOpacity={0.25}
         />
       ))}
     </g>
@@ -158,9 +159,10 @@ export const NadeView: React.VFC<{ nade: Nade }> = ({ nade }) => {
       cy={nade.Y}
       r="24"
       fill="#fff"
+      fillOpacity={0.5}
       stroke={teamColor(nade.Team)}
+      strokeOpacity={0.75}
       strokeWidth="2"
-      style={{ fillOpacity: 0.5 }}
     />
   ) : (
     <circle

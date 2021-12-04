@@ -152,8 +152,8 @@ const StyledForm = styled.form`
   > aside {
     position: fixed;
     top: 60px;
-    right: 4px;
-    width: 250px;
+    right: 8px;
+    width: 280px;
     max-height: calc(100vh - 60px - 100px);
     overflow-y: auto;
   }

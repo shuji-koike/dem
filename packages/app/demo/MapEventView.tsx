@@ -11,7 +11,7 @@ export const MapEventView: React.VFC<{
   changeTick?: (e: { Tick: number }) => void
 }> = React.memo(function MapEventView({ match, round, filter, changeTick }) {
   return (
-    <g style={{ opacity: round ? 0.4 : 0.8 }}>
+    <g opacity={round ? 0.4 : 0.8}>
       {filter.kills &&
         match.KillEvents?.filter(filter.kills).map((e, i) => (
           <KillEventView key={i} event={e} onClick={changeTick} />

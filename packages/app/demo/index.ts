@@ -69,7 +69,7 @@ export function bombColor(state: BombState): string {
       [BombState.Planted]: "#FF0000",
       [BombState.Planted | BombState.Defusing]: "#3567CC",
       [BombState.Defused]: "#3567CC",
-      [BombState.Exploded]: "#FF0000",
+      [BombState.Exploded]: "#AA0000",
     }[state] || "#E04800"
   )
 }

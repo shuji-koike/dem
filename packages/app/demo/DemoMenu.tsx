@@ -3,7 +3,7 @@ import React from "react"
 import styled from "styled-components"
 
 import { findPlayer, icon, teamColor } from "."
-import { useSteamUsers } from "../store/steam"
+import { useSteamUsers } from "../hooks"
 import { Filter } from "./DemoPlayer"
 import { PlayerCard } from "./PlayerCard"
 
@@ -54,12 +54,7 @@ export const DemoMenu: React.VFC<{
       </StyledNav>
       {filter.players &&
         frame?.Players.filter(filter.players).map((e) => (
-          <PlayerCard
-            key={e.ID}
-            player={e}
-            steamUser={steamUsers[e.ID]}
-            marginY={1}
-          />
+          <PlayerCard key={e.ID} player={e} steamUser={steamUsers[e.ID]} />
         ))}
       {filter.kills &&
         match.KillEvents.filter(filter.kills).map((e, i) => (
@@ -68,7 +63,7 @@ export const DemoMenu: React.VFC<{
             key={i}
             onClick={() => setTick?.(e.Tick)}
             marginY={1}
-            style={{ gap: 8 }}
+            gridGap={2}
           >
             <PlayerLabel player={findPlayer(match, e.Killer)} />
             <img height={16} src={icon(e.Weapon)} />
@@ -84,7 +79,7 @@ export const DemoMenu: React.VFC<{
             key={i}
             onClick={() => setTick?.(e.Tick)}
             marginY={1}
-            style={{ gap: 8 }}
+            gridGap={2}
           >
             <img height={16} src={icon(e.Weapon)} />
             <PlayerLabel player={findPlayer(match, e.Thrower)} />

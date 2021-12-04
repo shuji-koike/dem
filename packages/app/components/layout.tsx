@@ -85,7 +85,7 @@ export const Layout: React.VFC<{
         open={layout.showDrawer}
         onClose={() => setLayout({ ...layout, showDrawer: false })}
       >
-        <Toolbar variant="dense" style={{ minWidth: 240 }}>
+        <Toolbar variant="dense">
           <MenuButton />
         </Toolbar>
         {menu}

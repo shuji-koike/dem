@@ -9,21 +9,19 @@ import { DemoPage } from "./pages/DemoPage"
 import { Home } from "./pages/Home"
 import { MatchList } from "./pages/MatchList"
 import { Results } from "./pages/Results"
-import { Sandbox } from "./pages/Sandbox"
-import { MatchContextProvider } from "./store/MatchContext"
 
 export const App: React.VFC = () => {
   return (
     <React.Suspense fallback={<></>}>
       <BrowserRouter>
         <ThemeProvider>
-          <MatchContextProvider>
+          <AppContextProvider>
             <Layout menu={menu}>
               <React.Suspense fallback={<></>}>
                 <React.StrictMode>{routes}</React.StrictMode>
               </React.Suspense>
             </Layout>
-          </MatchContextProvider>
+          </AppContextProvider>
         </ThemeProvider>
       </BrowserRouter>
     </React.Suspense>
@@ -36,8 +34,33 @@ const routes = (
     <Route path="/files" element={<DemoList />} />
     <Route path="/results" element={<Results />} />
     <Route path="/matches" element={<MatchList />} />
-    <Route path="/sandbox" element={<Sandbox />} />
     <Route path="/sample" element={<DemoPage path="/static/sample.json" />} />
     <Route path="/" element={<Home />} />
   </Routes>
 )
+
+interface AppState {
+  match: Match | null
+  setMatch: (match: Match) => void
+  tick: number
+  setTick: (tick: number) => void
+}
+
+export const AppContext = React.createContext<AppState>({
+  match: null,
+  setMatch() {},
+  tick: 0,
+  setTick() {},
+})
+
+export const AppContextProvider: React.VFC<{
+  children: React.ReactNode
+}> = ({ children }) => {
+  const [match, setMatch] = React.useState<Match | null>(null)
+  const [tick, setTick] = React.useState(0)
+  return (
+    <AppContext.Provider value={{ match, setMatch, tick, setTick }}>
+      {children}
+    </AppContext.Provider>
+  )
+}

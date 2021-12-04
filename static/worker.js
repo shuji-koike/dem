@@ -1,6 +1,4 @@
 import "./wasm_exec"
-import "../packages/app/firebase"
-import { ref, getStorage, getDownloadURL } from "@firebase/storage"
 
 onmessage = async function ({ data: [cmd, ...args] }) {
   if (cmd == "wasmParaseDemo") {
@@ -22,9 +20,7 @@ async function initWasm() {
     // fetch((await import("./main.wasm?url")).default),
     fetch("/static/main.wasm")
       .then((res) => (res.ok ? res : Promise.reject()))
-      .catch(() =>
-        getDownloadURL(ref(getStorage(), "static/main.wasm")).then(fetch)
-      ),
+      .catch(() => fetch("https://csgo.tokyo/static/main.wasm")),
     go.importObject
   )
   go.run(instance)

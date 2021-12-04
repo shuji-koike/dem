@@ -19,29 +19,19 @@ export const DemoSlider: React.VFC<{
         .slice(0, 1)
         .map((e) => ({
           value: round.Frames.indexOf(e),
-          label: (
-            <Icon
-              style={{ color: bombColor(e.Bomb.State) }}
-              icon={faBomb}
-            ></Icon>
-          ),
+          label: <Icon color={bombColor(e.Bomb.State)} icon={faBomb} />,
         })),
       ...round.Frames.filter((e) => e.Bomb.State & BombState.Defused)
         .slice(0, 1)
         .map((e) => ({
           value: round.Frames.indexOf(e),
-          label: <Icon style={{ color: teamColor(3) }} icon={faTools}></Icon>,
+          label: <Icon color={teamColor(3)} icon={faTools} />,
         })),
       ...round.Frames.filter((e) => e.Bomb.State & BombState.Exploded)
         .slice(0, 1)
         .map((e) => ({
           value: round.Frames.indexOf(e),
-          label: (
-            <Icon
-              style={{ color: bombColor(e.Bomb.State) }}
-              icon={faBomb}
-            ></Icon>
-          ),
+          label: <Icon color={bombColor(e.Bomb.State)} icon={faBomb} />,
         })),
       ...round.Frames.filter(
         (e, i, arr) =>
@@ -55,9 +45,7 @@ export const DemoSlider: React.VFC<{
       })),
       ...match.KillEvents.filter((e) => e.Round === round.Round).map((e) => ({
         value: findIndex(round.Frames, (f) => f.Tick >= e.Tick),
-        label: (
-          <Icon style={{ color: teamColor(e.Team) }} icon={faTimes}></Icon>
-        ),
+        label: <Icon color={teamColor(e.Team)} icon={faTimes} />,
       })),
     ],
     [match, round]
