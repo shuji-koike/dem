@@ -60,6 +60,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 		}
 		match = Match{
 			TypeName:   "Match",
+			Version:    "v0.0.0-alpha",
 			TickRate:   int(math.Round(parser.TickRate())),
 			FrameRate:  int(math.Round(header.FrameRate())),
 			MapName:    header.MapName,

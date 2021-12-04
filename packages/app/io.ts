@@ -1,9 +1,15 @@
 import axios from "axios"
-import firebase from "firebase/app"
+import {
+  getDownloadURL,
+  getStorage,
+  listAll,
+  ref,
+  uploadString,
+} from "firebase/storage"
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import GoWorker from "../../static/worker.js?worker"
+import GoWorker from "../../static/worker.js?worker&inline"
 
 export async function pickDir(): Promise<File[]> {
   const files: File[] = []
@@ -29,7 +35,7 @@ export async function openDemo(
   return await Promise.resolve(null)
 }
 
-export function parseJson(data: Response | string): Promise<Match> {
+function parseJson(data: Response | string): Promise<Match> {
   if (typeof data === "string") return JSON.parse(data)
   if (data instanceof Response) return data.json()
   throw new Error()
@@ -57,10 +63,8 @@ export function parseDemo(
   })
 }
 
-export async function storageList(path = ""): Promise<string[]> {
-  return Promise.all(
-    (await firebase.storage().ref(path).list()).items.map((e) => e.fullPath)
-  )
+export async function storageList(path: string): Promise<string[]> {
+  return (await listAll(ref(getStorage(), path))).items.map((e) => e.fullPath)
 }
 
 export async function storagePut(
@@ -68,19 +72,11 @@ export async function storagePut(
   data: string | Match
 ): Promise<void> {
   if (typeof data === "object") data = JSON.stringify(data)
-  await firebase
-    .storage()
-    .ref(path)
-    .putString(data, undefined, { contentType: "application/json" })
-    .then(console.debug)
+  await uploadString(ref(getStorage(), path), data).then(console.debug)
 }
 
 export function storageFetch(path: string): Promise<Match | null> {
-  return firebase
-    .storage()
-    .ref(path)
-    .getDownloadURL()
-    .then((e) => (typeof e === "string" ? fetch(e).then(parseJson) : null))
+  return getDownloadURL(ref(getStorage(), path)).then(fetch).then(parseJson)
 }
 
 export function fetchFiles(file = ""): Promise<string[]> {

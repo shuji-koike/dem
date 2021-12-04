@@ -1,3 +1,4 @@
+import { css } from "@emotion/react"
 import {
   AppBar,
   CssBaseline,
@@ -7,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core"
 import { ChevronLeft, Menu } from "@material-ui/icons"
+import { Box } from "@primer/components"
 import React from "react"
 import ReactDOM from "react-dom"
 import { NavLink, useLocation } from "react-router-dom"
@@ -14,13 +16,23 @@ import { NavLink, useLocation } from "react-router-dom"
 import { AuthButton } from "./auth"
 
 interface LayoutState {
-  hideHeader?: boolean
-  showDrawer?: boolean
+  hideHeader: boolean
+  showDrawer: boolean
+  fixedHeight: number
   nav?: React.ReactNode
-  setLayout?: (state: LayoutState) => void
+  setLayout: (
+    state: LayoutState | ((state: LayoutState) => LayoutState)
+  ) => void
 }
 
-export const LayoutContext = React.createContext<LayoutState>({})
+const layoutState = Object.freeze<LayoutState>({
+  hideHeader: false,
+  showDrawer: false,
+  fixedHeight: 54,
+  setLayout() {},
+})
+
+export const LayoutContext = React.createContext<LayoutState>(layoutState)
 
 // https://git.io/JvUzq
 export const Layout: React.VFC<{
@@ -30,13 +42,24 @@ export const Layout: React.VFC<{
   children: React.ReactNode
 }> = ({ title, nav, menu, children }) => {
   const location = useLocation()
-  const [layout, setLayout] = React.useState<LayoutState>({})
+  const [layout, setLayout] = React.useState<LayoutState>(layoutState)
   React.useEffect(() => setLayout({ ...layout, showDrawer: false }), [location])
   return (
     <LayoutContext.Provider value={{ ...layout, setLayout }}>
       <CssBaseline />
-      <AppBar color="transparent" style={{ top: layout.hideHeader ? -60 : 0 }}>
-        <Toolbar variant="dense">
+      <AppBar
+        color="transparent"
+        css={css`
+          display: ${layout.hideHeader && "none"};
+        `}
+      >
+        <Toolbar
+          variant="dense"
+          css={css`
+            min-height: ${layout.fixedHeight}px;
+            max-height: ${layout.fixedHeight}px;
+          `}
+        >
           <MenuButton />
           {title && (
             <Typography component="h1" variant="h6" color="inherit" noWrap>
@@ -44,8 +67,17 @@ export const Layout: React.VFC<{
             </Typography>
           )}
           {layout.nav ?? nav}
-          <div id="header-portal"></div>
-          <div style={{ flexGrow: 1 }}></div>
+          <Box
+            id="header-portal"
+            css={css`
+              display: flex;
+              flex-grow: 1;
+              margin-left: 16px;
+              & > h1:not(:first-of-type) {
+                display: none;
+              }
+            `}
+          />
           <AuthButton />
         </Toolbar>
       </AppBar>
@@ -64,12 +96,15 @@ export const Layout: React.VFC<{
 }
 
 const MenuButton: React.VFC = () => {
-  const { showDrawer, ...layout } = React.useContext(LayoutContext)
+  const { showDrawer, setLayout } = React.useContext(LayoutContext)
   return (
     <IconButton
       edge="start"
       color="inherit"
-      onClick={() => layout.setLayout?.({ ...layout, showDrawer: !showDrawer })}
+      size="small"
+      onClick={() =>
+        setLayout((layout) => ({ ...layout, showDrawer: !showDrawer }))
+      }
     >
       {showDrawer ? <ChevronLeft /> : <Menu />}
     </IconButton>

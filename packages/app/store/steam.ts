@@ -1,4 +1,5 @@
-import firebase from "firebase/app"
+import { getApp } from "firebase/app"
+import { httpsCallable, getFunctions } from "firebase/functions"
 import { useEffect, useState } from "react"
 
 export interface SteamUser {
@@ -13,22 +14,14 @@ export function useSteamUsers(ids: number[] = []): SteamUsers {
   const data = { steamids: [...new Set(ids)].sort().join(",") }
   const [state, setState] = useState<SteamUsers>({})
   useEffect(() => {
-    getPlayerSummaries(data).then(setState)
+    httpsCallable<{ steamids: string }, { players: SteamUser[] }>(
+      getFunctions(getApp(), "asia-northeast1"),
+      "getPlayerSummaries"
+    )(data)
+      .then(({ data }) =>
+        data.players.reduce((acc, e) => ({ ...acc, [e.steamid]: e }), {})
+      )
+      .then(setState)
   }, [ids.join(",")])
   return state
-}
-
-async function getPlayerSummaries(data: {
-  steamids: string
-}): Promise<SteamUsers> {
-  const players = await firebase
-    .app()
-    .functions("asia-northeast1")
-    .httpsCallable("getPlayerSummaries")(data)
-    .then<SteamUser[]>((e) => e.data?.response?.players)
-  if (!players) {
-    console.error("getPlayerSummaries")
-    return {}
-  }
-  return players.reduce((acc, e) => ({ ...acc, [e.steamid]: e }), {})
 }

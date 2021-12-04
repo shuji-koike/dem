@@ -8,7 +8,6 @@
     "predeploy": "yarn --cwd packages/functions tsc"
   },
   "hosting": {
-    "predeploy": ["yarn install --frozen-lockfile", "yarn vite build"],
     "public": "dist",
     "ignore": ["**/.*"],
     "rewrites": [{ "source": "**", "destination": "/index.html" }]

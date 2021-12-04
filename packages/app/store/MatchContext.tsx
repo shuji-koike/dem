@@ -19,7 +19,7 @@ export const MatchContext = React.createContext<MatchState>({
 export const MatchContextProvider: React.VFC<{
   children: React.ReactNode
 }> = ({ children }) => {
-  const path = useParams<{ 0: string | undefined }>()?.[0]
+  const path = useParams()[0]
   const [match, setMatch] = React.useState<Match | null>(null)
   const [tick, setTick] = React.useState(0)
   React.useEffect(() => {

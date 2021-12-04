@@ -5,4 +5,4 @@ import "./firebase"
 import "./index.css"
 import { App } from "./app"
 
-ReactDOM.render(<App />, document.querySelector("body > article"))
+ReactDOM.render(<App />, document.querySelector("#root"))

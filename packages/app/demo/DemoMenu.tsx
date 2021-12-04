@@ -1,4 +1,4 @@
-import { Flex, Text } from "@primer/components"
+import { Box, Text } from "@primer/components"
 import React from "react"
 import styled from "styled-components"
 
@@ -63,7 +63,8 @@ export const DemoMenu: React.VFC<{
         ))}
       {filter.kills &&
         match.KillEvents.filter(filter.kills).map((e, i) => (
-          <Flex
+          <Box
+            display="flex"
             key={i}
             onClick={() => setTick?.(e.Tick)}
             marginY={1}
@@ -74,11 +75,12 @@ export const DemoMenu: React.VFC<{
             {!!e.Penetrated && <span>(P)</span>}
             {e.IsHeadshot && <span>(H)</span>}
             <PlayerLabel player={findPlayer(match, e.Victim)} />
-          </Flex>
+          </Box>
         ))}
       {filter.nades &&
         match.NadeEvents.filter(filter.nades).map((e, i) => (
-          <Flex
+          <Box
+            display="flex"
             key={i}
             onClick={() => setTick?.(e.Tick)}
             marginY={1}
@@ -86,7 +88,7 @@ export const DemoMenu: React.VFC<{
           >
             <img height={16} src={icon(e.Weapon)} />
             <PlayerLabel player={findPlayer(match, e.Thrower)} />
-          </Flex>
+          </Box>
         ))}
     </div>
   )

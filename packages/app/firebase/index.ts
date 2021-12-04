@@ -1,10 +1,6 @@
-import firebase from "firebase/app"
-import "firebase/auth"
-import "firebase/firestore"
-import "firebase/functions"
-import "firebase/storage"
+import { initializeApp } from "firebase/app"
 
-firebase.initializeApp({
+initializeApp({
   apiKey: import.meta.env["VITE_FIREBASE_API_KEY"],
   authDomain: `${import.meta.env["VITE_FIREBASE_PROJECT_ID"]}.firebaseapp.com`,
   databaseURL: `https://${

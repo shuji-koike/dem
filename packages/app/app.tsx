@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@primer/components"
 import React from "react"
-import { BrowserRouter, Route, Switch } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import { Layout } from "./components/layout"
 import { menu } from "./components/nav"
@@ -14,30 +14,30 @@ import { MatchContextProvider } from "./store/MatchContext"
 
 export const App: React.VFC = () => {
   return (
-    <BrowserRouter>
-      <ThemeProvider>
-        <MatchContextProvider>
-          <Switch>
-            <Route>
-              <Layout menu={menu}>{routes}</Layout>
-            </Route>
-          </Switch>
-        </MatchContextProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <React.Suspense fallback={<></>}>
+      <BrowserRouter>
+        <ThemeProvider>
+          <MatchContextProvider>
+            <Layout menu={menu}>
+              <React.Suspense fallback={<></>}>
+                <React.StrictMode>{routes}</React.StrictMode>
+              </React.Suspense>
+            </Layout>
+          </MatchContextProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </React.Suspense>
   )
 }
 
 const routes = (
-  <Switch>
-    <Route path="/files/*" component={DemoPage}></Route>
-    <Route path="/files" component={DemoList}></Route>
-    <Route path="/results" component={Results}></Route>
-    <Route path="/matches" component={MatchList}></Route>
-    <Route path="/sandbox" component={Sandbox}></Route>
-    <Route path="/sample">
-      <DemoPage path="/static/sample.json" />
-    </Route>
-    <Route path="/" component={Home}></Route>
-  </Switch>
+  <Routes>
+    <Route path="/files/*" element={<DemoPage />} />
+    <Route path="/files" element={<DemoList />} />
+    <Route path="/results" element={<Results />} />
+    <Route path="/matches" element={<MatchList />} />
+    <Route path="/sandbox" element={<Sandbox />} />
+    <Route path="/sample" element={<DemoPage path="/static/sample.json" />} />
+    <Route path="/" element={<Home />} />
+  </Routes>
 )

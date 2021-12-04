@@ -10,6 +10,7 @@ import (
 // Match ...
 type Match struct {
 	TypeName   string `json:"__typename"`
+	Version    string
 	TickRate   int
 	FrameRate  int
 	MapName    string

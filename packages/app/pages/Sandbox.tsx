@@ -1,7 +1,7 @@
 import { Alert } from "@material-ui/lab"
 import React from "react"
 import { isChrome } from "react-device-detect"
-import { useHistory } from "react-router"
+import { useNavigate } from "react-router"
 
 import { HeaderSlot } from "../components/layout"
 import { Match } from "../demo/Match"
@@ -11,7 +11,7 @@ export const Sandbox: React.VFC = () => {
   const [match, setMatch] = React.useState<Match | null>(null)
   const [output, setOutput] = React.useState<string[]>([])
   const [files, setFiles] = React.useState<File[]>([])
-  const history = useHistory()
+  const navigate = useNavigate()
   return match ? (
     <Match match={match} />
   ) : (
@@ -23,9 +23,7 @@ export const Sandbox: React.VFC = () => {
         <Alert color="warning">Only Google Chrome is supported!</Alert>
       )}
       <p>Click the button below and select a DEM file.</p>
-      <button onClick={() => history.push("/sample")}>
-        Open a sample File
-      </button>
+      <button onClick={() => navigate("/sample")}>Open a sample File</button>
       <button onClick={() => pickDir().then(setFiles)}>Open a Directory</button>
       <input
         type="file"

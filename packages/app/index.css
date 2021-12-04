@@ -1,21 +1,13 @@
-html,
-body,
-body > article {
+#root {
   position: relative;
-  width: 100vw;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
   color: #eee;
   background-color: #111;
   font-family: sans-serif;
 }
-body > article > main {
+#root > main {
   position: relative;
   box-sizing: border-box;
-  padding: 60px;
-  width: 100%;
-  min-height: 100%;
+  padding: 60px 72px 0;
 }
 p {
   margin: 0.5rem 0;
@@ -30,9 +22,4 @@ section svg {
   max-width: 40vh;
   background-color: #111;
   cursor: crosshair;
-}
-p > span + span,
-p > span + img,
-p > img + span {
-  margin-left: 0.5rem;
 }
