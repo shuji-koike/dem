@@ -1,8 +1,8 @@
 import { css } from "@emotion/react"
-import { Avatar, Box, ProgressBar, Text, Truncate } from "@primer/components"
+import { Avatar, Box, LinearProgress, Typography } from "@mui/material"
 import React from "react"
 
-import { teamColor, icon, armorIcon } from "."
+import { teamColor, icon, armorIcon, teamColorVariantMap } from "."
 import { SteamUser } from "../hooks"
 
 export const PlayerCard: React.VFC<{
@@ -10,30 +10,40 @@ export const PlayerCard: React.VFC<{
   steamUser?: SteamUser
 }> = ({ player, steamUser }) => {
   return (
-    <Box display="flex" gridGap={1}>
-      <a href={steamUser?.profileurl} target="_blank" rel="noopener noreferrer">
-        {steamUser && <Avatar size={40} square src={steamUser.avatar} />}
+    <Box display="flex" alignItems="center" gap={1}>
+      <a href={steamUser?.profileurl} target="_blank">
+        <Avatar variant="rounded" src={steamUser?.avatar} />
       </a>
       <Box flexGrow={1}>
-        <Box display="flex" gridGap={2}>
+        <Box display="flex" gap={2}>
           <Box minWidth={30} textAlign="right">
-            <Text fontWeight="bold" color="gray">
+            <Typography fontWeight="bold" color="gray">
               {player.Hp}
-            </Text>
+            </Typography>
           </Box>
           <Box flexGrow={1}>
-            <Truncate title={player.Name}>
-              <Text color={teamColor(player.Team)} fontWeight="bold">
-                {player.Name}
-              </Text>
-            </Truncate>
+            <Typography
+              noWrap
+              maxWidth={120}
+              color={teamColor(player.Team)}
+              fontWeight="bold"
+            >
+              {player.Name}
+            </Typography>
           </Box>
-          <Text fontWeight="bold" textAlign="right" color="#131">
+          <Typography fontWeight="bold" textAlign="right" color="#131">
             ${player.Money}
-          </Text>
+          </Typography>
         </Box>
-        <ProgressBar progress={player.Hp} barSize="small" />
-        <Box display="flex" gridGap={2} marginTop={1} minHeight="20px">
+        <LinearProgress
+          variant="determinate"
+          color={teamColorVariantMap.get(player.Team)}
+          value={player.Hp}
+          css={css`
+            opacity: 0.75;
+          `}
+        />
+        <Box display="flex" gap={1} marginTop={1} minHeight="20px">
           <img src={armorIcon(player)} />
           {player.Weapons?.filter((e) => e !== 405).map((e, i) => (
             <img

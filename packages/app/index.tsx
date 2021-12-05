@@ -3,7 +3,6 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import "./index.css"
-import { App } from "./app"
 
 initializeApp({
   apiKey: import.meta.env["VITE_FIREBASE_API_KEY"],
@@ -16,4 +15,10 @@ initializeApp({
   appId: import.meta.env["VITE_FIREBASE_APP_ID"],
 })
 
-ReactDOM.render(<App />, document.querySelector("#root"))
+const App = React.lazy(() => import("./app"))
+ReactDOM.render(
+  <React.Suspense fallback="">
+    <App />
+  </React.Suspense>,
+  document.querySelector("#root")
+)

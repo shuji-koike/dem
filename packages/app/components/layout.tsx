@@ -1,17 +1,21 @@
 import { css } from "@emotion/react"
+import { IconProp } from "@fortawesome/fontawesome-svg-core"
+import { faBars, faChevronLeft } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   AppBar,
-  CssBaseline,
+  Box,
   Drawer,
   IconButton,
   Toolbar,
   Typography,
-} from "@material-ui/core"
-import { ChevronLeft, Menu } from "@material-ui/icons"
-import { Box } from "@primer/components"
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material"
 import React from "react"
 import ReactDOM from "react-dom"
-import { NavLink, useLocation } from "react-router-dom"
+import { useLocation, NavLink } from "react-router-dom"
 
 import { AuthButton } from "./auth"
 
@@ -46,7 +50,6 @@ export const Layout: React.VFC<{
   React.useEffect(() => setLayout({ ...layout, showDrawer: false }), [location])
   return (
     <LayoutContext.Provider value={{ ...layout, setLayout }}>
-      <CssBaseline />
       <AppBar
         color="transparent"
         css={css`
@@ -71,8 +74,9 @@ export const Layout: React.VFC<{
             id="header-portal"
             css={css`
               display: flex;
-              flex-grow: 1;
-              margin-left: 16px;
+              margin: 0 16px;
+              flex: 1;
+              justify-content: space-between;
               & > h1:not(:first-of-type) {
                 display: none;
               }
@@ -106,10 +110,24 @@ const MenuButton: React.VFC = () => {
         setLayout((layout) => ({ ...layout, showDrawer: !showDrawer }))
       }
     >
-      {showDrawer ? <ChevronLeft /> : <Menu />}
+      <FontAwesomeIcon icon={showDrawer ? faChevronLeft : faBars} />
     </IconButton>
   )
 }
+
+export const MenuItem: React.VFC<{
+  icon: IconProp
+  label?: string
+  divider?: boolean
+  to: string
+}> = ({ icon, label, divider, ...props }) => (
+  <ListItem button divider={divider} component={NavLink} {...props}>
+    <ListItemIcon>
+      <FontAwesomeIcon icon={icon} />
+    </ListItemIcon>
+    <ListItemText primary={label} />
+  </ListItem>
+)
 
 export const HeaderSlot: React.VFC<{
   children: React.ReactNode

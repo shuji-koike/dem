@@ -20,7 +20,8 @@ export async function pickDir(): Promise<File[]> {
 
 export async function openDemo(
   file: File | Response | string | null | undefined,
-  onOutput?: (arr: string[]) => void
+  onOutput?: (arr: string[]) => void,
+  onRoundEnd?: (match: Match) => void
 ): Promise<Match | null> {
   if (typeof file === "string") {
     if (/^(public|private|sandbox)/.test(file)) return storageFetch(file)
@@ -30,7 +31,7 @@ export async function openDemo(
   if (file instanceof File && file.name.endsWith(".json"))
     return file.text().then(parseJson)
   if (file instanceof File && file.name.endsWith(".dem"))
-    return parseDemo(file, onOutput)
+    return parseDemo(file, onOutput, onRoundEnd)
   console.warn("openDemo", "unsupported file type!")
   return await Promise.resolve(null)
 }
@@ -43,7 +44,8 @@ function parseJson(data: Response | string): Promise<Match> {
 
 export function parseDemo(
   file: File | null,
-  onOutput?: (arr: string[]) => void
+  onOutput?: (arr: string[]) => void,
+  onRoundEnd?: (match: Match) => void
 ): Promise<Match | null> {
   if (!file) return Promise.resolve(null)
   return new Promise((resolve) => {
@@ -54,6 +56,9 @@ export function parseDemo(
         case "wasmParaseDemo":
           resolve(args[0])
           worker.terminate()
+          break
+        case "wasmParaseDemo:RoundEnd":
+          onRoundEnd?.(args[0])
           break
         case "wasmLogger":
           onOutput?.(args)

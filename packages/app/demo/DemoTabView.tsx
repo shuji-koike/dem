@@ -1,4 +1,5 @@
-import { Paper, Tab, Tabs } from "@material-ui/core"
+import { css } from "@emotion/react"
+import { Paper, Tab, Tabs } from "@mui/material"
 import React from "react"
 
 import { DebugView } from "./DebugView"
@@ -17,7 +18,7 @@ export const DemoTabView: React.VFC<{
   React.useEffect(() => setValue(tab), [tab])
   setTab = setTab || setValue
   return (
-    <Paper>
+    <Paper css={style}>
       <Tabs value={value} onChange={(_, e) => setTab?.(e)}>
         <Tab label="Scores" />
         <Tab label="Rounds" />
@@ -33,3 +34,17 @@ export const DemoTabView: React.VFC<{
     </Paper>
   )
 }
+
+const style = css`
+  table {
+    width: 100%;
+  }
+  table th {
+    text-align: left;
+  }
+  svg {
+    max-width: 40vh;
+    background-color: #111;
+    cursor: crosshair;
+  }
+`

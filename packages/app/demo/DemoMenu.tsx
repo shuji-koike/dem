@@ -1,6 +1,6 @@
-import { Box, Text } from "@primer/components"
+import { css } from "@emotion/react"
+import { Box } from "@mui/material"
 import React from "react"
-import styled from "styled-components"
 
 import { findPlayer, icon, teamColor } from "."
 import { useSteamUsers } from "../hooks"
@@ -37,8 +37,8 @@ export const DemoMenu: React.VFC<{
     }
   }, [tab, round])
   return (
-    <div onWheelCapture={(e) => e.stopPropagation()}>
-      <StyledNav>
+    <div css={style} onWheelCapture={(e) => e.stopPropagation()}>
+      <nav>
         <button onClick={() => setTab(1)}>Players</button>
         <button onClick={() => setTab(2)}>Kills</button>
         <button onClick={() => setTab(3)}>Nades</button>
@@ -51,19 +51,22 @@ export const DemoMenu: React.VFC<{
           />
           All
         </label>
-      </StyledNav>
+      </nav>
+      <hr />
       {filter.players &&
         frame?.Players.filter(filter.players).map((e) => (
           <PlayerCard key={e.ID} player={e} steamUser={steamUsers[e.ID]} />
         ))}
+      <hr />
       {filter.kills &&
         match.KillEvents.filter(filter.kills).map((e, i) => (
           <Box
-            display="flex"
             key={i}
-            onClick={() => setTick?.(e.Tick)}
+            display="flex"
+            alignItems="baseline"
             marginY={1}
-            gridGap={2}
+            gap={2}
+            onClick={() => setTick?.(e.Tick)}
           >
             <PlayerLabel player={findPlayer(match, e.Killer)} />
             <img height={16} src={icon(e.Weapon)} />
@@ -72,14 +75,16 @@ export const DemoMenu: React.VFC<{
             <PlayerLabel player={findPlayer(match, e.Victim)} />
           </Box>
         ))}
+      <hr />
       {filter.nades &&
         match.NadeEvents.filter(filter.nades).map((e, i) => (
           <Box
-            display="flex"
             key={i}
-            onClick={() => setTick?.(e.Tick)}
+            display="flex"
+            alignItems="baseline"
             marginY={1}
-            gridGap={2}
+            gap={2}
+            onClick={() => setTick?.(e.Tick)}
           >
             <img height={16} src={icon(e.Weapon)} />
             <PlayerLabel player={findPlayer(match, e.Thrower)} />
@@ -89,10 +94,15 @@ export const DemoMenu: React.VFC<{
   )
 }
 
-const StyledNav = styled.nav`
-  position: sticky;
-  top: 0;
-  z-index: 1;
+const style = css`
+  > nav {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  img {
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 1));
+  }
 `
 
 const PlayerLabel: React.VFC<{
@@ -101,8 +111,8 @@ const PlayerLabel: React.VFC<{
 }> = ({ player, onClick }) => {
   if (!player) return <></>
   return (
-    <Text onClick={onClick} fontWeight="bold" color={teamColor(player.Team)}>
+    <Box onClick={onClick} fontWeight="bold" color={teamColor(player.Team)}>
       {player.Name}
-    </Text>
+    </Box>
   )
 }

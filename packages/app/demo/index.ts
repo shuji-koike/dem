@@ -41,6 +41,13 @@ export const teamColorMap: ReadonlyMap<Team, string> = new Map([
   [Team.CounterTerrorists, "#295FCC"],
 ])
 
+export const teamColorVariantMap = new Map([
+  [Team.Unassigned, "error"],
+  [Team.Spectators, "info"],
+  [Team.Terrorists, "warning"],
+  [Team.CounterTerrorists, "success"],
+] as const)
+
 export function teamColor(team: Team): string {
   return teamColorMap.get(team) ?? throwDataError()
 }
@@ -202,7 +209,7 @@ export function velocity(vector: Vector): string {
 
 export function icon(name: string | number): string {
   return (
-    icons.canvas.sprites.find((e) => e.name === String(name))?.src || EmptyImage
+    icons.canvas.sprites.find((e) => e.name === String(name))?.src || emptyImage
   )
 }
 
@@ -210,11 +217,11 @@ export function armorIcon(player: Player): string {
   return (
     (player.State & PlayerState.HasHelmet && icon(403)) ||
     (player.State & PlayerState.HasArmor && icon(402)) ||
-    EmptyImage
+    emptyImage
   )
 }
 
-export const EmptyImage =
+export const emptyImage =
   "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
 
 function throwDataError<T>(): T {

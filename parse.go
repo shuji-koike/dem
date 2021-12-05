@@ -16,6 +16,8 @@ import (
 	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs/metadata"
 )
 
+const Version = "v0.0.0-alpha"
+
 var debug = log.New(ioutil.Discard, "", log.LstdFlags)
 var warn = log.New(os.Stderr, "", log.LstdFlags)
 
@@ -24,7 +26,10 @@ func init() {
 }
 
 // Parse ...
-func Parse(reader io.Reader) (match Match, err error) {
+func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
+	if handler == nil {
+		handler = func(_ Match) {}
+	}
 	parser := demoinfocs.NewParser(reader)
 	header, err := parser.ParseHeader()
 	if err != nil {
@@ -60,7 +65,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 		}
 		match = Match{
 			TypeName:   "Match",
-			Version:    "v0.0.0-alpha",
+			Version:    Version,
 			TickRate:   int(math.Round(parser.TickRate())),
 			FrameRate:  int(math.Round(header.FrameRate())),
 			MapName:    header.MapName,
@@ -103,6 +108,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 			round.Winner != common.TeamSpectators &&
 			round.Reason != events.RoundEndReason(0) {
 			match.Rounds = append(match.Rounds, round)
+			handler(match)
 		}
 	})
 	parser.RegisterEventHandler(func(e events.AnnouncementWinPanelMatch) {
@@ -126,7 +132,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 			e.GrenadeEntityID, e.Thrower.Team, e.Thrower.SteamID64)
 		proj, ok := state.GrenadeProjectiles()[e.GrenadeEntityID]
 		if !ok {
-			warn.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
+			debug.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
 			return
 		}
 		trajectory := make([]r2.Point, len(proj.Trajectory))
@@ -135,7 +141,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 		}
 		nade, ok := nades[int(e.Grenade.UniqueID())]
 		if !ok {
-			warn.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
+			debug.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
 		}
 		match.NadeEvents = append(match.NadeEvents, NadeEvent{
 			ID:         e.GrenadeEntityID,
@@ -158,7 +164,7 @@ func Parse(reader io.Reader) (match Match, err error) {
 			e.GrenadeEntityID, e.Thrower.Team, e.Thrower.SteamID64)
 		proj, ok := state.GrenadeProjectiles()[e.GrenadeEntityID]
 		if !ok {
-			warn.Printf("%6d| SmokeExpired\tProjectile Not Found", parser.CurrentFrame())
+			debug.Printf("%6d| SmokeExpired\tProjectile Not Found", parser.CurrentFrame())
 			return
 		}
 		trajectory := make([]r2.Point, len(proj.Trajectory))

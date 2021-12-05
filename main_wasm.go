@@ -25,17 +25,25 @@ func (logger) Write(p []byte) (int, error) {
 
 func wasmParaseDemo(this js.Value, args []js.Value) interface{} {
 	log.Printf("start")
-	if len(args) != 1 {
+	if len(args) < 1 {
 		log.Printf("args error")
 	}
 	buf := make([]byte, args[0].Get("byteLength").Int())
 	js.CopyBytesToGo(buf, args[0])
-	match, err := Parse(bytes.NewReader(buf))
+	match, err := Parse(bytes.NewReader(buf), func(m Match) {
+		if len(args) > 1 {
+			args[1].Invoke(toJson(m))
+		}
+	})
 	if err != nil {
 		log.Printf("parse error %s", err.Error())
 	}
+	log.Printf("end")
+	return toJson(match)
+}
+
+func toJson(match Match) js.Value {
 	writer := bytes.NewBufferString("")
 	json.NewEncoder(writer).Encode(match)
-	log.Printf("end")
 	return js.ValueOf(writer.String())
 }

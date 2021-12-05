@@ -11,9 +11,12 @@ export const DemoNav: React.VFC<{
   return (
     <>
       {match.Rounds?.map((e) => (
-        <div key={e.Tick} onClick={() => onChange(e)}>
-          <DemoNavItem round={e} active={e === round} />
-        </div>
+        <DemoNavItem
+          key={e.Tick}
+          round={e}
+          active={e === round}
+          onClick={() => onChange(e)}
+        />
       ))}
     </>
   )
@@ -22,31 +25,33 @@ export const DemoNav: React.VFC<{
 const DemoNavItem: React.VFC<{
   round: Round
   active?: boolean
-}> = ({ round, active }) => {
+  size?: number
+  onClick?: () => void
+}> = ({ round, active, size = 32, onClick }) => {
   const style = css`
     display: inline-block;
-    margin: 0.5em;
-    width: 2rem;
-    height: 2rem;
-    line-height: 2rem;
+    width: ${size}px;
+    height: ${size}px;
+    line-height: ${size}px;
+    border-radius: ${size / 2}px;
     text-align: center;
-    vertical-align: middle;
     font-family: monospace;
     color: ${teamColor(round.Winner)};
     cursor: pointer;
-    & {
-      filter: brightness(80%);
+    font-weight: bold;
+    filter: brightness(80%);
+    &:hover,
+    &.active {
+      color: #fff;
+      background-color: ${teamColor(round.Winner)};
     }
     &:hover {
-      font-weight: bold;
       filter: brightness(120%);
     }
-    ${active &&
-    css`
-      font-weight: bold;
-      text-decoration: underline;
-      filter: brightness(150%);
-    `}
   `
-  return <span css={style}>{round.Round + 1}</span>
+  return (
+    <div className={active ? "active" : ""} css={style} onClick={onClick}>
+      {round.Round + 1}
+    </div>
+  )
 }

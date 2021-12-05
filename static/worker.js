@@ -5,7 +5,11 @@ onmessage = async function ({ data: [cmd, ...args] }) {
     await initWasm()
     self.postMessage([
       cmd,
-      JSON.parse(wasmParaseDemo(new Uint8Array(await args[0].arrayBuffer()))),
+      JSON.parse(
+        wasmParaseDemo(new Uint8Array(await args[0].arrayBuffer()), (json) => {
+          self.postMessage(["wasmParaseDemo:RoundEnd", JSON.parse(json)])
+        })
+      ),
     ])
   }
 }

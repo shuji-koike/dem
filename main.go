@@ -1,4 +1,4 @@
-// +build !wasm
+//go:build !wasm
 
 package main
 
@@ -41,7 +41,7 @@ func main() {
 		if err != nil {
 			log.Printf("main: error reading stdin %s", err.Error())
 		} else {
-			Parse(bytes.NewReader(buf))
+			Parse(bytes.NewReader(buf), nil)
 		}
 	} else {
 		for _, path := range os.Args[1:] {
@@ -81,7 +81,9 @@ func load(path string) (Match, error) {
 				return match, err
 			}
 			defer file.Close()
-			match, err = Parse(file)
+			match, err = Parse(file, func(m Match) {
+				log.Printf("load: rounds=%d", len(m.Rounds))
+			})
 			if err == nil && !*dryRun {
 				err = goutil.WriteJSON(path+*postfix, match)
 			}

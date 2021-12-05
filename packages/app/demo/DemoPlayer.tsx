@@ -1,5 +1,5 @@
+import { css } from "@emotion/react"
 import React from "react"
-import styled from "styled-components"
 
 import { findRound, findFrame } from "."
 import { HeaderSlot } from "../components/layout"
@@ -80,12 +80,13 @@ export const DemoPlayer: React.VFC<{
     }
   }
   return (
-    <StyledForm
+    <form
       ref={ref}
       tabIndex={0}
       onKeyDown={onKeyDown}
       onWheel={onWheel}
       onSubmit={(e) => e.preventDefault()}
+      css={style}
     >
       <HeaderSlot>
         <DemoNav match={match} round={round} onChange={setRound} />
@@ -126,7 +127,7 @@ export const DemoPlayer: React.VFC<{
           index:{currentFrame}, frame:{frame?.Frame}, tick:{frame?.Tick}
         </pre>
       </footer>
-    </StyledForm>
+    </form>
   )
 }
 
@@ -136,7 +137,7 @@ export interface Filter {
   nades?: (e: NadeEvent) => boolean
 }
 
-const StyledForm = styled.form`
+const style = css`
   position: relative;
   outline: none;
   color: #fff;

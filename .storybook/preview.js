@@ -1,4 +1,21 @@
+import { addDecorator } from "@storybook/react"
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material"
 import "../packages/app/index.css"
+
+addDecorator((story) => {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {story()}
+    </ThemeProvider>
+  )
+})
+
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+})
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

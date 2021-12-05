@@ -1,30 +1,31 @@
-import { ThemeProvider } from "@primer/components"
+import { faFile, faHome, faTrophy } from "@fortawesome/free-solid-svg-icons"
+import { List, CssBaseline, ThemeProvider, createTheme } from "@mui/material"
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
-import { Layout } from "./components/layout"
-import { menu } from "./components/nav"
+import { Layout, MenuItem } from "./components/layout"
 import { DemoList } from "./pages/DemoList"
 import { DemoPage } from "./pages/DemoPage"
 import { Home } from "./pages/Home"
 import { MatchList } from "./pages/MatchList"
 import { Results } from "./pages/Results"
 
-export const App: React.VFC = () => {
+export default function App() {
   return (
-    <React.Suspense fallback={<></>}>
-      <BrowserRouter>
-        <ThemeProvider>
-          <AppContextProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppContextProvider>
+          <React.Suspense fallback="">
             <Layout menu={menu}>
-              <React.Suspense fallback={<></>}>
+              <React.Suspense fallback="">
                 <React.StrictMode>{routes}</React.StrictMode>
               </React.Suspense>
             </Layout>
-          </AppContextProvider>
-        </ThemeProvider>
-      </BrowserRouter>
-    </React.Suspense>
+          </React.Suspense>
+        </AppContextProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   )
 }
 
@@ -38,6 +39,26 @@ const routes = (
     <Route path="/" element={<Home />} />
   </Routes>
 )
+
+export const menu = (
+  <List>
+    <MenuItem icon={faHome} to="/" label="Home" />
+    <MenuItem icon={faFile} to="/files" label="Files" />
+    <MenuItem icon={faTrophy} to="/sample" label="Sample" />
+  </List>
+)
+
+export const theme = createTheme({
+  palette: {
+    success: {
+      main: "#295FCC",
+    },
+    warning: {
+      main: "#CC9629",
+    },
+    mode: "dark",
+  },
+})
 
 interface AppState {
   match: Match | null

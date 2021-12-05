@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { Avatar, Menu, MenuItem } from "@material-ui/core"
+import { Avatar, Menu, MenuItem } from "@mui/material"
 import {
   getAuth,
   GoogleAuthProvider,
@@ -44,7 +44,7 @@ export const AuthButton: React.VFC<{
                 signInWithPopup(getAuth(), new GoogleAuthProvider()).then(close)
               }
             >
-              Sign in with Steam
+              Sign in with Google
             </MenuItem>
             <MenuItem
               onClick={() =>
@@ -53,7 +53,7 @@ export const AuthButton: React.VFC<{
                 )
               }
             >
-              Sign in with Google
+              Sign in with Steam
             </MenuItem>
           </Menu>
         ))}

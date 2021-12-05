@@ -1,7 +1,11 @@
-import { faFileImage, faFileExcel } from "@fortawesome/free-solid-svg-icons"
+import {
+  faFileImage,
+  faFileExcel,
+  faChevronRight,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { ChevronRight, ExpandMore } from "@material-ui/icons"
-import { TreeItem, TreeView } from "@material-ui/lab"
+import { TreeItem, TreeView } from "@mui/lab"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -20,8 +24,8 @@ export const DemoList: React.VFC = () => {
         <h1>Matches</h1>
       </HeaderSlot>
       <TreeView
-        defaultCollapseIcon={<ExpandMore />}
-        defaultExpandIcon={<ChevronRight />}
+        defaultCollapseIcon={<FontAwesomeIcon icon={faChevronRight} />}
+        defaultExpandIcon={<FontAwesomeIcon icon={faChevronDown} />}
       >
         {state?.map((e) => (
           <DemoItem key={e} nodeId={e} file={e} />

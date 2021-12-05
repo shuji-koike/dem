@@ -1,4 +1,4 @@
-import { Alert } from "@material-ui/lab"
+import { Alert } from "@mui/lab"
 import React from "react"
 import { isChrome } from "react-device-detect"
 import { useNavigate } from "react-router"
@@ -30,7 +30,9 @@ export const Home: React.VFC = () => {
         accept=".dem,.json"
         disabled={output.length > 0}
         onChange={(e) =>
-          openDemo(e.currentTarget.files?.[0], setOutput).then(setMatch)
+          [...(e.currentTarget.files || [])]
+            .slice(0, 1)
+            .map((file) => openDemo(file, setOutput, setMatch).then(setMatch))
         }
       />
       {output.length > 0 && (
@@ -44,7 +46,7 @@ export const Home: React.VFC = () => {
           {files.filter(fileTypeFilter).map((file) => (
             <li
               key={file.name}
-              onClick={() => openDemo(file, setOutput).then(setMatch)}
+              onClick={() => openDemo(file, setOutput, setMatch).then(setMatch)}
             >
               {file.name}
             </li>

@@ -1,9 +1,9 @@
+import styled from "@emotion/styled"
 import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Slider } from "@material-ui/core"
+import { Slider } from "@mui/material"
 import { uniqBy } from "lodash"
 import React from "react"
-import styled from "styled-components"
 
 import { BombState, teamColor, bombColor } from "."
 
@@ -98,5 +98,5 @@ const MarkerLabel = styled.span`
 `
 const Icon = styled(FontAwesomeIcon)`
   position: relative;
-  top: -19px;
+  top: -27px;
 `
