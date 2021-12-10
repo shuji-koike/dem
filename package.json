@@ -16,10 +16,9 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@shuji-koike/boilerplate": "^1.0.0-beta.6",
-    "@shuji-koike/eslint-config": "^1.0.0-beta.6",
-    "@shuji-koike/vite-react": "^1.0.0-beta.6",
-    "vite": "^2.6.14"
+    "@shuji-koike/boilerplate": "latest",
+    "@shuji-koike/eslint-config": "latest",
+    "@shuji-koike/storybook": "latest",
+    "@shuji-koike/vite-react": "latest"
   }
 }

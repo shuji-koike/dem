@@ -23,6 +23,9 @@ GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
 ```sh
 gsutil cors set storage.cors.json gs://csgo-tokyo.appspot.com
 firebase deploy --only storage:rules
+
+firebase functions:config:get > packages/functions/.runtimeconfig.json
+firebase emulators:start --import .firebase/var --export-on-exit .firebase/var
 ```
 
 # links

@@ -1,4 +1,7 @@
-import { initializeApp } from "firebase/app"
+import { getApp, initializeApp } from "firebase/app"
+import { connectAuthEmulator, getAuth } from "firebase/auth"
+import { connectFunctionsEmulator, getFunctions } from "firebase/functions"
+import { connectStorageEmulator, getStorage } from "firebase/storage"
 import React from "react"
 import ReactDOM from "react-dom"
 
@@ -14,6 +17,16 @@ initializeApp({
   storageBucket: `${import.meta.env["VITE_FIREBASE_PROJECT_ID"]}.appspot.com`,
   appId: import.meta.env["VITE_FIREBASE_APP_ID"],
 })
+
+if (import.meta.env["VITE_FIREBASE_USE_EMULATOR"] === "true") {
+  connectAuthEmulator(getAuth(), "http://localhost:9099")
+  connectFunctionsEmulator(
+    getFunctions(getApp(), "asia-northeast1"),
+    "localhost",
+    5001
+  )
+  connectStorageEmulator(getStorage(), "localhost", 8080)
+}
 
 const App = React.lazy(() => import("./app"))
 ReactDOM.render(

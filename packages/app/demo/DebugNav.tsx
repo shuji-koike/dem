@@ -11,7 +11,11 @@ export const DebugNav: React.VFC<{
 }> = ({ match, round, frame }) => {
   const user = useAuth()
   const path = user && `private/${user.uid}/${new Date().getTime()}.dem.json`
-  if (import.meta.env.PROD) return <></>
+  if (
+    import.meta.env.PROD &&
+    import.meta.env["VITE_FIREBASE_USE_EMULATOR"] !== "true"
+  )
+    return <></>
   return (
     <section
       css={css`

@@ -11,10 +11,10 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "@mui/lab": "^5.0.0-alpha.58",
-    "@mui/material": "^5.2.2",
+    "@mui/lab": "^5.0.0-alpha.59",
+    "@mui/material": "^5.2.3",
     "axios": "^0.24.0",
-    "firebase": "^9.6.0",
+    "firebase": "^9.6.1",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-device-detect": "^2.1.2",
@@ -24,11 +24,10 @@
     "react-router-dom": "^6.0.2"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^6.3.4",
-    "@storybook/react": "^6.3.4",
-    "@types/wicg-file-system-access": "^2020.9.4",
-    "babel-loader": "^8.2.3",
-    "typescript": "^4.5.2",
-    "webpack": "4"
+    "@types/wicg-file-system-access": "^2020.9.4"
+  },
+  "optionalDependencies": {
+    "@babel/core": "^7.16.0",
+    "@storybook/react": "^6.4.9"
   }
 }

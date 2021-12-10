@@ -22,17 +22,13 @@ import { AuthButton } from "./auth"
 interface LayoutState {
   hideHeader: boolean
   showDrawer: boolean
-  fixedHeight: number
   nav?: React.ReactNode
-  setLayout: (
-    state: LayoutState | ((state: LayoutState) => LayoutState)
-  ) => void
+  setLayout: (state: Partial<LayoutState>) => void
 }
 
 const layoutState = Object.freeze<LayoutState>({
   hideHeader: false,
   showDrawer: false,
-  fixedHeight: 54,
   setLayout() {},
 })
 
@@ -46,23 +42,25 @@ export const Layout: React.VFC<{
   children: React.ReactNode
 }> = ({ title, nav, menu, children }) => {
   const location = useLocation()
-  const [layout, setLayout] = React.useState<LayoutState>(layoutState)
-  React.useEffect(() => setLayout({ ...layout, showDrawer: false }), [location])
+  const [layout, setState] = React.useState<LayoutState>(layoutState)
+  function setLayout(layout: Partial<LayoutState>) {
+    setState((state) => ({ ...state, ...layout }))
+  }
+  React.useEffect(() => setLayout({ showDrawer: false }), [location])
   return (
     <LayoutContext.Provider value={{ ...layout, setLayout }}>
       <AppBar
         color="transparent"
         css={css`
           display: ${layout.hideHeader && "none"};
+          position: sticky;
+          h1 {
+            font-size: 1.5rem;
+            margin: 0;
+          }
         `}
       >
-        <Toolbar
-          variant="dense"
-          css={css`
-            min-height: ${layout.fixedHeight}px;
-            max-height: ${layout.fixedHeight}px;
-          `}
-        >
+        <Toolbar>
           <MenuButton />
           {title && (
             <Typography component="h1" variant="h6" color="inherit" noWrap>
@@ -87,9 +85,9 @@ export const Layout: React.VFC<{
       </AppBar>
       <Drawer
         open={layout.showDrawer}
-        onClose={() => setLayout({ ...layout, showDrawer: false })}
+        onClose={() => setLayout({ showDrawer: false })}
       >
-        <Toolbar variant="dense">
+        <Toolbar>
           <MenuButton />
         </Toolbar>
         {menu}
@@ -103,12 +101,12 @@ const MenuButton: React.VFC = () => {
   const { showDrawer, setLayout } = React.useContext(LayoutContext)
   return (
     <IconButton
-      edge="start"
-      color="inherit"
       size="small"
-      onClick={() =>
-        setLayout((layout) => ({ ...layout, showDrawer: !showDrawer }))
-      }
+      css={css`
+        width: 42px;
+        height: 42px;
+      `}
+      onClick={() => setLayout({ showDrawer: !showDrawer })}
     >
       <FontAwesomeIcon icon={showDrawer ? faChevronLeft : faBars} />
     </IconButton>
@@ -120,14 +118,17 @@ export const MenuItem: React.VFC<{
   label?: string
   divider?: boolean
   to: string
-}> = ({ icon, label, divider, ...props }) => (
-  <ListItem button divider={divider} component={NavLink} {...props}>
-    <ListItemIcon>
-      <FontAwesomeIcon icon={icon} />
-    </ListItemIcon>
-    <ListItemText primary={label} />
-  </ListItem>
-)
+}> = ({ icon, label, divider, ...props }) => {
+  const { showDrawer } = React.useContext(LayoutContext)
+  return (
+    <ListItem button divider={divider} component={NavLink} {...props}>
+      <ListItemIcon>
+        <FontAwesomeIcon icon={icon} />
+      </ListItemIcon>
+      {showDrawer && <ListItemText primary={label} />}
+    </ListItem>
+  )
+}
 
 export const HeaderSlot: React.VFC<{
   children: React.ReactNode

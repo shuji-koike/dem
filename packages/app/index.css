@@ -1,5 +1,5 @@
-#root > main {
-  padding: 60px 75px 0;
+main {
+  padding: 0 75px;
 }
 p {
   margin: 0.5rem 0;

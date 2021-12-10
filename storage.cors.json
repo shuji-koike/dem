@@ -1,6 +1,10 @@
 [
   {
-    "origin": ["https://csgo.tokyo", "http://localhost:3000"],
+    "origin": [
+      "https://csgo.tokyo",
+      "http://localhost:3000",
+      "http://localhost:5000"
+    ],
     "responseHeader": ["*"],
     "method": ["GET"],
     "maxAgeSeconds": 86400
