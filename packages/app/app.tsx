@@ -1,5 +1,5 @@
 import { faFile, faHome, faTrophy } from "@fortawesome/free-solid-svg-icons"
-import { List, CssBaseline, ThemeProvider, createTheme } from "@mui/material"
+import { List, CssBaseline, ThemeProvider } from "@mui/material"
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
@@ -9,6 +9,7 @@ import { DemoPage } from "./pages/DemoPage"
 import { Home } from "./pages/Home"
 import { MatchList } from "./pages/MatchList"
 import { Results } from "./pages/Results"
+import { theme } from "./theme"
 
 export default function App() {
   return (
@@ -47,18 +48,6 @@ export const menu = (
     <MenuItem icon={faTrophy} to="/sample" label="Sample" />
   </List>
 )
-
-export const theme = createTheme({
-  palette: {
-    success: {
-      main: "#295FCC",
-    },
-    warning: {
-      main: "#CC9629",
-    },
-    mode: "dark",
-  },
-})
 
 interface AppState {
   match: Match | null

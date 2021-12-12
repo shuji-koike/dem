@@ -72,7 +72,7 @@ export const Layout: React.VFC<{
             id="header-portal"
             css={css`
               display: flex;
-              margin: 0 16px;
+              margin: 0 32px;
               flex: 1;
               justify-content: space-between;
               & > h1:not(:first-of-type) {

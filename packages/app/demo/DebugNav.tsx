@@ -26,7 +26,6 @@ export const DebugNav: React.VFC<{
       `}
     >
       {path && <button onClick={() => storagePut(path, match)}>upload</button>}
-      <br />
       <button onClick={() => console.debug(match)}>match</button>
       <button onClick={() => console.debug(round)}>round</button>
       <button onClick={() => console.debug(frame)}>frame</button>

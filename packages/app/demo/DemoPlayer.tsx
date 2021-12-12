@@ -138,7 +138,8 @@ export interface Filter {
 }
 
 const style = css`
-  position: relative;
+  display: flex;
+  flex-wrap: wrap;
   outline: none;
   color: #fff;
   > article {
@@ -152,10 +153,11 @@ const style = css`
   }
   > aside {
     position: fixed;
-    top: 60px;
-    right: 8px;
-    width: 280px;
-    max-height: calc(100vh - 60px - 100px);
+    top: 72px;
+    right: 0px;
+    width: 300px;
+    padding: 0 8px;
+    max-height: calc(100vh - 80px - 100px);
     overflow-y: auto;
   }
   > footer {
@@ -163,7 +165,7 @@ const style = css`
     left: 0;
     bottom: 0;
     box-sizing: border-box;
-    padding: 16px 32px;
+    padding: 8px 32px;
     width: 100%;
   }
   > footer > pre {
@@ -171,7 +173,7 @@ const style = css`
     right: 0;
     bottom: 0;
     margin: 0;
-    font-size: 16px;
-    color: #333;
+    font-size: 12px;
+    color: #222;
   }
 `
