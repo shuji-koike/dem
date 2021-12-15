@@ -18,11 +18,10 @@
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@emotion/babel-plugin": "^11.3.0",
-    "@shuji-koike/boilerplate": "latest",
-    "@shuji-koike/eslint-config": "latest",
-    "@shuji-koike/storybook": "latest",
-    "@shuji-koike/vite-react": "latest",
-    "@vitejs/plugin-react": "^1.1.1",
+    "@shuji-koike/boilerplate": "^1.1.0",
+    "@shuji-koike/eslint-config": "^1.1.0",
+    "@shuji-koike/storybook": "^1.1.0",
+    "@shuji-koike/vite-react": "^1.1.0",
     "webpack": "^4.46.0"
   }
 }
