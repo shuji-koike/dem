@@ -16,12 +16,12 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@emotion/babel-plugin": "^11.3.0",
-    "@shuji-koike/boilerplate": "^1.1.0",
-    "@shuji-koike/eslint-config": "^1.1.0",
-    "@shuji-koike/storybook": "^1.1.0",
-    "@shuji-koike/vite-react": "^1.1.0",
+    "@babel/core": "^7.16.5",
+    "@emotion/babel-plugin": "^11.7.1",
+    "@shuji-koike/boilerplate": "^1.2.0",
+    "@shuji-koike/eslint-config": "^1.2.0",
+    "@shuji-koike/storybook": "^1.2.0",
+    "@shuji-koike/vite-react": "^1.2.0",
     "webpack": "^4.46.0"
   }
 }

@@ -6,13 +6,13 @@
     "node": "16"
   },
   "dependencies": {
-    "@emotion/react": "^11.7.0",
+    "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "@mui/lab": "^5.0.0-alpha.59",
-    "@mui/material": "^5.2.3",
+    "@mui/lab": "^5.0.0-alpha.60",
+    "@mui/material": "^5.2.4",
     "axios": "^0.24.0",
     "firebase": "^9.6.1",
     "lodash": "^4.17.21",
@@ -24,8 +24,8 @@
     "react-router-dom": "^6.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@types/wicg-file-system-access": "^2020.9.4",
-    "@storybook/react": "^6.4.9"
+    "@babel/core": "^7.16.5",
+    "@storybook/react": "^6.4.9",
+    "@types/wicg-file-system-access": "^2020.9.4"
   }
 }
