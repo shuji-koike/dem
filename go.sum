@@ -17,6 +17,8 @@ github.com/llgcode/draw2d v0.0.0-20200930101115-bfaf5d914d1e/go.mod h1:mVa0dA29D
 github.com/llgcode/ps v0.0.0-20150911083025-f1443b32eedb/go.mod h1:1l8ky+Ew27CMX29uG+a2hNOKpeNYEQjjtiALiBlFQbY=
 github.com/markus-wa/demoinfocs-golang/v2 v2.12.0 h1:XdUZ/SUgZdPNarerbErDuM1n7BlCzQs6DgbX5+9OR2w=
 github.com/markus-wa/demoinfocs-golang/v2 v2.12.0/go.mod h1:BPIElNIVtyVzzc2AD3w/yMbiHiaq91o6L873PdZJobo=
+github.com/markus-wa/demoinfocs-golang/v2 v2.12.1 h1:DjQg4jtWuuJiOlckDe+wEoUcxGLoxrIoIHqVBf046vs=
+github.com/markus-wa/demoinfocs-golang/v2 v2.12.1/go.mod h1:BPIElNIVtyVzzc2AD3w/yMbiHiaq91o6L873PdZJobo=
 github.com/markus-wa/go-unassert v0.1.2 h1:uXWlMDa8JVtc4RgNq4XJIjyRejv9MOVuy/E0VECPxxo=
 github.com/markus-wa/go-unassert v0.1.2/go.mod h1:XEvrxR+trvZeMDfXcZPvzqGo6eumEtdk5VjNRuvvzxQ=
 github.com/markus-wa/gobitread v0.2.3 h1:COx7dtYQ7Q+77hgUmD+O4MvOcqG7y17RP3Z7BbjRvPs=

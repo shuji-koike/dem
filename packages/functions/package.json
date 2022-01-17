@@ -7,12 +7,7 @@
   },
   "main": "build/index.js",
   "scripts": {
-    "build": "tsc",
-    "serve": "yarn build && firebase emulators:start --only functions",
-    "shell": "yarn build && firebase functions:shell",
-    "start": "yarn shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "build": "tsc --noEmit false"
   },
   "dependencies": {
     "axios": "^0.24.0",

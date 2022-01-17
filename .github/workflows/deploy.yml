@@ -1,7 +1,7 @@
-name: build
-on: [push]
+name: deploy
+on: push: branches: [master]
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,22 +11,13 @@ jobs:
       - uses: actions/cache@v2
         id: cache_node_modules
         with:
-          path: node_modules
-          key: node_modules-14-${{ hashFiles('package.json', 'yarn.lock') }}
+          path: "**/node_modules"
+          key: node_modules-${{ hashFiles('**/package.json', 'yarn.lock') }}
       - run: yarn install --frozen-lockfile
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
-      - run: yarn prettier -c .
-      - run: yarn eslint .
-      - run: yarn tsc --noEmit
-      - run: touch static/main.wasm
-      - run: yarn vite build
-  build_go:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: "^1.16.5"
+          go-version: "1.17"
       - uses: actions/cache@v2
         id: cache_go_mod
         with:
@@ -34,8 +25,14 @@ jobs:
           key: go_mod-${{ hashFiles('go.sum') }}
       - run: go get
         if: steps.cache_go_mod.outputs.cache-hit != 'true'
-      - run: go build -o ./static/main .
+      - run: yarn tsc --noEmit
       - run: go build -o ./static/main.wasm .
         env:
           GOOS: js
           GOARCH: wasm
+      - run: yarn vite build
+      - run: yarn tsc --noEmit false
+        working-directory: packages/functions
+      - run: yarn firebase deploy --force --project ${{ secrets.FIREBASE_PROJECT_ID }}
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

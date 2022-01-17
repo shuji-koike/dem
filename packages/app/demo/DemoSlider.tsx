@@ -34,7 +34,7 @@ export const DemoSlider: React.VFC<{
           label: <Icon color={bombColor(e.Bomb.State)} icon={faBomb} />,
         })),
       ...round.Frames.filter(
-        (e, i, arr) =>
+        (e, _, arr) =>
           !(frameToTime(match, round, e) % 5) &&
           arr.find(
             (f) => frameToTime(match, round, f) === frameToTime(match, round, e)

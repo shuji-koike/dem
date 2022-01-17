@@ -10,7 +10,7 @@ export const DebugNav: React.VFC<{
   frame: Frame | undefined
 }> = ({ match, round, frame }) => {
   const user = useAuth()
-  const path = user && `private/${user.uid}/${new Date().getTime()}.dem.json`
+  const path = user && `private/${user.uid}/${new Date().getTime()}.dem.json.gz`
   if (
     import.meta.env.PROD &&
     import.meta.env["VITE_FIREBASE_USE_EMULATOR"] !== "true"

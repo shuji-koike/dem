@@ -4,19 +4,11 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "source": "packages/functions",
-    "predeploy": "yarn --cwd packages/functions tsc"
+    "source": "packages/functions"
   },
   "hosting": {
     "public": "dist",
     "ignore": ["**/.*"],
-    "redirects": [
-      {
-        "source": "/static/main.wasm",
-        "destination": "https://firebasestorage.googleapis.com/v0/b/csgo-tokyo.appspot.com/o/static%2Fmain.wasm?alt=media&token=7bbdc00f-4fdf-40d7-b79f-67dd60f67b5c",
-        "type": 301
-      }
-    ],
     "rewrites": [{ "source": "**", "destination": "/index.html" }]
   },
   "storage": {

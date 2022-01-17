@@ -41,3 +41,15 @@ export function useSteamUsers(ids: number[] = []): SteamUsers {
   }, [ids.join(",")])
   return state
 }
+
+export function useFileDrop(fn: (file: File) => void) {
+  function handler(e: DragEvent) {
+    ;[...(e.dataTransfer?.files ?? [])].slice(0, 1).forEach(fn)
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  useEffect(() => {
+    window.addEventListener("drop", handler)
+    return () => window.removeEventListener("drop", handler)
+  })
+}

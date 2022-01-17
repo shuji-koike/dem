@@ -6,10 +6,9 @@
     "node": "16"
   },
   "scripts": {
-    "start": "vite serve",
+    "start": "vite dev",
     "build": "vite build",
-    "test": "tsc --noEmit",
-    "lint": "eslint --cache --fix .; prettier --write --loglevel warn .",
+    "lint": "eslint --cache --fix .; prettier --write --loglevel warn .;tsc --noEmit",
     "storybook": "start-storybook -p 6006"
   },
   "workspaces": [
@@ -18,10 +17,12 @@
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@emotion/babel-plugin": "^11.7.1",
-    "@shuji-koike/boilerplate": "^1.2.0",
-    "@shuji-koike/eslint-config": "^1.2.0",
-    "@shuji-koike/storybook": "^1.2.0",
-    "@shuji-koike/vite-react": "^1.2.0",
+    "@firebase/app-compat": "^0.1.5",
+    "@shuji-koike/boilerplate": "^1.8.0",
+    "@shuji-koike/eslint-config": "^1.8.0",
+    "@shuji-koike/storybook": "^1.8.0",
+    "@shuji-koike/vite-react": "^1.8.0",
+    "firebase-tools": "^10.1.0",
     "webpack": "^4.46.0"
   }
 }

@@ -1,20 +1,8 @@
 {
+  "extends": "@shuji-koike/boilerplate/tsconfig.base.json",
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["esnext", "dom", "dom.iterable"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "allowJs": true,
-    "checkJs": true,
-    "outDir": "dist",
-    "noEmit": true,
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "jsx": "react"
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"]
   },
-  "exclude": ["**/dist", "**/static", "**/build"]
+  "exclude": ["**/node_modules", "**/build", "**/dist", "**/static"]
 }

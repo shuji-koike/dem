@@ -4,19 +4,14 @@ import {
   getStorage,
   listAll,
   ref,
+  uploadBytes,
   uploadString,
 } from "firebase/storage"
+import initGzip, { compressStringGzip, decompressGzip } from "wasm-gzip"
+import gzipWasm from "wasm-gzip/wasm_gzip_bg.wasm?url"
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import GoWorker from "../../static/worker.js?worker&inline"
-
-export async function pickDir(): Promise<File[]> {
-  const files: File[] = []
-  for await (const [, e] of await showDirectoryPicker())
-    if (e.kind === "file") files.push(await e.getFile())
-  return files
-}
+import mainWasm from "../../static/main.wasm?url"
+import GoWorker from "../../static/worker.js?worker"
 
 export async function openDemo(
   file: File | Response | string | null | undefined,
@@ -29,16 +24,32 @@ export async function openDemo(
   }
   if (file instanceof Response) return parseJson(file)
   if (file instanceof File && file.name.endsWith(".json"))
-    return file.text().then(parseJson)
+    return parseJson(file)
+  if (file instanceof File && file.name.endsWith(".json.gz"))
+    return parseJson(file)
   if (file instanceof File && file.name.endsWith(".dem"))
     return parseDemo(file, onOutput, onRoundEnd)
   console.warn("openDemo", "unsupported file type!")
   return await Promise.resolve(null)
 }
 
-function parseJson(data: Response | string): Promise<Match> {
+async function parseJson(
+  data: File | Response | ArrayBuffer | Uint8Array | string
+): Promise<Match> {
   if (typeof data === "string") return JSON.parse(data)
-  if (data instanceof Response) return data.json()
+  if (data instanceof Uint8Array)
+    return parseJson(new TextDecoder().decode(data))
+  if (data instanceof ArrayBuffer)
+    return parseJson(await gunzip(new Uint8Array(data)))
+  if (data instanceof Response)
+    if (data.headers.get("content-type") === "application/octet-stream")
+      return data.arrayBuffer().then(parseJson)
+    else return data.json()
+  if (data instanceof File)
+    if (data.name.endsWith(".gz")) return data.arrayBuffer().then(parseJson)
+    else return data.text().then(parseJson)
+  const never: never = data
+  console.error(never)
   throw new Error()
 }
 
@@ -50,7 +61,7 @@ export function parseDemo(
   if (!file) return Promise.resolve(null)
   return new Promise((resolve) => {
     const worker: Worker = new GoWorker()
-    worker.postMessage(["wasmParaseDemo", file])
+    worker.postMessage(["wasmParaseDemo", mainWasm, file])
     worker.onmessage = function ({ data: [cmd, ...args] }) {
       switch (cmd) {
         case "wasmParaseDemo":
@@ -74,10 +85,15 @@ export async function storageList(path: string): Promise<string[]> {
 
 export async function storagePut(
   path: string,
-  data: string | Match
+  data: string | Match,
+  compress = true
 ): Promise<void> {
-  if (typeof data === "object") data = JSON.stringify(data)
-  await uploadString(ref(getStorage(), path), data).then(console.debug)
+  const json = typeof data === "string" ? data : JSON.stringify(data)
+  if (compress || /\.gz$/.test(path)) {
+    await uploadBytes(ref(getStorage(), path), await gzip(json))
+  } else {
+    await uploadString(ref(getStorage(), path), json)
+  }
 }
 
 export function storageFetch(path: string): Promise<Match | null> {
@@ -96,4 +112,18 @@ export function fileTypeFilter(file: unknown): boolean {
 export function setStorage(match: Match | null): Match | null {
   localStorage.setItem("$MATCH:$TMP", JSON.stringify(match))
   return match
+}
+
+export async function gzip(input: string): Promise<Uint8Array> {
+  await initGzip(await fetch(gzipWasm))
+  const output = compressStringGzip(input)
+  if (!output) throw new Error()
+  return output
+}
+
+export async function gunzip(input: Uint8Array): Promise<Uint8Array> {
+  await initGzip(await fetch(gzipWasm))
+  const output = decompressGzip(input)
+  if (!output) throw new Error()
+  return output
 }
