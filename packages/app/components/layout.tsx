@@ -54,6 +54,7 @@ export const Layout: React.VFC<{
         css={css`
           display: ${layout.hideHeader && "none"};
           position: sticky;
+          backdrop-filter: blur(1px);
           h1 {
             font-size: 1.5rem;
             margin: 0;

@@ -51,26 +51,20 @@ export const menu = (
 )
 
 interface AppState {
-  match: Match | null
-  setMatch: (match: Match) => void
-  tick: number
-  setTick: (tick: number) => void
+  match?: Match | null
+  setMatch: (match: Match | null | undefined) => void
 }
 
 export const AppContext = React.createContext<AppState>({
-  match: null,
   setMatch() {},
-  tick: 0,
-  setTick() {},
 })
 
 export const AppContextProvider: React.VFC<{
   children: React.ReactNode
 }> = ({ children }) => {
-  const [match, setMatch] = React.useState<Match | null>(null)
-  const [tick, setTick] = React.useState(0)
+  const [match, setMatch] = React.useState<AppState["match"]>()
   return (
-    <AppContext.Provider value={{ match, setMatch, tick, setTick }}>
+    <AppContext.Provider value={{ match, setMatch }}>
       {children}
     </AppContext.Provider>
   )

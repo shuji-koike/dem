@@ -3,6 +3,7 @@ import React, { useEffect } from "react"
 import { isChrome } from "react-device-detect"
 import { useNavigate } from "react-router"
 
+import { AppContext } from "../app"
 import { HeaderSlot } from "../components/layout"
 import { Match } from "../demo/Match"
 import { useFileDrop } from "../hooks"
@@ -10,7 +11,7 @@ import { openDemo } from "../io"
 
 export const Home: React.VFC = () => {
   const navigate = useNavigate()
-  const [match, setMatch] = React.useState<Match | null>(null)
+  const { match, setMatch } = React.useContext(AppContext)
   const [output, setOutput] = React.useState<string[]>([])
   const [file, setFile] = React.useState<File>()
   useEffect(() => {

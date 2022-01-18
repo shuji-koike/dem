@@ -1,0 +1,12 @@
+{
+  "name": "@shuji-koike/csgo-crawler",
+  "version": "0.0.0-alpha",
+  "private": true,
+  "engines": {
+    "node": "16"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cheerio": "^1.0.0-rc.10"
+  }
+}

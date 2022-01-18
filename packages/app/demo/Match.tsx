@@ -3,7 +3,7 @@ import React from "react"
 import { DemoPlayer } from "./DemoPlayer"
 import { DemoTabView } from "./DemoTabView"
 
-export const Match: React.VFC<{ match: Match | null }> = ({ match }) => {
+export const Match: React.VFC<{ match?: Match | null }> = ({ match }) => {
   const [tick, setTick] = React.useState<number | undefined>(0)
   const [tab, setTab] = React.useState<number | undefined>()
   if (!match) return <></>

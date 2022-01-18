@@ -1,0 +1,9 @@
+{
+  "extends": "@shuji-koike/boilerplate/tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "module": "CommonJS",
+    "outDir": "build"
+  },
+  "files": ["index.ts"]
+}
