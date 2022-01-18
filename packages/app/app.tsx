@@ -3,6 +3,7 @@ import { List, CssBaseline, ThemeProvider } from "@mui/material"
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
+import sample from "../../static/sample.dem.json.gz?url"
 import { Layout, MenuItem } from "./components/layout"
 import { DemoList } from "./pages/DemoList"
 import { DemoPage } from "./pages/DemoPage"
@@ -36,7 +37,7 @@ const routes = (
     <Route path="/files" element={<DemoList />} />
     <Route path="/results" element={<Results />} />
     <Route path="/matches" element={<MatchList />} />
-    <Route path="/sample" element={<DemoPage path="/static/sample.json" />} />
+    <Route path="/sample" element={<DemoPage path={sample} />} />
     <Route path="/" element={<Home />} />
   </Routes>
 )

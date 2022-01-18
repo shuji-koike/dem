@@ -70,24 +70,25 @@ function findIndex(frames: Frame[], fn: (f: Frame) => boolean) {
 }
 
 function tickToSecond(match: Match, round: Round, tick: number) {
-  return ((tick || 0) - (round.Frames[0]?.Tick ?? 0)) / match.TickRate
+  return ((tick || 0) - (round.Frames[0]?.Tick ?? NaN)) / match.TickRate
 }
 
 function frameToTime(match: Match, round: Round, frame: Frame): number {
-  const tick =
-    round.Frames.find((e) => e.Bomb.State & BombState.Planted)?.Tick ?? NaN
-  return frame.Bomb.State & BombState.Planted
-    ? Math.floor((frame.Tick - tick) / match.TickRate)
+  const planted =
+    frame.Bomb.State & BombState.Planted
+      ? round.Frames.find((e) => e.Bomb.State & BombState.Planted)
+      : null
+  const time = planted
+    ? round.BombTime - Math.floor((frame.Tick - planted.Tick) / match.TickRate)
     : round.TimeLimit - tickToSecond(match, round, frame.Tick)
+  return Math.max(0, time)
 }
 
 function labelFormat(match: Match, round: Round, frame: Frame | undefined) {
-  if (!frame) return ""
-  return frame.Bomb.State & BombState.Planted
-    ? frameToTime(match, round, frame)
-    : new Date(frameToTime(match, round, frame) * 1000)
-        .toISOString()
-        .substr(14, 5)
+  if (!frame) return
+  const time = frameToTime(match, round, frame)
+  if (Number.isNaN(time)) return
+  return new Date(time * 1000).toISOString().slice(14, 19)
 }
 
 const MarkerLabel = styled.span`

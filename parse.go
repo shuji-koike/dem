@@ -7,6 +7,7 @@ import (
 	"math"
 	"os"
 	"sort"
+	"time"
 
 	"github.com/golang/geo/r2"
 	"github.com/golang/geo/r3"
@@ -81,12 +82,20 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			state.TotalRoundsPlayed(),
 			state.IsMatchStarted(),
 			state.IsWarmupPeriod())
+		BombTime, err := state.Rules().BombTime()
+		if err != nil {
+			warn.Printf("%6d| RoundStart\tBombTime is unknown", parser.CurrentFrame())
+			BombTime = time.Duration(40 * time.Second)
+		}
 		round = Round{
 			TypeName:  "Round",
 			Tick:      state.IngameTick(),
 			Frame:     parser.CurrentFrame(),
 			Round:     state.TotalRoundsPlayed(),
 			TimeLimit: e.TimeLimit,
+			FragLimit: e.FragLimit,
+			Objective: e.Objective,
+			BombTime:  BombTime.Round(time.Millisecond).Seconds(),
 			Frames:    make([]Frame, 0),
 		}
 		bomb = Bomb{}

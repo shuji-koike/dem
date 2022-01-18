@@ -29,6 +29,9 @@ type Round struct {
 	Round     int
 	Started   bool
 	TimeLimit int
+	FragLimit int
+	Objective string
+	BombTime  float64
 	Winner    common.Team
 	Reason    events.RoundEndReason
 	Frames    []Frame

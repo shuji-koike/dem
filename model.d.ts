@@ -25,6 +25,9 @@ interface Round {
   Round: number
   Started: boolean
   TimeLimit: number
+  FragLimit: number
+  Objective: string
+  BombTime: number
   Winner: Team
   Reason: number
   Frames: Frame[]
