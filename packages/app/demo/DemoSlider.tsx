@@ -54,6 +54,7 @@ export const DemoSlider: React.VFC<{
   return (
     <Slider
       css={css`
+        filter: brightness(80%);
         backdrop-filter: blur(1px);
       `}
       value={round.Frames.indexOf(frame)}

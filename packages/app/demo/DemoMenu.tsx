@@ -93,7 +93,7 @@ const style = css`
   > ${PlayerCard} {
     margin: 8px 0;
   }
-  * {
+  > * {
     filter: drop-shadow(0 0 4px rgba(18, 18, 18, 0.5));
   }
 `

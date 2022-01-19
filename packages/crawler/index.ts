@@ -5,11 +5,11 @@ import cheerio, { CheerioAPI } from "cheerio"
 
 main(["https://www.hltv.org/results?event=5608"])
 
-async function main(args: string[]) {
+export async function main(args: string[]) {
   await fetchDemos(args[0] || "")
 }
 
-async function fetchDemos(url: string) {
+export async function fetchDemos(url: string) {
   const matches = (await fetchLinks(url)).filter(
     (e) => ~e.indexOf("https://www.hltv.org/matches/")
   )

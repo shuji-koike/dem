@@ -1,13 +1,14 @@
+import { DecoratorFn } from "@storybook/react"
 import { CssBaseline, ThemeProvider } from "@mui/material"
-import { theme } from "../packages/app/theme.tsx"
+import { theme } from "../packages/app/theme"
 
 import "../packages/app/index.css"
 
-export const decorators = [
-  (story) => (
+export const decorators: DecoratorFn[] = [
+  (Story) => (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {story()}
+      <Story />
     </ThemeProvider>
   ),
 ]
@@ -17,8 +18,8 @@ export const parameters = {
   backgrounds: {
     default: "dark",
     values: [
-      { name: "light", value: "#eee" },
-      { name: "dark", value: "#111" },
+      { name: "light", value: "#fff" },
+      { name: "dark", value: theme.palette.background.default },
     ],
   },
 }

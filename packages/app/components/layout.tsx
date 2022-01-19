@@ -70,12 +70,13 @@ export const Layout: React.VFC<{
           )}
           {layout.nav ?? nav}
           <Box
+            flex={1}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
             id="header-portal"
             css={css`
-              display: flex;
               margin: 0 32px;
-              flex: 1;
-              justify-content: space-between;
               & > h1:not(:first-of-type) {
                 display: none;
               }

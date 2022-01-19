@@ -1,4 +1,5 @@
 .*
+!.storybook
 /functions/lib
 /dist
 /static
