@@ -1,4 +1,3 @@
-import { css } from "@emotion/react"
 import styled from "@emotion/styled"
 import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -53,10 +52,6 @@ export const DemoSlider: React.VFC<{
   )
   return (
     <Slider
-      css={css`
-        filter: brightness(80%);
-        backdrop-filter: blur(1px);
-      `}
       value={round.Frames.indexOf(frame)}
       max={round.Frames.length - 1}
       onChange={(_, value) => {

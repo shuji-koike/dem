@@ -33,7 +33,7 @@ jobs:
         env:
           GOOS: js
           GOARCH: wasm
-      - run: touch ./static/sample.dem.json.gz
+      - run: touch ./static/sample.dem.json
       - run: yarn vite build
       - run: yarn tsc --noEmit false
         working-directory: packages/functions
