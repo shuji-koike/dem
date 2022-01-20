@@ -1,4 +1,4 @@
-import { faFile, faHome, faTrophy } from "@fortawesome/free-solid-svg-icons"
+import { faFile, faHome } from "@fortawesome/free-solid-svg-icons"
 import { List, CssBaseline, ThemeProvider } from "@mui/material"
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
@@ -44,7 +44,6 @@ export const menu = (
   <List>
     <MenuItem icon={faHome} to="/" label="Home" />
     <MenuItem icon={faFile} to="/files" label="Files" />
-    <MenuItem icon={faTrophy} to="/sample" label="Sample" />
   </List>
 )
 

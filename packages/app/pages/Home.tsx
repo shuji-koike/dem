@@ -1,5 +1,5 @@
 import { Alert } from "@mui/lab"
-import React, { useEffect } from "react"
+import React from "react"
 import { isChrome } from "react-device-detect"
 import { useNavigate } from "react-router"
 
@@ -14,22 +14,17 @@ export const Home: React.VFC = () => {
   const { match, setMatch } = React.useContext(AppContext)
   const [output, setOutput] = React.useState<string[]>([])
   const [file, setFile] = React.useState<File>()
-  useEffect(() => {
+  React.useEffect(() => {
     if (file) openDemo(file, setOutput, setMatch).then(setMatch)
   }, [file])
-  useFileDrop(setFile)
+  useFileDrop(setFile) // FIXME
   return match ? (
     <Match match={match} />
   ) : (
-    <main>
-      <HeaderSlot>
-        <h1>CSGO Demo Viewer</h1>
-      </HeaderSlot>
+    <article>
+      <HeaderSlot />
       {isChrome || (
         <Alert color="warning">Only Google Chrome is supported!</Alert>
-      )}
-      {import.meta.env.DEV && (
-        <button onClick={() => navigate("/sample")}>Open a sample File</button>
       )}
       <p>Click the button below and select a DEM file.</p>
       <input
@@ -46,6 +41,13 @@ export const Home: React.VFC = () => {
           {output.join("\n")}
         </pre>
       )}
-    </main>
+      {import.meta.env.DEV && (
+        <nav className="debug">
+          <button onClick={() => navigate("/sample")}>
+            Open a sample File
+          </button>
+        </nav>
+      )}
+    </article>
   )
 }

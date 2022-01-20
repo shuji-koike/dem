@@ -27,11 +27,13 @@ export const DemoNav: React.VFC<{
           <DemoNavItem>
             <FontAwesomeIcon icon={faSyncAlt} size="sm" color="#444" spin />
           </DemoNavItem>
-          {[...Array(Math.max(0, 16 - (match.Rounds?.length ?? 0)))].map(() => (
-            <DemoNavItem>
-              <FontAwesomeIcon icon={faSyncAlt} size="xs" color="#333" />
-            </DemoNavItem>
-          ))}
+          {[...Array(Math.max(0, 16 - (match.Rounds?.length ?? 0)))].map(
+            (_, i) => (
+              <DemoNavItem key={i}>
+                <FontAwesomeIcon icon={faSyncAlt} size="xs" color="#333" />
+              </DemoNavItem>
+            )
+          )}
         </>
       )}
     </>

@@ -92,17 +92,22 @@ type NadeEvent struct {
 // KillEvent ...
 type KillEvent struct {
 	r2.Point
-	Killer     uint64
-	Victim     uint64
-	Assister   uint64
-	Weapon     common.EquipmentType
-	Team       common.Team
-	IsHeadshot bool
-	Penetrated int
-	From       r2.Point
-	Tick       int
-	Frame      int
-	Round      int
+	Killer        uint64
+	Victim        uint64
+	Assister      uint64
+	Weapon        common.EquipmentType
+	Team          common.Team
+	Penetrated    int
+	IsHeadshot    bool
+	AssistedFlash bool
+	AttackerBlind bool
+	NoScope       bool
+	ThroughSmoke  bool
+	Distance      float32
+	From          r2.Point
+	Tick          int
+	Frame         int
+	Round         int
 }
 
 // Bomb ...

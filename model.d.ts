@@ -85,8 +85,13 @@ interface KillEvent extends Point {
   Assister: number
   Weapon: number
   Team: Team
-  IsHeadshot: boolean
   Penetrated: number
+  IsHeadshot: boolean
+  AssistedFlash: boolean
+  AttackerBlind: boolean
+  NoScope: boolean
+  ThroughSmoke: boolean
+  Distance: number
   From: Point
   Tick: number
   Frame: number

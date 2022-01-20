@@ -1,4 +1,3 @@
-import { css } from "@emotion/react"
 import React from "react"
 
 import { useAuth } from "../hooks"
@@ -11,20 +10,9 @@ export const DebugNav: React.VFC<{
 }> = ({ match, round, frame }) => {
   const user = useAuth()
   const path = user && `private/${user.uid}/${new Date().getTime()}.dem.json.gz`
-  if (
-    import.meta.env.PROD &&
-    import.meta.env["VITE_FIREBASE_USE_EMULATOR"] !== "true"
-  )
-    return <></>
+  if (!import.meta.env.DEV) return <></>
   return (
-    <section
-      css={css`
-        opacity: 0.1;
-        &:hover {
-          opacity: 1;
-        }
-      `}
-    >
+    <section className="debug">
       {path && <button onClick={() => storagePut(path, match)}>upload</button>}
       <button onClick={() => console.debug(match)}>match</button>
       <button onClick={() => console.debug(round)}>round</button>

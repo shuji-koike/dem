@@ -211,18 +211,23 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			return
 		}
 		match.KillEvents = append(match.KillEvents, KillEvent{
-			Killer:     getSteamID(e.Killer),
-			Victim:     getSteamID(e.Victim),
-			Assister:   getSteamID(e.Assister),
-			Weapon:     getWeapon(e.Weapon),
-			Team:       getTeam(e.Victim),
-			IsHeadshot: e.IsHeadshot,
-			Penetrated: e.PenetratedObjects,
-			Tick:       state.IngameTick(),
-			Frame:      parser.CurrentFrame(),
-			Round:      state.TotalRoundsPlayed(),
-			Point:      normalizeSafe(e.Victim),
-			From:       normalizeSafe(e.Killer),
+			Killer:        getSteamID(e.Killer),
+			Victim:        getSteamID(e.Victim),
+			Assister:      getSteamID(e.Assister),
+			Weapon:        getWeapon(e.Weapon),
+			Team:          getTeam(e.Victim),
+			Penetrated:    e.PenetratedObjects,
+			IsHeadshot:    e.IsHeadshot,
+			AssistedFlash: e.AssistedFlash,
+			AttackerBlind: e.AttackerBlind,
+			NoScope:       e.NoScope,
+			ThroughSmoke:  e.ThroughSmoke,
+			Distance:      e.Distance,
+			Tick:          state.IngameTick(),
+			Frame:         parser.CurrentFrame(),
+			Round:         state.TotalRoundsPlayed(),
+			Point:         normalizeSafe(e.Victim),
+			From:          normalizeSafe(e.Killer),
 		})
 	})
 

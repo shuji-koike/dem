@@ -15,14 +15,13 @@ import {
 } from "@mui/material"
 import React from "react"
 import ReactDOM from "react-dom"
-import { useLocation, NavLink } from "react-router-dom"
+import { useLocation, NavLink, Link } from "react-router-dom"
 
 import { AuthButton } from "./auth"
 
 interface LayoutState {
   hideHeader: boolean
   showDrawer: boolean
-  nav?: React.ReactNode
   setLayout: (state: Partial<LayoutState>) => void
 }
 
@@ -68,20 +67,15 @@ export const Layout: React.VFC<{
               <NavLink to="/">{title}</NavLink>
             </Typography>
           )}
-          {layout.nav ?? nav}
+          {nav}
           <Box
+            id="header-portal"
             flex={1}
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            id="header-portal"
-            css={css`
-              margin: 0 32px;
-              & > h1:not(:first-of-type) {
-                display: none;
-              }
-            `}
-          />
+            margin="0 32px"
+          ></Box>
           <AuthButton />
         </Toolbar>
       </AppBar>
@@ -104,10 +98,7 @@ const MenuButton: React.VFC = () => {
   return (
     <IconButton
       size="small"
-      css={css`
-        width: 42px;
-        height: 42px;
-      `}
+      sx={{ width: 42, height: 42 }}
       onClick={() => setLayout({ showDrawer: !showDrawer })}
     >
       <FontAwesomeIcon icon={showDrawer ? faChevronLeft : faBars} />
@@ -133,8 +124,14 @@ export const MenuItem: React.VFC<{
 }
 
 export const HeaderSlot: React.VFC<{
-  children: React.ReactNode
-}> = ({ children }) => {
+  children?: React.ReactNode
+}> = ({ children = logo }) => {
   const container = document.getElementById("header-portal")
   return container ? ReactDOM.createPortal(children, container) : null
 }
+
+const logo = (
+  <Link to="/">
+    <Typography variant="h1">LOGO</Typography>
+  </Link>
+)
