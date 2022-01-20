@@ -1,3 +1,4 @@
+import { setUser as setSentryUser } from "@sentry/react"
 import { getApp } from "firebase/app"
 import { getAuth, User } from "firebase/auth"
 import { httpsCallable, getFunctions } from "firebase/functions"
@@ -6,6 +7,7 @@ import { useEffect, useState } from "react"
 export function useAuth(): User | null {
   const [user, setUser] = useState(getAuth().currentUser)
   useEffect(() => getAuth().onAuthStateChanged(setUser), [])
+  useEffect(() => setSentryUser({ id: user?.uid }), [user])
   return user
 }
 
@@ -13,7 +15,10 @@ export function useAuthSuspense(): User {
   const user = useAuth()
   if (!user)
     throw new Promise<void>((resolve) => {
-      getAuth().onAuthStateChanged(() => resolve())
+      const unsubscribe = getAuth().onAuthStateChanged(() => {
+        resolve()
+        unsubscribe()
+      })
     })
   return user
 }

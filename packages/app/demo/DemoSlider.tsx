@@ -1,11 +1,19 @@
 import styled from "@emotion/styled"
 import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Slider, Theme, Typography, useTheme } from "@mui/material"
+import { Slider, Typography, useTheme } from "@mui/material"
 import { uniqBy } from "lodash"
 import React from "react"
 
-import { BombState, teamColor, bombColor } from "."
+import {
+  bombColor,
+  BombState,
+  findIndex,
+  frameToColor,
+  frameToTime,
+  labelFormat,
+  teamColor,
+} from "."
 
 export const DemoSlider: React.VFC<{
   match: Match
@@ -14,7 +22,7 @@ export const DemoSlider: React.VFC<{
   setFrame: (e: Frame | undefined) => void
 }> = ({ match, round, frame, setFrame }) => {
   const theme = useTheme()
-  const toTime = frameToTime.bind(null, match, round)
+  const toTime = frameToTime.bind(undefined, match, round)
   const marks = React.useMemo(
     () => [
       ...round.Frames.filter((e) => e.Bomb.State & BombState.Defused)
@@ -30,18 +38,23 @@ export const DemoSlider: React.VFC<{
           label: <Icon color={bombColor(e.Bomb.State)} icon={faBomb} />,
         })),
       ...round.Frames.filter(
-        (frame, _, arr, time = toTime(frame)) =>
-          !(time % 5) &&
-          frame ===
+        (e, _, arr, time = toTime(e)) =>
+          !(~~time % 5) &&
+          e ===
             arr.find(
-              (e) => toTime(e) === time && e.Bomb.State === frame.Bomb.State
+              (f) => ~~toTime(f) === ~~time && e.Bomb.State === f.Bomb.State
             )
       ).map((e) => ({
         value: round.Frames.indexOf(e),
         label: (
-          <MarkerLabel color={frameToColor.call(theme, e)}>
+          <Typography
+            fontSize={14}
+            fontFamily="monospace"
+            color={frameToColor.call(theme, e)}
+            letterSpacing={-1}
+          >
             {labelFormat(match, round, e)}
-          </MarkerLabel>
+          </Typography>
         ),
       })),
       ...match.KillEvents.filter((e) => e.Round === round.Round).map((e) => ({
@@ -64,44 +77,6 @@ export const DemoSlider: React.VFC<{
     />
   )
 }
-
-function findIndex(frames: Frame[], fn: (f: Frame) => boolean) {
-  const index = frames.findIndex(fn)
-  return index === -1 ? frames.length - 1 : index
-}
-
-function tickToSecond(match: Match, round: Round, tick: number) {
-  return ((tick || 0) - (round.Frames[0]?.Tick ?? NaN)) / match.TickRate
-}
-
-function frameToTime(match: Match, round: Round, frame: Frame): number {
-  const planted =
-    frame.Bomb.State & BombState.Planted
-      ? round.Frames.find((e) => e.Bomb.State & BombState.Planted)
-      : null
-  const time = planted
-    ? round.BombTime - Math.floor((frame.Tick - planted.Tick) / match.TickRate)
-    : round.TimeLimit - tickToSecond(match, round, frame.Tick)
-  return Math.max(0, time)
-}
-
-function frameToColor(this: Theme, frame: Frame): string {
-  if (frame.Bomb.State & BombState.Planted) return this.palette.warning.main
-  return this.palette.grey[600]
-}
-
-function labelFormat(match: Match, round: Round, frame: Frame | undefined) {
-  if (!frame) return
-  const time = frameToTime(match, round, frame)
-  if (Number.isNaN(time)) return
-  return new Date(time * 1000).toISOString().slice(14, 19)
-}
-
-const MarkerLabel = styled(Typography)`
-  font-size: 14px !important;
-  font-family: monospace;
-  letter-spacing: -1px;
-`
 
 const Icon = styled(FontAwesomeIcon)`
   position: relative;

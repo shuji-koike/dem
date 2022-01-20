@@ -1,3 +1,5 @@
+import { Theme } from "@mui/material"
+
 import icons from "../../../static/icons.json"
 
 export enum Team {
@@ -155,6 +157,45 @@ class PlayerScore {
   get killDeath() {
     return (this.kills / this.deaths).toFixed(2)
   }
+}
+
+export function findIndex(
+  frames: Frame[],
+  fn: (f: Frame) => boolean,
+  index = frames.findIndex(fn)
+): number {
+  return ~index ? index : frames.length - 1
+}
+
+export function tickToTime(match: Match, round: Round, tick: number) {
+  return ((tick || 0) - (round.Frames[0]?.Tick ?? NaN)) / match.TickRate
+}
+
+export function frameToTime(match: Match, round: Round, frame: Frame): number {
+  const planted =
+    frame.Bomb.State & BombState.Planted
+      ? round.Frames.find((e) => e.Bomb.State & BombState.Planted)
+      : null
+  const time = planted
+    ? round.BombTime - (frame.Tick - planted.Tick) / match.TickRate
+    : round.TimeLimit - tickToTime(match, round, frame.Tick)
+  return Math.max(0, time)
+}
+
+export function frameToColor(this: Theme, frame: Frame, theme = this): string {
+  if (frame.Bomb.State & BombState.Planted) return theme.palette.warning.main
+  return theme.palette.grey[600]
+}
+
+export function labelFormat(
+  match: Match,
+  round: Round,
+  frame: Frame | undefined
+) {
+  if (!frame) return
+  const time = frameToTime(match, round, frame)
+  if (Number.isNaN(time)) return
+  return new Date(time * 1000).toISOString().slice(14, 19)
 }
 
 export function getScores(match: Match): PlayerScore[] {

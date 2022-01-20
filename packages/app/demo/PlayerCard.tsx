@@ -1,15 +1,14 @@
 import { css } from "@emotion/react"
-import styled from "@emotion/styled"
 import { Avatar, Box, LinearProgress, Typography } from "@mui/material"
 import React from "react"
 
 import { teamColor, icon, armorIcon, teamColorVariantMap } from "."
 import { SteamUser } from "../hooks"
 
-const $PlayerCard: React.VFC<{
+export const PlayerCard: React.VFC<{
   player: Player
   steamUser?: SteamUser
-}> = ({ player, steamUser, ...props }) => {
+}> = React.memo(function PlayerCard({ player, steamUser, ...props }) {
   return (
     <Box {...props} display="flex" alignItems="center" gap={1}>
       <a href={steamUser?.profileurl} target="_blank">
@@ -70,6 +69,4 @@ const $PlayerCard: React.VFC<{
       </Box>
     </Box>
   )
-}
-
-export const PlayerCard = styled(React.memo($PlayerCard))``
+})

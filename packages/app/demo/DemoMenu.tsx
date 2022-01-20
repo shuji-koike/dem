@@ -90,7 +90,7 @@ const style = css`
     top: 0;
     z-index: 1;
   }
-  > ${PlayerCard} {
+  > div {
     margin: 8px 0;
   }
   > * {

@@ -83,7 +83,7 @@ export const Layout: React.VFC<{
         open={layout.showDrawer}
         onClose={() => setLayout({ showDrawer: false })}
       >
-        <Toolbar>
+        <Toolbar sx={{ width: 300 }}>
           <MenuButton />
         </Toolbar>
         {menu}
@@ -132,6 +132,6 @@ export const HeaderSlot: React.VFC<{
 
 const logo = (
   <Link to="/">
-    <Typography variant="h1">LOGO</Typography>
+    <Typography variant="h1"></Typography>
   </Link>
 )

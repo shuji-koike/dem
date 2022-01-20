@@ -1,5 +1,6 @@
 import { faFile, faHome } from "@fortawesome/free-solid-svg-icons"
 import { List, CssBaseline, ThemeProvider } from "@mui/material"
+import { ErrorBoundary } from "@sentry/react"
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
@@ -13,20 +14,22 @@ import { theme } from "./theme"
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <ErrorBoundary showDialog>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppContextProvider>
-          <React.Suspense fallback="">
-            <Layout menu={menu}>
-              <React.Suspense fallback="">
-                <React.StrictMode>{routes}</React.StrictMode>
-              </React.Suspense>
-            </Layout>
-          </React.Suspense>
-        </AppContextProvider>
+        <React.Suspense fallback="">
+          <BrowserRouter>
+            <AppContextProvider>
+              <Layout menu={menu}>
+                <React.Suspense fallback="">
+                  <React.StrictMode>{routes}</React.StrictMode>
+                </React.Suspense>
+              </Layout>
+            </AppContextProvider>
+          </BrowserRouter>
+        </React.Suspense>
       </ThemeProvider>
-    </BrowserRouter>
+    </ErrorBoundary>
   )
 }
 
