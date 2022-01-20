@@ -1,7 +1,7 @@
 import styled from "@emotion/styled"
 import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Slider } from "@mui/material"
+import { Slider, Theme, Typography, useTheme } from "@mui/material"
 import { uniqBy } from "lodash"
 import React from "react"
 
@@ -13,14 +13,10 @@ export const DemoSlider: React.VFC<{
   frame: Frame
   setFrame: (e: Frame | undefined) => void
 }> = ({ match, round, frame, setFrame }) => {
+  const theme = useTheme()
+  const toTime = frameToTime.bind(null, match, round)
   const marks = React.useMemo(
     () => [
-      ...round.Frames.filter((e) => e.Bomb.State & BombState.Planted)
-        .slice(0, 1)
-        .map((e) => ({
-          value: round.Frames.indexOf(e),
-          label: <Icon color={bombColor(e.Bomb.State)} icon={faBomb} />,
-        })),
       ...round.Frames.filter((e) => e.Bomb.State & BombState.Defused)
         .slice(0, 1)
         .map((e) => ({
@@ -34,14 +30,19 @@ export const DemoSlider: React.VFC<{
           label: <Icon color={bombColor(e.Bomb.State)} icon={faBomb} />,
         })),
       ...round.Frames.filter(
-        (e, _, arr) =>
-          !(frameToTime(match, round, e) % 5) &&
-          arr.find(
-            (f) => frameToTime(match, round, f) === frameToTime(match, round, e)
-          ) === e
+        (frame, _, arr, time = toTime(frame)) =>
+          !(time % 5) &&
+          frame ===
+            arr.find(
+              (e) => toTime(e) === time && e.Bomb.State === frame.Bomb.State
+            )
       ).map((e) => ({
         value: round.Frames.indexOf(e),
-        label: <MarkerLabel>{labelFormat(match, round, e)}</MarkerLabel>,
+        label: (
+          <MarkerLabel color={frameToColor.call(theme, e)}>
+            {labelFormat(match, round, e)}
+          </MarkerLabel>
+        ),
       })),
       ...match.KillEvents.filter((e) => e.Round === round.Round).map((e) => ({
         value: findIndex(round.Frames, (f) => f.Tick >= e.Tick),
@@ -84,6 +85,11 @@ function frameToTime(match: Match, round: Round, frame: Frame): number {
   return Math.max(0, time)
 }
 
+function frameToColor(this: Theme, frame: Frame): string {
+  if (frame.Bomb.State & BombState.Planted) return this.palette.warning.main
+  return this.palette.grey[600]
+}
+
 function labelFormat(match: Match, round: Round, frame: Frame | undefined) {
   if (!frame) return
   const time = frameToTime(match, round, frame)
@@ -91,12 +97,12 @@ function labelFormat(match: Match, round: Round, frame: Frame | undefined) {
   return new Date(time * 1000).toISOString().slice(14, 19)
 }
 
-const MarkerLabel = styled.span`
-  color: #666;
+const MarkerLabel = styled(Typography)`
   font-size: 14px !important;
   font-family: monospace;
   letter-spacing: -1px;
 `
+
 const Icon = styled(FontAwesomeIcon)`
   position: relative;
   top: -27px;

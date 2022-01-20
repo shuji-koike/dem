@@ -13,11 +13,11 @@ export const Home: React.VFC = () => {
   const navigate = useNavigate()
   const { match, setMatch } = React.useContext(AppContext)
   const [output, setOutput] = React.useState<string[]>([])
-  const [file, setFile] = React.useState<File>()
+  const [files, setFiles] = React.useState<File[]>()
   React.useEffect(() => {
-    if (file) openDemo(file, setOutput, setMatch).then(setMatch)
-  }, [file])
-  useFileDrop(setFile) // FIXME
+    if (files) openDemo(files[0], setOutput, setMatch).then(setMatch)
+  }, [files])
+  useFileDrop(setFiles) // FIXME
   return match ? (
     <Match match={match} />
   ) : (
@@ -31,9 +31,7 @@ export const Home: React.VFC = () => {
         type="file"
         accept=".dem,.json,.gz"
         disabled={output.length > 0}
-        onChange={(e) =>
-          [...(e.currentTarget.files || [])].slice(0, 1).forEach(setFile)
-        }
+        onChange={(e) => setFiles([...(e.currentTarget.files || [])])}
       />
       {output.length > 0 && (
         <pre>

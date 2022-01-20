@@ -20,7 +20,7 @@ export async function openDemo(
 ): Promise<Match | null> {
   if (typeof file === "string") {
     if (/^(public|private|sandbox)/.test(file)) return storageFetch(file)
-    return fetch(file).then(parseJson)
+    return await fetch(file).then(parseJson)
   }
   if (file instanceof Response) return parseJson(file)
   if (file instanceof File && file.name.endsWith(".json"))
@@ -29,8 +29,8 @@ export async function openDemo(
     return parseJson(file)
   if (file instanceof File && file.name.endsWith(".dem"))
     return parseDemo(file, onOutput, onRoundEnd)
-  console.warn("openDemo", "unsupported file type!")
-  return await Promise.resolve(null)
+  if (file) console.warn("openDemo", "unsupported file type!")
+  return null
 }
 
 async function parseJson(

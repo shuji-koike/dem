@@ -42,9 +42,9 @@ export function useSteamUsers(ids: number[] = []): SteamUsers {
   return state
 }
 
-export function useFileDrop(fn: (file: File) => void) {
+export function useFileDrop(setFiles: (files: File[]) => void) {
   function handler(e: DragEvent) {
-    ;[...(e.dataTransfer?.files ?? [])].slice(0, 1).forEach(fn)
+    setFiles([...(e.dataTransfer?.files ?? [])])
     e.preventDefault()
     e.stopPropagation()
   }
