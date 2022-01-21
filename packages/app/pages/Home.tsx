@@ -1,4 +1,5 @@
 import { Alert } from "@mui/lab"
+import { getAnalytics, logEvent } from "firebase/analytics"
 import React from "react"
 import { isChrome } from "react-device-detect"
 import { useNavigate } from "react-router"
@@ -11,6 +12,9 @@ import { storagePutPublicMatch } from "../demo/io"
 export const Home: React.VFC = () => {
   const navigate = useNavigate()
   const { match } = React.useContext(AppContext)
+  React.useEffect(() => {
+    if (match) logEvent(getAnalytics(), "view_item")
+  }, [match])
   return match ? (
     <MatchView match={match} />
   ) : (

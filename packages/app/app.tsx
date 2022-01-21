@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import sample from "../../static/sample.dem.json?url"
 import { Layout, MenuItem } from "./components/layout"
+import { AnalyticsProvider } from "./firebase"
 import { DemoList } from "./pages/DemoList"
 import { DemoPage } from "./pages/DemoPage"
 import { Home } from "./pages/Home"
@@ -19,13 +20,15 @@ export default function App() {
         <CssBaseline />
         <React.Suspense fallback="">
           <BrowserRouter>
-            <AppContextProvider>
-              <Layout menu={menu}>
-                <React.Suspense fallback="">
-                  <React.StrictMode>{routes}</React.StrictMode>
-                </React.Suspense>
-              </Layout>
-            </AppContextProvider>
+            <AnalyticsProvider>
+              <AppContextProvider>
+                <Layout menu={menu}>
+                  <React.Suspense fallback="">
+                    <React.StrictMode>{routes}</React.StrictMode>
+                  </React.Suspense>
+                </Layout>
+              </AppContextProvider>
+            </AnalyticsProvider>
           </BrowserRouter>
         </React.Suspense>
       </ThemeProvider>
