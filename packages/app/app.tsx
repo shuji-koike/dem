@@ -14,7 +14,7 @@ import { theme } from "./theme"
 
 export default function App() {
   return (
-    <ErrorBoundary showDialog>
+    <ErrorBoundary showDialog={import.meta.env.PROD}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <React.Suspense fallback="">

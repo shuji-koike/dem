@@ -130,6 +130,7 @@ export const HeaderSlot: React.VFC<{
   return container ? ReactDOM.createPortal(children, container) : null
 }
 
+// TODO
 const logo = (
   <Link to="/">
     <Typography variant="h1"></Typography>

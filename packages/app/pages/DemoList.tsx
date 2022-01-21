@@ -10,14 +10,20 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 
 import { HeaderSlot } from "../components/layout"
+import { storageList } from "../demo/io"
 import { useAuth } from "../hooks"
-import { storageList } from "../io"
 
 export const DemoList: React.VFC = () => {
   const user = useAuth()
   const [state, setState] = React.useState<string[]>()
-  const path = user ? `private/${user.uid}` : "public"
-  React.useEffect(() => void storageList(path).then(setState), [path])
+  React.useEffect(() => {
+    ;(async function () {
+      setState([
+        ...(user ? await storageList(`private/${user.uid}`) : []),
+        ...(await storageList("public")),
+      ])
+    })()
+  }, [user?.uid])
   return (
     <main>
       <HeaderSlot>

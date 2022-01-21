@@ -7,11 +7,12 @@ import {
   uploadBytes,
   uploadString,
 } from "firebase/storage"
+
+import mainWasm from "/static/main.wasm?url"
+import GoWorker from "/static/worker.js?worker"
+
 import initGzip, { compressStringGzip, decompressGzip } from "wasm-gzip"
 import gzipWasm from "wasm-gzip/wasm_gzip_bg.wasm?url"
-
-import mainWasm from "../../static/main.wasm?url"
-import GoWorker from "../../static/worker.js?worker"
 
 export async function openDemo(
   file: File | Response | string | null | undefined,
@@ -19,8 +20,10 @@ export async function openDemo(
   onRoundEnd?: (match: Match) => void
 ): Promise<Match | null> {
   if (typeof file === "string") {
-    if (/^(public|private|sandbox)/.test(file)) return storageFetch(file)
-    return await fetch(file).then(parseJson)
+    if (/^(public|private|sandbox)/.test(file)) {
+      return await storageFetch(file)
+    }
+    return fetch(file).then(parseJson)
   }
   if (file instanceof Response) return parseJson(file)
   if (file instanceof File && file.name.endsWith(".json"))
@@ -94,6 +97,17 @@ export async function storagePut(
   } else {
     await uploadString(ref(getStorage(), path), json)
   }
+}
+
+export async function storagePutPublicMatch(match: Match, file: File | string) {
+  await storagePut(
+    `public/${new Date().getTime()}-${toName(file)}.json.gz`,
+    match
+  )
+}
+
+function toName(file: File | string) {
+  return encodeURIComponent(typeof file === "string" ? file : file.name)
 }
 
 export function storageFetch(path: string): Promise<Match | null> {

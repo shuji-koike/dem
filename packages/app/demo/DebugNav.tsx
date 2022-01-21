@@ -1,7 +1,7 @@
 import React from "react"
 
 import { useAuth } from "../hooks"
-import { storagePut } from "../io"
+import { storagePut } from "./io"
 
 export const DebugNav: React.VFC<{
   match: Match
