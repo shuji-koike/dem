@@ -1,4 +1,3 @@
-import axios from "axios"
 import {
   getDownloadURL,
   getStorage,
@@ -19,11 +18,11 @@ export async function openDemo(
   onOutput?: (arr: string[]) => void,
   onRoundEnd?: (match: Match) => void
 ): Promise<Match | null> {
+  if (!file) return null
   if (typeof file === "string") {
-    if (/^(public|private|sandbox)/.test(file)) {
-      return await storageFetch(file)
-    }
-    return fetch(file).then(parseJson)
+    if (/^(public|private|sandbox)/.test(file))
+      return getDownloadURL(ref(getStorage(), file)).then(fetch).then(parseJson)
+    return parseJson(await fetch(file))
   }
   if (file instanceof Response) return parseJson(file)
   if (file instanceof File && file.name.endsWith(".json"))
@@ -32,8 +31,9 @@ export async function openDemo(
     return parseJson(file)
   if (file instanceof File && file.name.endsWith(".dem"))
     return parseDemo(file, onOutput, onRoundEnd)
-  if (file) console.warn("openDemo", "unsupported file type!")
-  return null
+  if (file instanceof File) throw new Error("unsupported file type!")
+  const never: never = file
+  throw new Error(never)
 }
 
 async function parseJson(
@@ -52,8 +52,7 @@ async function parseJson(
     if (data.name.endsWith(".gz")) return data.arrayBuffer().then(parseJson)
     else return data.text().then(parseJson)
   const never: never = data
-  console.error(never)
-  throw new Error()
+  throw new Error(never)
 }
 
 export function parseDemo(
@@ -90,35 +89,29 @@ export async function storagePut(
   path: string,
   data: string | Match,
   compress = true
-): Promise<void> {
+): Promise<string> {
   const json = typeof data === "string" ? data : JSON.stringify(data)
-  if (compress || /\.gz$/.test(path)) {
+  if (compress || /\.gz$/i.test(path)) {
     await uploadBytes(ref(getStorage(), path), await gzip(json))
   } else {
     await uploadString(ref(getStorage(), path), json)
   }
+  return path
 }
 
-export async function storagePutPublicMatch(match: Match, file: File | string) {
-  await storagePut(
-    `public/${new Date().getTime()}-${toName(file)}.json.gz`,
-    match
-  )
+export async function storagePutPublicMatch(
+  match: Match,
+  file: File | string
+): Promise<string> {
+  const path = `public/${new Date().getTime()}-${toName(file)}.json.gz`
+  return await storagePut(path, match)
 }
 
 function toName(file: File | string) {
   return encodeURIComponent(typeof file === "string" ? file : file.name)
 }
 
-export function storageFetch(path: string): Promise<Match | null> {
-  return getDownloadURL(ref(getStorage(), path)).then(fetch).then(parseJson)
-}
-
-export function fetchFiles(file = ""): Promise<string[]> {
-  return axios.get(`/api/files/${file}`).then(({ data }) => data.sort?.())
-}
-
-export function fileTypeFilter(file: unknown): boolean {
+export function isValidFile(file: unknown): file is File {
   if (file instanceof File) return /\.(dem|json)(\.gz)?$/i.test(file.name)
   return false
 }
@@ -130,14 +123,10 @@ export function setStorage(match: Match | null): Match | null {
 
 export async function gzip(input: string): Promise<Uint8Array> {
   await initGzip(await fetch(gzipWasm))
-  const output = compressStringGzip(input)
-  if (!output) throw new Error()
-  return output
+  return compressStringGzip(input) ?? Promise.reject()
 }
 
 export async function gunzip(input: Uint8Array): Promise<Uint8Array> {
   await initGzip(await fetch(gzipWasm))
-  const output = decompressGzip(input)
-  if (!output) throw new Error()
-  return output
+  return decompressGzip(input) ?? Promise.reject()
 }

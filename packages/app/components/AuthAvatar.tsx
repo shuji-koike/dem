@@ -10,7 +10,7 @@ import React from "react"
 
 import { useAuth } from "../hooks"
 
-export const AuthButton: React.VFC<{
+export const AuthAvatar: React.VFC<{
   diameter?: number
 }> = ({ diameter = 32 }) => {
   const user = useAuth()

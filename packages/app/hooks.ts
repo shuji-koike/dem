@@ -2,7 +2,7 @@ import { setUser as setSentryUser } from "@sentry/react"
 import { getApp } from "firebase/app"
 import { getAuth, User } from "firebase/auth"
 import { httpsCallable, getFunctions } from "firebase/functions"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 export function useAuth(): User | null {
   const [user, setUser] = useState(getAuth().currentUser)
@@ -57,4 +57,18 @@ export function useFileDrop(setFiles: (files: File[]) => void) {
     window.addEventListener("drop", handler)
     return () => window.removeEventListener("drop", handler)
   })
+}
+
+export function useToggle(initialState = false) {
+  const [state, setState] = useState<boolean>(initialState)
+  return useMemo(
+    () => ({
+      state,
+      setState,
+      setFalse: () => setState(false),
+      setTrue: () => setState(true),
+      toggle: () => setState(!state),
+    }),
+    [state, setState]
+  )
 }

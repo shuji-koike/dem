@@ -1,5 +1,4 @@
 import { css } from "@emotion/react"
-import { IconProp } from "@fortawesome/fontawesome-svg-core"
 import { faBars, faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -9,15 +8,12 @@ import {
   IconButton,
   Toolbar,
   Typography,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
 } from "@mui/material"
 import React from "react"
 import ReactDOM from "react-dom"
 import { useLocation, NavLink, Link } from "react-router-dom"
 
-import { AuthButton } from "./auth"
+import { AuthAvatar } from "./AuthAvatar"
 
 interface LayoutState {
   hideHeader: boolean
@@ -75,8 +71,8 @@ export const Layout: React.VFC<{
             justifyContent="space-between"
             alignItems="center"
             margin="0 32px"
-          ></Box>
-          <AuthButton />
+          />
+          <AuthAvatar />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -103,23 +99,6 @@ const MenuButton: React.VFC = () => {
     >
       <FontAwesomeIcon icon={showDrawer ? faChevronLeft : faBars} />
     </IconButton>
-  )
-}
-
-export const MenuItem: React.VFC<{
-  icon: IconProp
-  label?: string
-  divider?: boolean
-  to: string
-}> = ({ icon, label, divider, ...props }) => {
-  const { showDrawer } = React.useContext(LayoutContext)
-  return (
-    <ListItem button divider={divider} component={NavLink} {...props}>
-      <ListItemIcon>
-        <FontAwesomeIcon icon={icon} />
-      </ListItemIcon>
-      {showDrawer && <ListItemText primary={label} />}
-    </ListItem>
   )
 }
 

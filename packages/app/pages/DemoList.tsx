@@ -27,7 +27,7 @@ export const DemoList: React.VFC = () => {
   return (
     <main>
       <HeaderSlot>
-        <h1>Matches</h1>
+        <h1>Files</h1>
       </HeaderSlot>
       <TreeView
         defaultCollapseIcon={<FontAwesomeIcon icon={faChevronRight} />}
@@ -51,10 +51,12 @@ const DemoItem: React.VFC<{
       nodeId={nodeId}
       icon={
         <FontAwesomeIcon
-          icon={/\.dem(\.json)?(\.gz)?$/.test(file) ? faFileImage : faFileExcel}
+          icon={
+            /\.dem(\.json)?(\.gz)?$/i.test(file) ? faFileImage : faFileExcel
+          }
         />
       }
-      onClick={() => navigate(`/files/${file}`)}
+      onClick={() => navigate(`/dem/${file}`)}
       label={file}
     />
   )

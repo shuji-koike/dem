@@ -1,16 +1,14 @@
-import { faFile, faHome } from "@fortawesome/free-solid-svg-icons"
-import { List, CssBaseline, ThemeProvider } from "@mui/material"
+import { CssBaseline, ThemeProvider } from "@mui/material"
 import { ErrorBoundary } from "@sentry/react"
 import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
-import sample from "../../static/sample.dem.json?url"
-import { Layout, MenuItem } from "./components/layout"
+import { Layout } from "./components/layout"
+import { menu } from "./components/menu"
 import { AnalyticsProvider } from "./firebase"
 import { DemoList } from "./pages/DemoList"
 import { DemoPage } from "./pages/DemoPage"
 import { Home } from "./pages/Home"
-import { Results } from "./pages/Results"
 import { theme } from "./theme"
 
 export default function App() {
@@ -38,24 +36,15 @@ export default function App() {
 
 const routes = (
   <Routes>
-    <Route path="/files/*" element={<DemoPage />} />
+    <Route path="/dem/*" element={<DemoPage />} />
     <Route path="/files" element={<DemoList />} />
-    <Route path="/results" element={<Results />} />
-    <Route path="/sample" element={<DemoPage path={sample} />} />
     <Route path="/" element={<Home />} />
   </Routes>
 )
 
-export const menu = (
-  <List>
-    <MenuItem icon={faHome} to="/" label="Home" />
-    <MenuItem icon={faFile} to="/files" label="Files" />
-  </List>
-)
-
-interface AppState {
+export interface AppState extends Record<string, unknown> {
   match?: Match | null
-  setMatch: (match: Match | null | undefined) => void
+  setMatch: React.Dispatch<React.SetStateAction<AppState["match"]>>
 }
 
 export const AppContext = React.createContext<AppState>({
