@@ -3,12 +3,12 @@ import { Box, Tab, Tabs } from "@mui/material"
 import React from "react"
 
 import { findPlayer, icon } from "."
-import { useSteamUsers } from "../hooks"
 import { Filter } from "./DemoPlayer"
 import { PlayerCard } from "./PlayerCard"
 import { PlayerLabel } from "./PlayerLabel"
+import { useSteamUsers } from "../hooks"
 
-export const DemoMenu: React.VFC<{
+export const DemoMenu: React.FC<{
   match: Match
   round?: Round
   frame?: Frame
@@ -60,8 +60,9 @@ export const DemoMenu: React.VFC<{
           >
             <PlayerLabel player={findPlayer(match, e.Killer)} />
             <img height={16} src={icon(e.Weapon)} />
-            {!!e.Penetrated && <span>(P)</span>}
-            {e.IsHeadshot && <span>(H)</span>}
+            {/* TODO: add icon */}
+            {!!e.Penetrated && <span>(-x-)</span>}
+            {e.IsHeadshot && <span>(HS)</span>}
             <PlayerLabel player={findPlayer(match, e.Victim)} />
           </Box>
         ))}

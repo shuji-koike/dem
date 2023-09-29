@@ -2,7 +2,7 @@
   "extends": "@shuji-koike/boilerplate/tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "types": ["vite/client"]
+    "types": ["vite/client", "@emotion/react/types/css-prop"]
   },
   "exclude": ["**/node_modules", "**/build", "**/dist", "**/static"]
 }

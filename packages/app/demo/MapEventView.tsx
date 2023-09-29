@@ -4,7 +4,7 @@ import { Filter } from "./DemoPlayer"
 import { KillEventView } from "./KillEventView"
 import { NadeEventView } from "./NadeEventView"
 
-export const MapEventView: React.VFC<{
+export const MapEventView: React.FC<{
   match: Match
   round?: Round
   filter: Filter

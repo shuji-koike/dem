@@ -37,10 +37,10 @@ export function useSteamUsers(ids: number[] = []): SteamUsers {
   useEffect(() => {
     httpsCallable<{ steamids: string }, { players: SteamUser[] }>(
       getFunctions(getApp(), "asia-northeast1"),
-      "getPlayerSummaries"
+      "getPlayerSummaries",
     )(data)
       .then(({ data }) =>
-        data.players.reduce((acc, e) => ({ ...acc, [e.steamid]: e }), {})
+        data.players.reduce((acc, e) => ({ ...acc, [e.steamid]: e }), {}),
       )
       .then(setState)
   }, [ids.join(",")])
@@ -69,6 +69,6 @@ export function useToggle(initialState = false) {
       setTrue: () => setState(true),
       toggle: () => setState(!state),
     }),
-    [state, setState]
+    [state, setState],
   )
 }

@@ -5,7 +5,7 @@ import React from "react"
 
 import { teamColor } from "."
 
-export const DemoNav: React.VFC<{
+export const DemoNav: React.FC<{
   match: Pick<Match, "Rounds" | "Ended">
   round?: Round
   onChange?: (round: Round) => void
@@ -32,7 +32,7 @@ export const DemoNav: React.VFC<{
               <DemoNavItem key={i}>
                 <FontAwesomeIcon icon={faSyncAlt} size="xs" color="#333" />
               </DemoNavItem>
-            )
+            ),
           )}
         </>
       )}
@@ -40,7 +40,7 @@ export const DemoNav: React.VFC<{
   )
 }
 
-const DemoNavItem: React.VFC<{
+const DemoNavItem: React.FC<{
   active?: boolean
   size?: number
   color?: string

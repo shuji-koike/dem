@@ -12,12 +12,12 @@ import {
 import React, { useContext } from "react"
 import { NavLink, Route, Routes } from "react-router-dom"
 
+import { LayoutContext } from "./layout"
 import { AppContext } from "../app"
 import { DemoTabView } from "../demo/DemoTabView"
 import { useToggle } from "../hooks"
-import { LayoutContext } from "./layout"
 
-const MatchMenu: React.VFC = () => {
+const MatchMenu: React.FC = () => {
   const { match } = useContext(AppContext)
   const open = useToggle()
   return (
@@ -30,7 +30,7 @@ const MatchMenu: React.VFC = () => {
   )
 }
 
-const MenuLink: React.VFC<{
+const MenuLink: React.FC<{
   icon: IconProp
   label?: string
   divider?: boolean
@@ -47,7 +47,7 @@ const MenuLink: React.VFC<{
   )
 }
 
-const MenuButton: React.VFC<
+const MenuButton: React.FC<
   React.ComponentProps<typeof ListItemButton> & {
     icon: IconProp
     label?: string

@@ -3,7 +3,7 @@ import React from "react"
 import { KillEventView } from "./KillEventView"
 import { MapView } from "./MapView"
 
-export const KillsView: React.VFC<{
+export const KillsView: React.FC<{
   match: Match
   setTick?: (tick: number) => void
 }> = ({ match, setTick }) => {

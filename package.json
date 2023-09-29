@@ -15,14 +15,11 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/core": "^7.16.5",
-    "@emotion/babel-plugin": "^11.7.1",
-    "@firebase/app-compat": "^0.1.5",
-    "@shuji-koike/boilerplate": "^1.8.0",
-    "@shuji-koike/eslint-config": "^1.8.0",
-    "@shuji-koike/storybook": "^1.8.0",
-    "@shuji-koike/vite-react": "^1.8.0",
-    "firebase-tools": "^10.1.0",
-    "webpack": "^4.46.0"
+    "@firebase/app-compat": "^0.2.19",
+    "@shuji-koike/boilerplate": "^1.13.0",
+    "@shuji-koike/eslint-config": "^1.13.0",
+    "@shuji-koike/storybook": "^1.13.0",
+    "@shuji-koike/vite-react": "^1.13.0",
+    "firebase-tools": "^12.6.1"
   }
 }

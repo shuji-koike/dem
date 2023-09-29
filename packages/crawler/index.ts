@@ -11,10 +11,10 @@ export async function main(args: string[]) {
 
 export async function fetchDemos(url: string) {
   const matches = (await fetchLinks(url)).filter(
-    (e) => ~e.indexOf("https://www.hltv.org/matches/")
+    (e) => ~e.indexOf("https://www.hltv.org/matches/"),
   )
   const downloads = normalize(
-    (await Promise.all(matches.flatMap(fetchLinks))).flat()
+    (await Promise.all(matches.flatMap(fetchLinks))).flat(),
   ).filter((e) => ~e.indexOf("https://www.hltv.org/download/demo"))
   downloads.forEach(console.info)
 }
@@ -22,7 +22,7 @@ export async function fetchDemos(url: string) {
 export async function fetchLinks(url: string): Promise<string[]> {
   const $ = await fetchPage(url)
   return normalize(
-    $("a").map((_, e) => new URL($(e).attr("href") || "", url).toString())
+    $("a").map((_, e) => new URL($(e).attr("href") || "", url).toString()),
   )
 }
 

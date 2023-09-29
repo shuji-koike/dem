@@ -2,7 +2,7 @@ import React from "react"
 
 import { sumCache, Team } from "."
 
-export const RoundsView: React.VFC<{
+export const RoundsView: React.FC<{
   match: Match
   setTick?: (tick: number) => void
 }> = ({ match, setTick }) => {

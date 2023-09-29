@@ -2,7 +2,6 @@ package main
 
 import (
 	"io"
-	"io/ioutil"
 	"log"
 	"math"
 	"os"
@@ -19,7 +18,7 @@ import (
 
 const Version = "v0.0.0-alpha"
 
-var debug = log.New(ioutil.Discard, "", log.LstdFlags)
+var debug = log.New(io.Discard, "", log.LstdFlags)
 var warn = log.New(os.Stderr, "", log.LstdFlags)
 
 func init() {

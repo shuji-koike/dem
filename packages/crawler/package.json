@@ -6,7 +6,7 @@
     "node": "16"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "cheerio": "^1.0.0-rc.10"
+    "axios": "^1.5.1",
+    "cheerio": "^1.0.0-rc.12"
   }
 }

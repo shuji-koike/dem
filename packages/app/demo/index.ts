@@ -85,7 +85,7 @@ export function bombColor(state: BombState): string {
 
 export function colorToMatrix(hex: string): string {
   const [r, g, b] = (hex.slice(1).match(/.{2}/g) || []).map(
-    (a) => parseInt(a, 16) / 255
+    (a) => parseInt(a, 16) / 255,
   )
   return [
     [0, 0, 0, 0, r],
@@ -114,17 +114,17 @@ export function pointsToString(arr: Point[]): string {
 
 export function findRound(
   match: Match,
-  tick: number | undefined
+  tick: number | undefined,
 ): Round | undefined {
   if (typeof tick !== "number") return
   return match.Rounds?.find(
-    (e) => (e.Frames[e.Frames.length - 1]?.Tick ?? 0) > tick
+    (e) => (e.Frames[e.Frames.length - 1]?.Tick ?? 0) > tick,
   )
 }
 
 export function findFrame(
   match: Match,
-  tick: number | undefined
+  tick: number | undefined,
 ): Frame | undefined {
   if (typeof tick !== "number") return
   return findRound(match, tick)?.Frames.find((e) => e.Tick > tick)
@@ -162,7 +162,7 @@ class PlayerScore {
 export function findIndex(
   frames: Frame[],
   fn: (f: Frame) => boolean,
-  index = frames.findIndex(fn)
+  index = frames.findIndex(fn),
 ): number {
   return ~index ? index : frames.length - 1
 }
@@ -190,7 +190,7 @@ export function frameToColor(this: Theme, frame: Frame, theme = this): string {
 export function labelFormat(
   match: Match,
   round: Round,
-  frame: Frame | undefined
+  frame: Frame | undefined,
 ) {
   if (!frame) return
   const time = frameToTime(match, round, frame)
@@ -211,13 +211,11 @@ export function getScores(match: Match): PlayerScore[] {
     dict[e.Killer]!.headshots += e.IsHeadshot ? 1 : 0
     /* eslint-enable @typescript-eslint/no-non-null-assertion */
   })
-  match.Rounds?.slice(-1)
-    .map((e) => e.Frames.slice(-1))
-    .flat()
-    .forEach((e) =>
-      e?.Players.forEach((e) =>
-        Object.assign(dict[e.ID], { Name: e.Name, Team: e.Team })
-      )
+  match.Rounds?.at(-1)
+    ?.Frames.at(-1)
+    ?.Players.forEach((e) =>
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      Object.assign(dict[e.ID]!, { Name: e.Name, Team: e.Team }),
     )
   return Object.entries(dict)
     .map(([, v]) => v)

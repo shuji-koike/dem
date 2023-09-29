@@ -1,7 +1,7 @@
 import { Alert } from "@mui/lab"
 import { getAnalytics, logEvent } from "firebase/analytics"
 import React from "react"
-import { isChrome } from "react-device-detect"
+import { isChrome, isChromium } from "react-device-detect"
 import { useLocation, useNavigate } from "react-router"
 
 import { AppContext } from "../app"
@@ -9,7 +9,7 @@ import { DemoFilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
 import { storagePutPublicMatch } from "../demo/io"
 
-export const Home: React.VFC = () => {
+export const Home: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { match, setMatch } = React.useContext(AppContext)
@@ -23,7 +23,7 @@ export const Home: React.VFC = () => {
     <MatchView match={match} />
   ) : (
     <article>
-      {isChrome || (
+      {isChrome || isChromium || (
         <Alert color="warning">Only Google Chrome is supported!</Alert>
       )}
       <p>Click the button below and select a DEM file.</p>
@@ -33,7 +33,7 @@ export const Home: React.VFC = () => {
           const path = /\.dem$/i.test(name)
             ? await storagePutPublicMatch(match, name)
             : name
-          navigate(`/dem/${path}`, { state: { match } })
+          navigate(`/dem/${path}/`, { state: { match } })
         }}
       />
       {import.meta.env.DEV && (

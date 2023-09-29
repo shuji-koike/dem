@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"errors"
 	"flag"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"runtime"
@@ -37,7 +37,7 @@ func main() {
 	if *server {
 		new(Server).Listen(*port)
 	} else if *stdin {
-		buf, err := ioutil.ReadAll(os.Stdin)
+		buf, err := io.ReadAll(os.Stdin)
 		if err != nil {
 			log.Printf("main: error reading stdin %s", err.Error())
 		} else {

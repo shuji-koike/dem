@@ -30,7 +30,7 @@ const layoutState = Object.freeze<LayoutState>({
 export const LayoutContext = React.createContext<LayoutState>(layoutState)
 
 // https://git.io/JvUzq
-export const Layout: React.VFC<{
+export const Layout: React.FC<{
   title?: string
   nav?: React.ReactNode
   menu?: React.ReactNode
@@ -89,7 +89,7 @@ export const Layout: React.VFC<{
   )
 }
 
-const MenuButton: React.VFC = () => {
+const MenuButton: React.FC = () => {
   const { showDrawer, setLayout } = React.useContext(LayoutContext)
   return (
     <IconButton
@@ -102,7 +102,7 @@ const MenuButton: React.VFC = () => {
   )
 }
 
-export const HeaderSlot: React.VFC<{
+export const HeaderSlot: React.FC<{
   children?: React.ReactNode
 }> = ({ children = logo }) => {
   const container = document.getElementById("header-portal")

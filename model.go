@@ -113,8 +113,7 @@ type KillEvent struct {
 // Bomb ...
 type Bomb struct {
 	r2.Point
-	Planted bool
-	State   BombState
+	State BombState
 }
 
 // BombState ...

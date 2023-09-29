@@ -10,7 +10,7 @@ import React from "react"
 
 import { useAuth } from "../hooks"
 
-export const AuthAvatar: React.VFC<{
+export const AuthAvatar: React.FC<{
   diameter?: number
 }> = ({ diameter = 32 }) => {
   const user = useAuth()
@@ -49,7 +49,7 @@ export const AuthAvatar: React.VFC<{
             <MenuItem
               onClick={() =>
                 signInWithPopup(getAuth(), new OAuthProvider("steam")).then(
-                  close
+                  close,
                 )
               }
             >

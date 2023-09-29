@@ -1,6 +1,6 @@
 import React from "react"
 
-export const DebugView: React.VFC<{ match: Match }> = ({ match }) => {
+export const DebugView: React.FC<{ match: Match }> = ({ match }) => {
   return (
     <section>
       <pre>

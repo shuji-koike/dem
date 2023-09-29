@@ -6,27 +6,27 @@
     "node": "16"
   },
   "dependencies": {
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.35",
-    "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.14",
-    "@mui/lab": "^5.0.0-alpha.62",
-    "@mui/material": "^5.2.6",
-    "@sentry/react": "^6.16.1",
-    "@sentry/tracing": "^6.16.1",
-    "firebase": "^9.6.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mui/lab": "^5.0.0-alpha.146",
+    "@mui/material": "^5.14.11",
+    "@sentry/react": "^7.72.0",
+    "@sentry/tracing": "^7.72.0",
+    "firebase": "^10.4.0",
     "lodash": "^4.17.21",
-    "react": "^17.0.2",
-    "react-device-detect": "^2.1.2",
-    "react-dom": "^17.0.2",
-    "react-is": "^17.0.2",
-    "react-router": "^6.1.1",
-    "react-router-dom": "^6.1.1",
-    "wasm-gzip": "^1.0.1"
+    "react": "^18.2.0",
+    "react-device-detect": "^2.2.3",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "react-router": "^6.16.0",
+    "react-router-dom": "^6.16.0",
+    "wasm-gzip": "^2.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.5",
-    "@storybook/react": "^6.4.9"
+    "@babel/core": "^7.23.0",
+    "@storybook/react": "^7.4.5"
   }
 }

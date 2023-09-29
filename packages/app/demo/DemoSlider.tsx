@@ -15,7 +15,7 @@ import {
   teamColor,
 } from "."
 
-export const DemoSlider: React.VFC<{
+export const DemoSlider: React.FC<{
   match: Match
   round: Round
   frame: Frame
@@ -42,8 +42,8 @@ export const DemoSlider: React.VFC<{
           !(~~time % 5) &&
           e ===
             arr.find(
-              (f) => ~~toTime(f) === ~~time && e.Bomb.State === f.Bomb.State
-            )
+              (f) => ~~toTime(f) === ~~time && e.Bomb.State === f.Bomb.State,
+            ),
       ).map((e) => ({
         value: round.Frames.indexOf(e),
         label: (
@@ -62,7 +62,7 @@ export const DemoSlider: React.VFC<{
         label: <Icon color={teamColor(e.Team)} icon={faTimes} />,
       })),
     ],
-    [match, round]
+    [match, round],
   )
   return (
     <Slider

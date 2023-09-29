@@ -3,7 +3,7 @@ import React from "react"
 
 import { teamColor } from "."
 
-export const PlayerLabel: React.VFC<{
+export const PlayerLabel: React.FC<{
   player: Player | null
   onClick?: () => unknown
 }> = ({ player, onClick }) => {

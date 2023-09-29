@@ -2,7 +2,7 @@ import React from "react"
 
 import { assetsMapRadar } from "../assets"
 
-export const MapView: React.VFC<{
+export const MapView: React.FC<{
   match: Match
   children?: React.ReactNode
 }> = ({ match, children }) => {

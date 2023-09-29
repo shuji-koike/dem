@@ -2,7 +2,7 @@ import React from "react"
 
 import { getScores } from "."
 
-export const ScoreBoardView: React.VFC<{ match: Match }> = ({ match }) => {
+export const ScoreBoardView: React.FC<{ match: Match }> = ({ match }) => {
   const scores = getScores(match)
   return (
     <section>

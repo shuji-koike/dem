@@ -5,7 +5,7 @@ import React from "react"
 import { teamColor, icon, armorIcon, teamColorVariantMap } from "."
 import { SteamUser } from "../hooks"
 
-export const PlayerCard: React.VFC<{
+export const PlayerCard: React.FC<{
   player: Player
   steamUser?: SteamUser
 }> = React.memo(function PlayerCard({ player, steamUser, ...props }) {

@@ -2,20 +2,24 @@ import React from "react"
 
 import { openDemo, isValidFile } from "./io"
 
-export const DemoFilePicker: React.VFC<{
+export const DemoFilePicker: React.FC<{
   setMatch?: (match: Match | null) => void
   onLoad?: (match: Match, name: string) => void
 }> = ({ setMatch, onLoad }) => {
   const [output, setOutput] = React.useState<string[]>([])
   const [files, setFiles] = React.useState<File[]>()
+  const mounted = React.useRef(true)
   React.useEffect(() => {
-    const file = files && files[0]
+    const file = files?.at(0)
     if (!file) return
     if (!isValidFile(file)) return console.error("invalid file")
     openDemo(file, setOutput, setMatch).then((match) => {
-      setMatch?.(match)
-      if (match) onLoad?.(match, file.name)
+      if (mounted.current) {
+        setMatch?.(match)
+        if (match) onLoad?.(match, file.name)
+      }
     })
+    return () => void (mounted.current = false)
   }, [files])
   return (
     <>

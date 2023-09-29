@@ -4,7 +4,7 @@ import { setpos, velocity } from "."
 import { MapView } from "./MapView"
 import { NadeEventView } from "./NadeEventView"
 
-export const NadesView: React.VFC<{
+export const NadesView: React.FC<{
   match: Match
   setTick?: (tick: number) => void
 }> = ({ match, setTick }) => {

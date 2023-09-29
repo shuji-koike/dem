@@ -11,7 +11,7 @@ import {
   icon,
 } from "."
 
-export const FrameView: React.VFC<{ frame?: Frame }> = ({ frame }) => {
+export const FrameView: React.FC<{ frame?: Frame }> = ({ frame }) => {
   return frame ? (
     <>
       <MolotovView frame={frame}></MolotovView>
@@ -28,7 +28,7 @@ export const FrameView: React.VFC<{ frame?: Frame }> = ({ frame }) => {
   )
 }
 
-export const FramePlayer: React.VFC<{ player: Player }> = ({ player }) => {
+export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
   return (
     <g onClick={() => console.debug(JSON.stringify(player))}>
       {!player.Hp ? (
@@ -90,7 +90,7 @@ export const FramePlayer: React.VFC<{ player: Player }> = ({ player }) => {
   )
 }
 
-export const TrailView: React.VFC<{ round?: Round }> = ({ round }) => {
+export const TrailView: React.FC<{ round?: Round }> = ({ round }) => {
   const ref = React.useRef<HTMLCanvasElement>(null)
   React.useEffect(() => {
     const context = ref.current?.getContext?.("2d")
@@ -111,7 +111,7 @@ export const TrailView: React.VFC<{ round?: Round }> = ({ round }) => {
   )
 }
 
-export const BombView: React.VFC<{ frame: Frame }> = ({ frame }) => {
+export const BombView: React.FC<{ frame: Frame }> = ({ frame }) => {
   return (
     <g>
       <image
@@ -133,7 +133,7 @@ export const BombView: React.VFC<{ frame: Frame }> = ({ frame }) => {
   )
 }
 
-export const MolotovView: React.VFC<{ frame: Frame }> = ({ frame }) => {
+export const MolotovView: React.FC<{ frame: Frame }> = ({ frame }) => {
   return (
     <g>
       {frame.Nades?.filter((e) => e.Flames?.length).map((nade, i) => (
@@ -151,7 +151,7 @@ export const MolotovView: React.VFC<{ frame: Frame }> = ({ frame }) => {
   )
 }
 
-export const NadeView: React.VFC<{ nade: Nade }> = ({ nade }) => {
+export const NadeView: React.FC<{ nade: Nade }> = ({ nade }) => {
   if (!nade.Weapon) return null
   return nade.Weapon === 505 && nade.Active ? (
     <circle

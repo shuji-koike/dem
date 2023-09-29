@@ -10,13 +10,13 @@ import {
 import mainWasm from "/static/main.wasm?url"
 import GoWorker from "/static/worker.js?worker"
 
-import initGzip, { compressStringGzip, decompressGzip } from "wasm-gzip"
+import initGzip, { compress, decompress } from "wasm-gzip"
 import gzipWasm from "wasm-gzip/wasm_gzip_bg.wasm?url"
 
 export async function openDemo(
   file: File | Response | string | null | undefined,
   onOutput?: (arr: string[]) => void,
-  onRoundEnd?: (match: Match) => void
+  onRoundEnd?: (match: Match) => void,
 ): Promise<Match | null> {
   if (!file) return null
   if (typeof file === "string") {
@@ -37,7 +37,7 @@ export async function openDemo(
 }
 
 async function parseJson(
-  data: File | Response | ArrayBuffer | Uint8Array | string
+  data: File | Response | ArrayBuffer | Uint8Array | string,
 ): Promise<Match> {
   if (typeof data === "string") return JSON.parse(data)
   if (data instanceof Uint8Array)
@@ -58,7 +58,7 @@ async function parseJson(
 export function parseDemo(
   file: File | null,
   onOutput?: (arr: string[]) => void,
-  onRoundEnd?: (match: Match) => void
+  onRoundEnd?: (match: Match) => void,
 ): Promise<Match | null> {
   if (!file) return Promise.resolve(null)
   return new Promise((resolve) => {
@@ -88,7 +88,7 @@ export async function storageList(path: string): Promise<string[]> {
 export async function storagePut(
   path: string,
   data: string | Match,
-  compress = true
+  compress = true,
 ): Promise<string> {
   const json = typeof data === "string" ? data : JSON.stringify(data)
   if (compress || /\.gz$/i.test(path)) {
@@ -101,7 +101,7 @@ export async function storagePut(
 
 export async function storagePutPublicMatch(
   match: Match,
-  file: File | string
+  file: File | string,
 ): Promise<string> {
   const path = `public/${new Date().getTime()}-${toName(file)}.json.gz`
   return await storagePut(path, match)
@@ -123,10 +123,10 @@ export function setStorage(match: Match | null): Match | null {
 
 export async function gzip(input: string): Promise<Uint8Array> {
   await initGzip(await fetch(gzipWasm))
-  return compressStringGzip(input) ?? Promise.reject()
+  return compress(input) ?? Promise.reject()
 }
 
 export async function gunzip(input: Uint8Array): Promise<Uint8Array> {
   await initGzip(await fetch(gzipWasm))
-  return decompressGzip(input) ?? Promise.reject()
+  return decompress(input) ?? Promise.reject()
 }

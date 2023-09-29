@@ -8,7 +8,7 @@ import { NadesView } from "./NadesView"
 import { RoundsView } from "./RoundsView"
 import { ScoreBoardView } from "./ScoreBoardView"
 
-export const DemoTabView: React.VFC<{
+export const DemoTabView: React.FC<{
   match: Match
   setTick?: (tick: number) => void
   tab?: number

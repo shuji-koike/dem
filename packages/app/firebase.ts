@@ -26,7 +26,7 @@ initializeApp({
 initializeAnalytics(getApp())
 
 getAuth().onAuthStateChanged(
-  (user) => user && setUserId(getAnalytics(), user.uid)
+  (user) => user && setUserId(getAnalytics(), user.uid),
 )
 
 if (import.meta.env["VITE_FIREBASE_USE_EMULATOR"] === "true") {
@@ -34,7 +34,7 @@ if (import.meta.env["VITE_FIREBASE_USE_EMULATOR"] === "true") {
   connectFunctionsEmulator(
     getFunctions(getApp(), "asia-northeast1"),
     "localhost",
-    5001
+    5001,
   )
   connectStorageEmulator(getStorage(), "localhost", 8080)
 }

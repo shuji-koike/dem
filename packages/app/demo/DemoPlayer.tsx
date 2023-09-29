@@ -2,7 +2,6 @@ import { css } from "@emotion/react"
 import React from "react"
 
 import { findRound, findFrame } from "."
-import { HeaderSlot } from "../components/layout"
 import { DebugNav } from "./DebugNav"
 import { DemoMenu } from "./DemoMenu"
 import { DemoNav } from "./DemoNav"
@@ -10,8 +9,9 @@ import { DemoSlider } from "./DemoSlider"
 import { FrameView, TrailView } from "./FrameView"
 import { MapEventView } from "./MapEventView"
 import { MapView } from "./MapView"
+import { HeaderSlot } from "../components/layout"
 
-export const DemoPlayer: React.VFC<{
+export const DemoPlayer: React.FC<{
   match: Match
   tick?: number
   setTick?: (tick: number | undefined) => void
@@ -27,19 +27,19 @@ export const DemoPlayer: React.VFC<{
     if (frame && !round?.Frames.includes(frame)) setFrame(round?.Frames[0])
   }, [round])
   React.useEffect(() => ref.current?.focus(), [ref.current])
-  React.useEffect(() =>
-    clearInterval.bind(
+  React.useEffect(() => {
+    return clearTimeout.bind(
       window,
       setTimeout(
         () => !state.paused && setCurrentFrame(currentFrame + 1),
-        1000 / 8
-      )
+        1000 / 8,
+      ),
     )
-  )
+  }, [])
   React.useEffect(() => {
     document.body.style.overscrollBehavior = "none"
     return () => void (document.body.style.overscrollBehavior = "auto")
-  })
+  }, [])
   function setCurrentFrame(n: number) {
     const frame = round?.Frames[n]
     if (frame) setFrame(frame)
@@ -57,7 +57,7 @@ export const DemoPlayer: React.VFC<{
       setFrame(findFrame(match, Tick))
       setTick?.(Tick)
     },
-    [match, setTick]
+    [match, setTick],
   )
   function onKeyDown(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {

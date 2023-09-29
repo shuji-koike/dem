@@ -51,7 +51,7 @@ export const AppContext = React.createContext<AppState>({
   setMatch() {},
 })
 
-export const AppContextProvider: React.VFC<{
+export const AppContextProvider: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => {
   const [match, setMatch] = React.useState<AppState["match"]>()

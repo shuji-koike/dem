@@ -7,7 +7,7 @@ import { MatchView } from "../demo/MatchView"
 import { openDemo } from "../demo/io"
 import { useLocationState } from "../hooks/useLocationState"
 
-export const DemoPage: React.VFC<{ path?: string }> = ({ path }) => {
+export const DemoPage: React.FC<{ path?: string }> = ({ path }) => {
   const state = useLocationState<AppState>()
   const { "*": paramPath } = useParams<"*">()
   const { match, setMatch } = React.useContext(AppContext)

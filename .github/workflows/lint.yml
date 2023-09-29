@@ -17,3 +17,4 @@ jobs:
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
       - run: yarn prettier -c .
       - run: yarn eslint .
+      - run: yarn tsc --noEmit

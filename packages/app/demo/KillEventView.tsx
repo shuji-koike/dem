@@ -2,7 +2,7 @@ import React from "react"
 
 import { teamOpponentColor, teamColor } from "."
 
-export const KillEventView: React.VFC<{
+export const KillEventView: React.FC<{
   event: KillEvent
   selected?: boolean
   onClick?: (event: KillEvent) => void
@@ -26,7 +26,7 @@ export const KillEventView: React.VFC<{
           ></circle>
           <path
             d={["M", event.From.X, event.From.Y, "L", event.X, event.Y].join(
-              " "
+              " ",
             )}
             fill="transparent"
             stroke="rgba(255,255,255,0.25)"

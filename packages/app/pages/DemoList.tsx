@@ -13,7 +13,7 @@ import { HeaderSlot } from "../components/layout"
 import { storageList } from "../demo/io"
 import { useAuth } from "../hooks"
 
-export const DemoList: React.VFC = () => {
+export const DemoList: React.FC = () => {
   const user = useAuth()
   const [state, setState] = React.useState<string[]>()
   React.useEffect(() => {
@@ -33,15 +33,13 @@ export const DemoList: React.VFC = () => {
         defaultCollapseIcon={<FontAwesomeIcon icon={faChevronRight} />}
         defaultExpandIcon={<FontAwesomeIcon icon={faChevronDown} />}
       >
-        {state?.map((e) => (
-          <DemoItem key={e} nodeId={e} file={e} />
-        ))}
+        {state?.map((e) => <DemoItem key={e} nodeId={e} file={e} />)}
       </TreeView>
     </main>
   )
 }
 
-const DemoItem: React.VFC<{
+const DemoItem: React.FC<{
   file: string
   nodeId: string
 }> = ({ file, nodeId }) => {
@@ -56,7 +54,7 @@ const DemoItem: React.VFC<{
           }
         />
       }
-      onClick={() => navigate(`/dem/${file}`)}
+      onClick={() => navigate(`/dem/${file}/`)}
       label={file}
     />
   )

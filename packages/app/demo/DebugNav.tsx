@@ -1,9 +1,9 @@
 import React from "react"
 
-import { useAuth } from "../hooks"
 import { storagePut } from "./io"
+import { useAuth } from "../hooks"
 
-export const DebugNav: React.VFC<{
+export const DebugNav: React.FC<{
   match: Match
   round: Round | undefined
   frame: Frame | undefined
