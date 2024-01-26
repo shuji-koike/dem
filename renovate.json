@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Asia/Tokyo",
+  "dependencyDashboard": true,
+  "configMigration": true,
+  "prHourlyLimit": 0,
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "all minor and patch dependencies"
+    }
+  ],
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "addLabels": ["deps"]
+}
