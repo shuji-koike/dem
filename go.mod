@@ -1,13 +1,13 @@
 module github.com/shuji-koike/csgo
 
-go 1.21
+go 1.21.6
 
 require (
 	github.com/golang/geo v0.0.0-20230421003525-6adc56603217
 	github.com/markus-wa/demoinfocs-golang v1.11.0
 	github.com/markus-wa/demoinfocs-golang/v3 v3.3.0
 	github.com/shuji-koike/goutil v1.0.0
-	golang.org/x/sync v0.3.0
+	golang.org/x/sync v0.6.0
 )
 
 require (
