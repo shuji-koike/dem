@@ -3,6 +3,7 @@ import { URL } from "url"
 import axios from "axios"
 import cheerio, { CheerioAPI } from "cheerio"
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 main(["https://www.hltv.org/results?event=5608"])
 
 export async function main(args: string[]) {

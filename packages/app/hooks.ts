@@ -35,7 +35,7 @@ export function useSteamUsers(ids: number[] = []): SteamUsers {
   const data = { steamids: [...new Set(ids)].sort().join(",") }
   const [state, setState] = useState<SteamUsers>({})
   useEffect(() => {
-    httpsCallable<{ steamids: string }, { players: SteamUser[] }>(
+    void httpsCallable<{ steamids: string }, { players: SteamUser[] }>(
       getFunctions(getApp(), "asia-northeast1"),
       "getPlayerSummaries",
     )(data)

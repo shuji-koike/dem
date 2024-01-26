@@ -3,7 +3,7 @@
   "version": "0.0.0-alpha",
   "private": true,
   "engines": {
-    "node": "16"
+    "node": "20"
   },
   "scripts": {
     "start": "vite dev",
@@ -15,11 +15,11 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@firebase/app-compat": "^0.2.19",
-    "@shuji-koike/boilerplate": "^1.13.0",
-    "@shuji-koike/eslint-config": "^1.13.0",
-    "@shuji-koike/storybook": "^1.13.0",
-    "@shuji-koike/vite-react": "^1.13.0",
-    "firebase-tools": "^12.6.1"
+    "@firebase/app-compat": "^0.2.26",
+    "@shuji-koike/boilerplate": "^1.24.0",
+    "@shuji-koike/eslint-config": "^1.24.0",
+    "@shuji-koike/storybook": "^1.24.0",
+    "@shuji-koike/vite-react": "^1.24.0",
+    "firebase-tools": "^13.1.0"
   }
 }

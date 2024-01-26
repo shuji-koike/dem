@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/golang/geo/r2"
 	"github.com/golang/geo/r3"
-	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs/common"
-	"github.com/markus-wa/demoinfocs-golang/v2/pkg/demoinfocs/events"
+	"github.com/markus-wa/demoinfocs-golang/v3/pkg/demoinfocs/common"
+	"github.com/markus-wa/demoinfocs-golang/v3/pkg/demoinfocs/events"
 )
 
 // Match ...

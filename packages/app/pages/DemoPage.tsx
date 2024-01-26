@@ -13,7 +13,7 @@ export const DemoPage: React.FC<{ path?: string }> = ({ path }) => {
   const { match, setMatch } = React.useContext(AppContext)
   React.useEffect(() => {
     if (!state.match)
-      Promise.resolve(paramPath === "sample" ? sample : path || paramPath)
+      void Promise.resolve(paramPath === "sample" ? sample : path || paramPath)
         .then(openDemo)
         .then(setMatch)
   }, [path, paramPath])

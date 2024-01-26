@@ -3,30 +3,30 @@
   "version": "0.0.0-alpha",
   "private": true,
   "engines": {
-    "node": "16"
+    "node": "20"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "@fortawesome/fontawesome-svg-core": "^6.4.2",
-    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@mui/lab": "^5.0.0-alpha.146",
-    "@mui/material": "^5.14.11",
-    "@sentry/react": "^7.72.0",
-    "@sentry/tracing": "^7.72.0",
-    "firebase": "^10.4.0",
+    "@mui/lab": "^5.0.0-alpha.162",
+    "@mui/material": "^5.15.6",
+    "@sentry/react": "^7.98.0",
+    "@sentry/tracing": "^7.98.0",
+    "firebase": "^10.7.2",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
-    "react-router": "^6.16.0",
-    "react-router-dom": "^6.16.0",
-    "wasm-gzip": "^2.0.1"
+    "react-router": "^6.21.3",
+    "react-router-dom": "^6.21.3",
+    "wasm-gzip": "^2.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.0",
-    "@storybook/react": "^7.4.5"
+    "@babel/core": "^7.23.9",
+    "@storybook/react": "^7.6.10"
   }
 }

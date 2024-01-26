@@ -17,7 +17,7 @@ export const DemoList: React.FC = () => {
   const user = useAuth()
   const [state, setState] = React.useState<string[]>()
   React.useEffect(() => {
-    ;(async function () {
+    void (async function () {
       setState([
         ...(user ? await storageList(`private/${user.uid}`) : []),
         ...(await storageList("public")),

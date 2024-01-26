@@ -13,7 +13,7 @@ export const DemoFilePicker: React.FC<{
     const file = files?.at(0)
     if (!file) return
     if (!isValidFile(file)) return console.error("invalid file")
-    openDemo(file, setOutput, setMatch).then((match) => {
+    void openDemo(file, setOutput, setMatch).then((match) => {
       if (mounted.current) {
         setMatch?.(match)
         if (match) onLoad?.(match, file.name)

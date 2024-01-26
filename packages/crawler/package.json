@@ -3,10 +3,10 @@
   "version": "0.0.0-alpha",
   "private": true,
   "engines": {
-    "node": "16"
+    "node": "20"
   },
   "dependencies": {
-    "axios": "^1.5.1",
+    "axios": "^1.6.7",
     "cheerio": "^1.0.0-rc.12"
   }
 }
