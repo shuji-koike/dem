@@ -18,7 +18,7 @@ jobs:
           key: node_modules-${{ hashFiles('**/package.json', 'yarn.lock') }}
       - run: yarn install --frozen-lockfile
         if: steps.cache_node_modules.outputs.cache-hit != 'true'
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v5
         with:
           go-version: "1.21"
       - uses: actions/cache@v2
