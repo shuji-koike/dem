@@ -15,6 +15,7 @@
   "devDependencies": {
     "@emotion/react": "^11.11.3",
     "@firebase/app-compat": "^0.2.26",
+    "@sentry/vite-plugin": "^2.10.3",
     "@shuji-koike/boilerplate": "^1.24.0",
     "@shuji-koike/eslint-config": "^1.24.0",
     "@shuji-koike/storybook": "^1.24.0",
