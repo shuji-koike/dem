@@ -72,7 +72,7 @@ export const DemoMenu: React.FC<{
           ),
         )}
       </div>
-      <div>
+      <Box flexGrow={1}>
         {match.KillEvents.filter((e) => filter.kills?.(e)).map((e, i) => (
           <Box
             key={i}
@@ -91,8 +91,8 @@ export const DemoMenu: React.FC<{
             <PlayerLabel player={findPlayer(match, e.Victim)} />
           </Box>
         ))}
-      </div>
-      <div>
+      </Box>
+      <Box flexGrow={1}>
         {match.NadeEvents.filter((e) => filter.nades?.(e)).map((e, i) => (
           <Box
             key={i}
@@ -107,7 +107,7 @@ export const DemoMenu: React.FC<{
             <PlayerLabel player={findPlayer(match, e.Thrower)} />
           </Box>
         ))}
-      </div>
+      </Box>
     </div>
   )
 }
