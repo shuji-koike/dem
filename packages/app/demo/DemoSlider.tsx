@@ -80,5 +80,5 @@ export const DemoSlider: React.FC<{
 
 const Icon = styled(FontAwesomeIcon)`
   position: relative;
-  top: -27px;
+  top: -25px;
 `
