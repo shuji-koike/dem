@@ -47,13 +47,14 @@ export const AuthAvatar: React.FC<{
               Sign in with Google
             </MenuItem>
             <MenuItem
+              disabled
               onClick={() =>
                 signInWithPopup(getAuth(), new OAuthProvider("steam")).then(
                   close,
                 )
               }
             >
-              Sign in with Steam
+              Sign in with Steam (coming soon)
             </MenuItem>
           </Menu>
         ))}
