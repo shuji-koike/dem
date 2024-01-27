@@ -33,7 +33,8 @@ export const Home: React.FC = () => {
           const path = /\.dem$/i.test(name)
             ? await storagePutPublicMatch(match, name)
             : name
-          navigate(`/dem/${path}/`, { state: { match } })
+          console.info(path)
+          // navigate(`/dem/${path}/`, { state: { match } })
         }}
       />
       {import.meta.env.DEV && (

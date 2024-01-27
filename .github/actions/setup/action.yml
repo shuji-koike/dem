@@ -1,0 +1,22 @@
+name: setup
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v2
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "20"
+        cache: "pnpm"
+    - uses: actions/setup-go@v5
+      with:
+        go-version-file: ./go.mod
+        cache: true
+    - uses: actions/cache@v4
+      id: cache_go_mod
+      with:
+        path: ~/go/pkg/mod
+        key: go_mod-${{ hashFiles('go.sum') }}
+    - run: go get
+      shell: bash
+    - run: pnpm install
+      shell: bash

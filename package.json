@@ -5,21 +5,32 @@
   "engines": {
     "node": "20"
   },
+  "packageManager": "pnpm@8.14.3",
   "scripts": {
     "start": "vite dev",
     "build": "vite build",
     "lint": "eslint --cache --fix .; prettier --write --loglevel warn .;tsc --noEmit",
     "storybook": "start-storybook -p 6006"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "devDependencies": {
+    "@emotion/react": "^11.11.3",
     "@firebase/app-compat": "^0.2.26",
     "@shuji-koike/boilerplate": "^1.24.0",
     "@shuji-koike/eslint-config": "^1.24.0",
     "@shuji-koike/storybook": "^1.24.0",
     "@shuji-koike/vite-react": "^1.24.0",
-    "firebase-tools": "^13.1.0"
+    "@types/lodash": "^4.14.202",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.2.1",
+    "firebase-tools": "^13.1.0",
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.21.3",
+    "react-router-dom": "^6.21.3",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
   }
 }

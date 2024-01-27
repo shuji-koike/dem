@@ -1,7 +1,6 @@
 .*
 !.storybook
-/functions/lib
-/dist
+dist
 /static
 /var
 /csgo
@@ -11,3 +10,4 @@ __debug_bin
 *.log
 *.dem
 *.rar
+gha-creds-*.json

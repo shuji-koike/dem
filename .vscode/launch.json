@@ -6,16 +6,8 @@
       "request": "launch",
       "name": "yarn start",
       "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["start"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "yarn storybook",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["storybook"]
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "start"]
     }
   ]
 }

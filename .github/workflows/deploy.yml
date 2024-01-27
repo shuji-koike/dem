@@ -3,40 +3,22 @@ on:
   push:
     branches:
       - master
+      - staging
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - uses: actions/cache@v4
-        id: cache_node_modules
-        with:
-          path: "**/node_modules"
-          key: node_modules-${{ hashFiles('**/package.json', 'yarn.lock') }}
-      - run: yarn install --frozen-lockfile
-        if: steps.cache_node_modules.outputs.cache-hit != 'true'
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "1.21"
-      - uses: actions/cache@v4
-        id: cache_go_mod
-        with:
-          path: ~/go/pkg/mod
-          key: go_mod-${{ hashFiles('go.sum') }}
-      - run: go get
-        if: steps.cache_go_mod.outputs.cache-hit != 'true'
-      - run: yarn tsc --noEmit
-      - run: go build -o ./static/main.wasm .
-        env:
-          GOOS: js
-          GOARCH: wasm
-      - run: touch ./static/sample.dem.json
-      - run: yarn vite build
-      - run: yarn tsc --noEmit false
+      - uses: ./.github/actions/setup
+      - run: GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
+      - run: npx vite build
+      - run: npx tsx build.ts
         working-directory: packages/functions
-      - run: yarn firebase deploy --force --project ${{ secrets.FIREBASE_PROJECT_ID }}
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/787830619763/locations/global/workloadIdentityPools/github/providers/csgo
+          service_account: github-actions-cd@csgo-tokyo.iam.gserviceaccount.com
+      - run: npx firebase deploy --force

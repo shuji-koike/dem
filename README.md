@@ -11,3 +11,13 @@ This project is open source but not a free software, and temporary licensed as
 
 - [Counter-Strike: Global Offensive](https://blog.counter-strike.net/)
 - https://www.hltv.org/
+
+# setup
+
+```
+pnpm install
+GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
+touch ./static/sample.dem.json
+
+pnpm start
+```

@@ -2,8 +2,8 @@
   "extends": "@shuji-koike/boilerplate/tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ESNext"],
-    "module": "CommonJS",
-    "outDir": "build",
+    "module": "ESNext",
+    "outDir": "dist",
+    "noEmit": true,
   },
-  "files": ["src/index.ts"],
 }

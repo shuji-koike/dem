@@ -1,0 +1,12 @@
+{
+  "__typename": "Match",
+  "Version": "string",
+  "TickRate": 0,
+  "FrameRate": 0,
+  "MapName": "",
+  "Started": true,
+  "Ended": true,
+  "Rounds": [],
+  "NadeEvents": [],
+  "KillEvents": []
+}

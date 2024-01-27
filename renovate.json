@@ -12,6 +12,5 @@
       "groupName": "all minor and patch dependencies"
     }
   ],
-  "postUpdateOptions": ["yarnDedupeHighest"],
   "addLabels": ["deps"]
 }
