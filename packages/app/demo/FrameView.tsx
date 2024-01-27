@@ -1,4 +1,5 @@
 import React from "react"
+import { isSafari } from "react-device-detect"
 
 import {
   NadeColor,
@@ -104,6 +105,7 @@ export const TrailView: React.FC<{ round?: Round }> = ({ round }) => {
       })
     }
   }, [round])
+  if (isSafari) return // ref https://bugs.webkit.org/show_bug.cgi?id=23113
   return (
     <foreignObject x={0} y={0} width={1024} height={1024}>
       <canvas ref={ref} width="1024" height="1024"></canvas>

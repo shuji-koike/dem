@@ -1,10 +1,9 @@
-import { Alert } from "@mui/lab"
 import { getAnalytics, logEvent } from "firebase/analytics"
 import React from "react"
-import { isChrome, isChromium } from "react-device-detect"
 import { useLocation, useNavigate } from "react-router"
 
 import { AppContext } from "../app"
+import { BrowserAlert } from "../components/BrowserAlert"
 import { DemoFilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
 import { isValidFile, openDemo, storagePutPublicMatch } from "../demo/io"
@@ -28,9 +27,6 @@ export const Home: React.FC = () => {
     <MatchView match={match} />
   ) : (
     <article>
-      {isChrome || isChromium || (
-        <Alert color="warning">Only Google Chrome is supported!</Alert>
-      )}
       <p>Drag and drop a ".dem" file into this window.</p>
       <p>Or click the button below and select a ".dem" file.</p>
       <DemoFilePicker
@@ -43,6 +39,7 @@ export const Home: React.FC = () => {
           // navigate(`/dem/${path}/`, { state: { match } })
         }}
       />
+      <BrowserAlert />
       {import.meta.env.DEV && (
         <nav className="debug">
           <button onClick={() => navigate("/dem/sample")}>
