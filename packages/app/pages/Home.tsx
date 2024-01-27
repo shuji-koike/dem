@@ -7,12 +7,17 @@ import { useLocation, useNavigate } from "react-router"
 import { AppContext } from "../app"
 import { DemoFilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
-import { storagePutPublicMatch } from "../demo/io"
+import { isValidFile, openDemo, storagePutPublicMatch } from "../demo/io"
+import { useDrragAndDropFile } from "../hooks/useDrragAndDropFile"
 
 export const Home: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { match, setMatch } = React.useContext(AppContext)
+  useDrragAndDropFile(async (files) => {
+    if (isValidFile(files[0]))
+      setMatch(await openDemo(files[0], console.debug, setMatch))
+  })
   React.useEffect(() => {
     if (match) logEvent(getAnalytics(), "view_item")
   }, [match])
@@ -26,7 +31,8 @@ export const Home: React.FC = () => {
       {isChrome || isChromium || (
         <Alert color="warning">Only Google Chrome is supported!</Alert>
       )}
-      <p>Click the button below and select a DEM file.</p>
+      <p>Drag and drop a ".dem" file into this window.</p>
+      <p>Or click the button below and select a ".dem" file.</p>
       <DemoFilePicker
         setMatch={setMatch}
         onLoad={async (match, name) => {

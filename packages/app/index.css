@@ -1,3 +1,7 @@
+html {
+  width: 100vw;
+  height: 100vh;
+}
 p {
   margin: 0.5rem 0;
 }
