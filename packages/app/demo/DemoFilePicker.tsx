@@ -3,7 +3,7 @@ import React from "react"
 import { openDemo, isValidFile } from "./io"
 
 export const DemoFilePicker: React.FC<{
-  setMatch?: (match: Match | null) => void
+  setMatch?: React.Dispatch<React.SetStateAction<Match | null | undefined>>
   onLoad?: (match: Match, name: string) => void
 }> = ({ setMatch, onLoad }) => {
   const [output, setOutput] = React.useState<string[]>([])
@@ -31,8 +31,10 @@ export const DemoFilePicker: React.FC<{
       />
       {output.length > 0 && (
         <pre>
-          <p>Converting DEM file `{files?.[0]?.name}`</p>
-          {output}
+          <p>Parsing DEM file `{files?.[0]?.name}`</p>
+          {output.map((e, i) => (
+            <p key={i}>{e}</p>
+          ))}
         </pre>
       )}
     </>

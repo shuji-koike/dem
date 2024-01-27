@@ -15,8 +15,8 @@ import gzipWasm from "wasm-gzip/wasm_gzip_bg.wasm?url"
 
 export async function openDemo(
   file: File | Response | string | null | undefined,
-  onOutput?: (arr: string[]) => void,
-  onRoundEnd?: (match: Match) => void,
+  onOutput?: React.Dispatch<React.SetStateAction<string[]>>,
+  onRoundEnd?: React.Dispatch<React.SetStateAction<Match | null | undefined>>,
 ): Promise<Match | null> {
   if (!file) return null
   if (typeof file === "string") {
@@ -57,8 +57,8 @@ async function parseJson(
 
 export function parseDemo(
   file: File | null,
-  onOutput?: (arr: string[]) => void,
-  onRoundEnd?: (match: Match) => void,
+  onOutput?: React.Dispatch<React.SetStateAction<string[]>>,
+  onRoundEnd?: React.Dispatch<React.SetStateAction<Match | null | undefined>>,
 ): Promise<Match | null> {
   if (!file) return Promise.resolve(null)
   return new Promise((resolve) => {
@@ -74,7 +74,7 @@ export function parseDemo(
           onRoundEnd?.(args[0])
           break
         case "wasmLogger":
-          onOutput?.(args)
+          onOutput?.((arr) => arr.concat(args))
           break
       }
     }
