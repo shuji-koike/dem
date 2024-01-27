@@ -6,7 +6,7 @@ import { AppContext } from "../app"
 import { BrowserAlert } from "../components/BrowserAlert"
 import { DemoFilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
-import { isValidFile, openDemo, storagePutPublicMatch } from "../demo/io"
+import { isValidFile, openDemo } from "../demo/io"
 import { useDrragAndDropFile } from "../hooks/useDrragAndDropFile"
 
 export const Home: React.FC = () => {
@@ -18,9 +18,6 @@ export const Home: React.FC = () => {
       setMatch(await openDemo(files[0], console.debug, setMatch))
   })
   React.useEffect(() => {
-    if (match) logEvent(getAnalytics(), "view_item")
-  }, [match])
-  React.useEffect(() => {
     if (match) setMatch(undefined)
   }, [location.pathname])
   return match ? (
@@ -31,13 +28,7 @@ export const Home: React.FC = () => {
       <p>Or click the button below and select a ".dem" file.</p>
       <DemoFilePicker
         setMatch={setMatch}
-        onLoad={async (match, name) => {
-          const path = /\.dem$/i.test(name)
-            ? await storagePutPublicMatch(match, name)
-            : name
-          console.info(path)
-          // navigate(`/dem/${path}/`, { state: { match } })
-        }}
+        onLoad={() => logEvent(getAnalytics(), "DemoFilePicker:onLoad")}
       />
       <BrowserAlert />
       {import.meta.env.DEV && (
