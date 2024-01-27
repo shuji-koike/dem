@@ -11,15 +11,18 @@ import (
 
 func main() {
 	log.Printf("main: start")
-	log.SetOutput(&logger{})
+	log.SetOutput(&Logger{Level: "info"})
+	warn.SetOutput(&Logger{Level: "warn"})
 	js.Global().Set("wasmParaseDemo", js.FuncOf(wasmParaseDemo))
 	select {}
 }
 
-type logger struct{}
+type Logger struct {
+	Level string
+}
 
-func (logger) Write(p []byte) (int, error) {
-	js.Global().Call("wasmLogger", string(p))
+func (logger *Logger) Write(p []byte) (int, error) {
+	js.Global().Call("wasmLogger", js.Global().Get("Array").New(logger.Level, string(p)))
 	return len(p), nil
 }
 

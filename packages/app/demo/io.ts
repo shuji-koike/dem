@@ -74,7 +74,14 @@ export function parseDemo(
           onRoundEnd?.(args[0])
           break
         case "wasmLogger":
-          onOutput?.((arr) => arr.concat(args))
+          if (!Array.isArray(args[0])) return
+          // eslint-disable-next-line no-case-declarations
+          const [level, message] = args[0]
+          if (level === "error") console.error(message)
+          else if (level === "warn") console.warn(message)
+          else if (level === "debug") console.debug(message)
+          else console.info(message)
+          onOutput?.((arr) => arr.concat(`[${level}] ${message}`))
           break
       }
     }
