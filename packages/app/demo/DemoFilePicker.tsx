@@ -1,3 +1,4 @@
+import { css } from "@emotion/react"
 import React from "react"
 
 import { openDemo, isValidFile } from "./io"
@@ -30,7 +31,12 @@ export const DemoFilePicker: React.FC<{
         onChange={(e) => setFiles([...(e.currentTarget.files || [])])}
       />
       {output.length > 0 && (
-        <pre>
+        <pre
+          css={css`
+            font-size: 12px;
+            color: darkgreen;
+          `}
+        >
           <p>Parsing DEM file `{files?.[0]?.name}`</p>
           {output.map((e, i) => (
             <p key={i}>{e}</p>
