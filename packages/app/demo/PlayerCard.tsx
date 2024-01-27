@@ -26,6 +26,7 @@ export const PlayerCard: React.FC<{
             fontWeight="bold"
             color="gray"
             textAlign="right"
+            fontSize={12}
           >
             {player.Hp}
           </Typography>
@@ -34,33 +35,36 @@ export const PlayerCard: React.FC<{
             maxWidth={140}
             color={teamColor(player.Team)}
             fontWeight="bold"
+            fontSize={12}
             noWrap
           >
             {player.Name}
           </Typography>
+          <Box flexGrow={1} />
           <Typography
             minWidth={40}
             fontWeight="bold"
             textAlign="right"
             color="#060"
-            fontSize={16}
+            fontSize={11}
           >
             ${player.Money}
           </Typography>
         </Box>
         <LinearProgress
+          css={{ height: 2 }}
           variant="determinate"
           color={teamColorVariantMap.get(player.Team)}
           value={player.Hp}
         />
-        <Box display="flex" gap={1} marginTop="4px" minHeight="20px">
+        <Box display="flex" gap={3 / 4} marginTop={1 / 2} minHeight="16px">
           <img src={armorIcon(player)} />
           {player.Weapons?.filter((e) => e !== 405).map((e, i) => (
             <img
               key={i}
               src={icon(e)}
               css={css`
-                height: 20px;
+                height: 12px;
                 opacity: ${player.Weapon === e ? 1 : 0.5};
               `}
             />

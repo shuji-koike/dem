@@ -2,7 +2,6 @@ import { css } from "@emotion/react"
 import React from "react"
 
 import { findRound, findFrame } from "."
-import { DebugNav } from "./DebugNav"
 import { DemoMenu } from "./DemoMenu"
 import { DemoNav } from "./DemoNav"
 import { DemoSlider } from "./DemoSlider"
@@ -88,6 +87,7 @@ export const DemoPlayer: React.FC<{
       onSubmit={(e) => e.preventDefault()}
       css={style}
     >
+      <div css={backdrop} />
       <HeaderSlot>
         <DemoNav match={match} round={round} onChange={setRound} />
       </HeaderSlot>
@@ -112,7 +112,6 @@ export const DemoPlayer: React.FC<{
           filter={filter}
           setFilter={setFilter}
         />
-        <DebugNav match={match} round={round} frame={frame} />
       </aside>
       <footer>
         {round && frame && (
@@ -150,6 +149,11 @@ const style = css`
     height: 100vh;
     max-width: 100vw;
     max-height: 100vw;
+    @media (max-height: 700px) {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
   > aside {
     position: fixed;
@@ -157,8 +161,21 @@ const style = css`
     right: 0px;
     width: 300px;
     padding: 0 8px;
-    max-height: calc(100vh - 80px - 100px);
+    max-height: calc(100vh - 200px); // FIXME
     overflow-y: auto;
+    @media (max-height: 700px) {
+      width: 100%;
+      > * > nav {
+        display: none;
+      }
+      > * {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      > * > * {
+        width: 200px;
+      }
+    }
   }
   > footer {
     position: fixed;
@@ -176,4 +193,12 @@ const style = css`
     font-size: 12px;
     color: #222;
   }
+`
+
+const backdrop = css`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
 `

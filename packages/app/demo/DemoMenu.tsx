@@ -44,16 +44,41 @@ export const DemoMenu: React.FC<{
           <Tab value={3} label="Nades" />
         </Tabs>
       </nav>
-      {filter.players &&
-        frame?.Players.filter(filter.players).map((e) => (
-          <PlayerCard key={e.ID} player={e} steamUser={steamUsers[e.ID]} />
-        ))}
-      {filter.kills &&
-        match.KillEvents.filter(filter.kills).map((e, i) => (
+      <div>
+        {frame?.Players.filter((e) => e.Team === 3 && filter.players?.(e)).map(
+          (e) => (
+            <PlayerCard
+              key={e.ID}
+              player={e}
+              steamUser={steamUsers[e.ID]}
+              css={css`
+                margin: 8px 0;
+              `}
+            />
+          ),
+        )}
+      </div>
+      <div>
+        {frame?.Players.filter((e) => e.Team === 2 && filter.players?.(e)).map(
+          (e) => (
+            <PlayerCard
+              key={e.ID}
+              player={e}
+              steamUser={steamUsers[e.ID]}
+              css={css`
+                margin: 8px 0;
+              `}
+            />
+          ),
+        )}
+      </div>
+      <div>
+        {match.KillEvents.filter((e) => filter.kills?.(e)).map((e, i) => (
           <Box
             key={i}
             display="flex"
             alignItems="baseline"
+            justifyContent="end"
             marginY={1}
             gap={2}
             onClick={() => setTick?.(e.Tick)}
@@ -66,12 +91,14 @@ export const DemoMenu: React.FC<{
             <PlayerLabel player={findPlayer(match, e.Victim)} />
           </Box>
         ))}
-      {filter.nades &&
-        match.NadeEvents.filter(filter.nades).map((e, i) => (
+      </div>
+      <div>
+        {match.NadeEvents.filter((e) => filter.nades?.(e)).map((e, i) => (
           <Box
             key={i}
             display="flex"
             alignItems="baseline"
+            justifyContent="end"
             marginY={1}
             gap={2}
             onClick={() => setTick?.(e.Tick)}
@@ -80,21 +107,24 @@ export const DemoMenu: React.FC<{
             <PlayerLabel player={findPlayer(match, e.Thrower)} />
           </Box>
         ))}
+      </div>
     </div>
   )
 }
 
 const style = css`
-  backdrop-filter: blur(1px);
+  display: flex;
+  flex-direction: column;
   > nav {
     position: sticky;
     top: 0;
     z-index: 1;
   }
-  > div {
-    margin: 8px 0;
-  }
-  > * {
+  > * > * {
+    backdrop-filter: blur(1px);
     filter: drop-shadow(0 0 4px rgba(18, 18, 18, 0.5));
+  }
+  div:empty {
+    display: none;
   }
 `
