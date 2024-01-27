@@ -161,8 +161,11 @@ const style = css`
     right: 0px;
     width: 300px;
     padding: 0 8px;
-    max-height: calc(100vh - 200px); // FIXME
+    max-height: calc(100vh - 140px); // FIXME
     overflow-y: auto;
+    ::-webkit-scrollbar {
+      display: none;
+    }
     @media (max-height: 700px) {
       width: 100%;
       > * > nav {
