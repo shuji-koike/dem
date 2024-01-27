@@ -74,11 +74,12 @@ export const DemoSlider: React.FC<{
       marks={uniqBy(marks, "value")}
       valueLabelDisplay="auto"
       valueLabelFormat={(e) => labelFormat(match, round, round.Frames[e])}
+      size="small"
     />
   )
 }
 
 const Icon = styled(FontAwesomeIcon)`
   position: relative;
-  top: -25px;
+  top: -26px;
 `
