@@ -10,10 +10,10 @@ import (
 
 	"github.com/golang/geo/r2"
 	"github.com/golang/geo/r3"
-	"github.com/markus-wa/demoinfocs-golang/metadata"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/common"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/events"
+	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/msgs2"
 )
 
 const Version = "v0.0.0-alpha"
@@ -27,6 +27,7 @@ func init() {
 
 // Parse ...
 func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
+	log.Printf("%6d| Parse: start", 0)
 	if handler == nil {
 		handler = func(_ Match) {}
 	}
@@ -35,7 +36,9 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 	if err != nil {
 		return
 	}
-	mapMetadata := metadata.MapNameToMap[header.MapName]
+	mapMetadata := GetLegacyMapMetadata(header.MapName)
+	log.Printf("%6d| GetLegacyMapMetadata\t%#v", 0, mapMetadata)
+
 	normalize := func(point r3.Vector) r2.Point {
 		x, y := mapMetadata.TranslateScale(point.X, point.Y)
 		return r2.Point{X: math.Round(x), Y: math.Round(y)}
@@ -51,6 +54,11 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 	var round Round
 	var bomb Bomb
 	nades := make(map[int]NadeEvent)
+
+	parser.RegisterNetMessageHandler(func(msg *msgs2.CSVCMsg_ServerInfo) {
+		log.Printf("%6d| CSVCMsg_ServerInfo\t%s", parser.CurrentFrame(), msg.GetMapName())
+		mapMetadata = GetLegacyMapMetadata(msg.GetMapName())
+	})
 
 	parser.RegisterEventHandler(func(e events.MatchStart) {
 		log.Printf("%6d| MatchStart\t[%d]\tstarted=%t\twarmup=%t\tTickRate=%.1f\tFrameRate=%.1f\n",
