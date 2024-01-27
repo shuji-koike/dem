@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
@@ -11,5 +12,13 @@ export default defineConfig({
     react({
       jsxImportSource: "@emotion/react",
     }),
+    process.env["CI"] &&
+      sentryVitePlugin({
+        org: "shujikoike",
+        project: "csgo",
+      }),
   ],
+  build: {
+    sourcemap: !!process.env["CI"],
+  },
 })

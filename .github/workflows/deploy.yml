@@ -15,6 +15,8 @@ jobs:
       - uses: ./.github/actions/setup
       - run: GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
       - run: npx vite build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - run: npx tsx build.ts
         working-directory: packages/functions
       - uses: google-github-actions/auth@v2
