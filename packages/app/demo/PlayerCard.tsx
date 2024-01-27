@@ -17,7 +17,7 @@ export const PlayerCard: React.FC<{
       <Box flexGrow={1}>
         <Box
           display="flex"
-          gap={2}
+          gap={1}
           alignItems="flex-end"
           justifyContent="space-between"
         >
@@ -32,8 +32,8 @@ export const PlayerCard: React.FC<{
           </Typography>
           <Typography
             flexGrow={1}
-            maxWidth={140}
-            color={teamColor(player.Team)}
+            maxWidth={100}
+            color={player.Hp > 20 ? teamColor(player.Team) : "gray"}
             fontWeight="bold"
             fontSize={12}
             noWrap
@@ -46,7 +46,7 @@ export const PlayerCard: React.FC<{
             fontWeight="bold"
             textAlign="right"
             color="#060"
-            fontSize={11}
+            fontSize={10}
           >
             ${player.Money}
           </Typography>
@@ -54,7 +54,9 @@ export const PlayerCard: React.FC<{
         <LinearProgress
           css={{ height: 2 }}
           variant="determinate"
-          color={teamColorVariantMap.get(player.Team)}
+          color={
+            player.Hp > 20 ? teamColorVariantMap.get(player.Team) : "error"
+          }
           value={player.Hp}
         />
         <Box display="flex" gap={3 / 4} marginTop={1 / 2} minHeight="16px">

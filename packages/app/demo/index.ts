@@ -44,7 +44,7 @@ export const teamColorMap: ReadonlyMap<Team, string> = new Map([
 ])
 
 export const teamColorVariantMap = new Map([
-  [Team.Unassigned, "error"],
+  [Team.Unassigned, "info"],
   [Team.Spectators, "info"],
   [Team.Terrorists, "warning"],
   [Team.CounterTerrorists, "success"],
