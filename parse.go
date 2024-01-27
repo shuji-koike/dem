@@ -11,9 +11,9 @@ import (
 	"github.com/golang/geo/r2"
 	"github.com/golang/geo/r3"
 	"github.com/markus-wa/demoinfocs-golang/metadata"
-	"github.com/markus-wa/demoinfocs-golang/v3/pkg/demoinfocs"
-	"github.com/markus-wa/demoinfocs-golang/v3/pkg/demoinfocs/common"
-	"github.com/markus-wa/demoinfocs-golang/v3/pkg/demoinfocs/events"
+	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs"
+	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/common"
+	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/events"
 )
 
 const Version = "v0.0.0-alpha"
