@@ -379,13 +379,16 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 
 	err = parser.ParseToEnd()
 	if err == demoinfocs.ErrUnexpectedEndOfDemo {
-		log.Printf("%6d| ErrUnexpectedEndOfDemo\n", parser.CurrentFrame())
+		warn.Printf("%6d| ErrUnexpectedEndOfDemo\n", parser.CurrentFrame())
 		err = nil
 	} else if err != nil {
-		log.Printf("%6d| ParseError\t%s\n", parser.CurrentFrame(), err.Error())
+		warn.Printf("%6d| ParseError\t%s\n", parser.CurrentFrame(), err.Error())
+	} else if !match.Ended {
+		warn.Printf("%6d| ParseToEnd\tUnexpected end\n", parser.CurrentFrame())
 	} else {
-		log.Printf("%6d| ParseToEnd\n", parser.CurrentFrame())
+		log.Printf("%6d| ParseToEnd\tEnded=%t\n", parser.CurrentFrame(), match.Ended)
 	}
+	match.Ended = true
 	return
 }
 

@@ -41,7 +41,7 @@ func wasmParaseDemo(this js.Value, args []js.Value) interface{} {
 	if err != nil {
 		log.Printf("parse error %s", err.Error())
 	}
-	log.Printf("end")
+	log.Printf("end: %t", match.Ended)
 	return toJson(match)
 }
 

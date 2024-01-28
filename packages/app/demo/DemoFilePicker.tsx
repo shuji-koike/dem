@@ -5,7 +5,7 @@ import { openDemo, isValidFile } from "./io"
 
 export const DemoFilePicker: React.FC<{
   setMatch?: React.Dispatch<React.SetStateAction<Match | null | undefined>>
-  onLoad?: (match: Match, name: string) => void
+  onLoad?: (match: Match | null, name: string) => void
 }> = ({ setMatch, onLoad }) => {
   const [output, setOutput] = React.useState<string[]>([])
   const [files, setFiles] = React.useState<File[]>()
@@ -15,10 +15,8 @@ export const DemoFilePicker: React.FC<{
     if (!file) return
     if (!isValidFile(file)) return console.error("invalid file")
     void openDemo(file, setOutput, setMatch).then((match) => {
-      if (mounted.current) {
-        setMatch?.(match)
-        if (match) onLoad?.(match, file.name)
-      }
+      setMatch?.(match)
+      onLoad?.(match, file.name)
     })
     return () => void (mounted.current = false)
   }, [files])

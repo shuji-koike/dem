@@ -65,6 +65,7 @@ export function parseDemo(
     worker.postMessage({ cmd: "wasmParaseDemo", mainWasm, payload: file })
     worker.onmessage = function ({ data: [cmd, ...args] }) {
       switch (cmd) {
+        case "wasmParaseDemo":
         case "wasmParaseDemo:MatchEnd":
           resolve(args[0])
           worker.terminate()
