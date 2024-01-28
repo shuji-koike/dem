@@ -20,7 +20,7 @@ export const Home: React.FC = () => {
   React.useEffect(() => {
     if (match) setMatch(undefined)
   }, [location.pathname])
-  return match ? (
+  return match && match.Rounds?.length ? (
     <MatchView match={match} />
   ) : (
     <article>
