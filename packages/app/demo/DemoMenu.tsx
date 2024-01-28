@@ -31,6 +31,7 @@ export const DemoMenu: React.FC<{
         break
     }
   }, [tab, round])
+  if (!round && !frame) return null
   return (
     <div css={style} onWheelCapture={(e) => e.stopPropagation()}>
       <nav>
