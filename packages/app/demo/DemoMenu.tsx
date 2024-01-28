@@ -72,36 +72,56 @@ export const DemoMenu: React.FC<{
           ),
         )}
       </div>
-      <Box flexGrow={1}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={1}
+        flexGrow={1}
+        alignItems="flex-end"
+        paddingY={1}
+      >
         {match.KillEvents.filter((e) => filter.kills?.(e)).map((e, i) => (
           <Box
             key={i}
             display="flex"
             alignItems="baseline"
-            justifyContent="end"
-            marginY={1}
-            gap={2}
+            gap={1}
             onClick={() => setTick?.(e.Tick)}
+            sx={{ cursor: "pointer" }}
+            fontSize={12}
+            flexWrap="wrap"
           >
+            {e.AttackerBlind && <img src={icon("blinded")} height={14} />}
             <PlayerLabel player={findPlayer(match, e.Killer)} />
-            <img height={16} src={icon(e.Weapon)} />
-            {/* TODO: add icon */}
-            {!!e.Penetrated && <span>(-x-)</span>}
-            {e.IsHeadshot && <span>(HS)</span>}
+            <img height={10} src={icon(e.Weapon)} />
+            <Box display="flex" gap={1 / 4}>
+              {e.NoScope && <img src={icon("noscope")} height={14} />}
+              {e.ThroughSmoke && <img src={icon("smoke")} height={14} />}
+              {!!e.Penetrated && <img src={icon("wallbang")} height={14} />}
+              {e.IsHeadshot && <img src={icon("headshot")} height={14} />}
+            </Box>
             <PlayerLabel player={findPlayer(match, e.Victim)} />
           </Box>
         ))}
       </Box>
-      <Box flexGrow={1}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={1}
+        flexGrow={1}
+        alignItems="flex-end"
+        paddingY={1}
+      >
         {match.NadeEvents.filter((e) => filter.nades?.(e)).map((e, i) => (
           <Box
             key={i}
             display="flex"
             alignItems="baseline"
             justifyContent="end"
-            marginY={1}
-            gap={2}
+            gap={1 / 2}
             onClick={() => setTick?.(e.Tick)}
+            fontSize={12}
+            sx={{ cursor: "pointer" }}
           >
             <img height={16} src={icon(e.Weapon)} />
             <PlayerLabel player={findPlayer(match, e.Thrower)} />

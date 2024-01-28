@@ -1,16 +1,16 @@
-import { Box } from "@mui/material"
+import { Box, BoxProps } from "@mui/material"
 import React from "react"
 
 import { teamColor } from "."
 
-export const PlayerLabel: React.FC<{
-  player: Player | null
-  onClick?: () => unknown
-}> = ({ player, onClick }) => {
+export const PlayerLabel: React.FC<
+  BoxProps & { player: Player | null | undefined }
+> = ({ player, children, ...rest }) => {
   if (!player) return <></>
   return (
-    <Box onClick={onClick} fontWeight="bold" color={teamColor(player.Team)}>
+    <Box fontWeight="bold" color={teamColor(player.Team)} {...rest}>
       {player.Name}
+      {children}
     </Box>
   )
 }
