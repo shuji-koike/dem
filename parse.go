@@ -67,17 +67,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 		mapMetadata = GetLegacyMapMetadata(MapName)
 	})
 
-	parser.RegisterEventHandler(func(e events.MatchStart) {
-		log.Printf("%6d| MatchStart\t[%d]\tstarted=%t\twarmup=%t\tTickRate=%.1f\tFrameRate=%.1f\n",
-			parser.CurrentFrame(),
-			state.TotalRoundsPlayed(),
-			state.IsMatchStarted(),
-			state.IsWarmupPeriod(),
-			parser.TickRate(),
-			header.FrameRate())
-		if match.Ended || match.Started && state.IsWarmupPeriod() {
-			return
-		}
+	startMatch := func() {
 		match = Match{
 			TypeName:   "Match",
 			Version:    Version,
@@ -89,6 +79,21 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			KillEvents: make([]KillEvent, 0),
 			NadeEvents: make([]NadeEvent, 0),
 		}
+	}
+	startMatch()
+
+	parser.RegisterEventHandler(func(e events.MatchStart) {
+		log.Printf("%6d| MatchStart\t[%d]\tstarted=%t\twarmup=%t\tTickRate=%.1f\tFrameRate=%.1f\n",
+			parser.CurrentFrame(),
+			state.TotalRoundsPlayed(),
+			state.IsMatchStarted(),
+			state.IsWarmupPeriod(),
+			parser.TickRate(),
+			header.FrameRate())
+		if match.Ended || match.Started && state.IsWarmupPeriod() {
+			return
+		}
+		startMatch()
 	})
 	parser.RegisterEventHandler(func(e events.RoundStart) {
 		log.Printf("%6d| RoundStart\t[%d]\tstarted=%t\twarmup=%t\n",
@@ -292,9 +297,11 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			return
 		}
 		frame := Frame{
-			Tick:  state.IngameTick(),
-			Frame: parser.CurrentFrame(),
-			Bomb:  bomb,
+			Tick:    state.IngameTick(),
+			Frame:   parser.CurrentFrame(),
+			Bomb:    bomb,
+			Players: make([]Player, 0),
+			Nades:   make([]Nade, 0),
 		}
 		frame.Bomb.Point = normalize(state.Bomb().Position())
 		for _, p := range state.Participants().Connected() {
