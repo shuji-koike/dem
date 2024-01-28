@@ -12,5 +12,6 @@
       "groupName": "all minor and patch dependencies"
     }
   ],
+  "postUpdateOptions": ["pnpmDedupe"],
   "addLabels": ["deps"]
 }
