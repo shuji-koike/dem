@@ -15,7 +15,7 @@ export const DemoNav: React.FC<{
       {match.Rounds?.map((e) => (
         <DemoNavItem
           key={e.Tick}
-          active={e === round}
+          active={e.Round === round?.Round}
           color={teamColor(e.Winner)}
           onClick={() => onChange?.(e)}
         >
