@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"io"
 	"log"
 	"math"
@@ -17,6 +18,9 @@ import (
 )
 
 const Version = "v0.0.0-alpha"
+
+var Sample = flag.Int("sample", 32, "frame sample rate")
+var FlgTrajectory = flag.Bool("trajectory", false, "enable trajectory")
 
 var debug = log.New(io.Discard, "", log.LstdFlags)
 var warn = log.New(os.Stderr, "", log.LstdFlags)
@@ -151,9 +155,11 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			debug.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
 			return
 		}
-		trajectory := make([]r2.Point, len(proj.Trajectory))
-		for i := range proj.Trajectory {
-			trajectory[i] = normalize(proj.Trajectory[i])
+		trajectory := make([]r2.Point, 0)
+		if *FlgTrajectory {
+			for i := range proj.Trajectory2 {
+				trajectory[i] = normalize(proj.Trajectory2[i].Position)
+			}
 		}
 		nade, ok := nades[int(e.Grenade.UniqueID())]
 		if !ok {
@@ -183,9 +189,11 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			debug.Printf("%6d| SmokeExpired\tProjectile Not Found", parser.CurrentFrame())
 			return
 		}
-		trajectory := make([]r2.Point, len(proj.Trajectory))
-		for i := range proj.Trajectory {
-			trajectory[i] = normalize(proj.Trajectory[i])
+		trajectory := make([]r2.Point, 0)
+		if *FlgTrajectory {
+			for i := range proj.Trajectory2 {
+				trajectory[i] = normalize(proj.Trajectory2[i].Position)
+			}
 		}
 		nade, ok := nades[int(e.Grenade.UniqueID())]
 		if !ok {
@@ -277,7 +285,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 		if !match.Started || match.Ended || !round.Started {
 			return
 		}
-		if parser.CurrentFrame()%32 != 0 {
+		if parser.CurrentFrame()%*Sample != 0 {
 			return
 		}
 		frame := Frame{
