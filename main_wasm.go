@@ -10,10 +10,10 @@ import (
 // https://golang.org/pkg/syscall/js/
 
 func main() {
-	log.Printf("main: start")
 	log.SetOutput(&Logger{Level: "info"})
 	warn.SetOutput(&Logger{Level: "warn"})
-	js.Global().Set("wasmParaseDemo", js.FuncOf(wasmParaseDemo))
+	js.Global().Set("$wasmParaseDemo", js.FuncOf(wasmParaseDemo))
+	log.Printf("initialized")
 	select {}
 }
 
@@ -22,7 +22,7 @@ type Logger struct {
 }
 
 func (logger *Logger) Write(p []byte) (int, error) {
-	js.Global().Call("wasmLogger", js.Global().Get("Array").New(logger.Level, string(p)))
+	js.Global().Call("$wasmLogger", js.Global().Get("Array").New(logger.Level, string(p)))
 	return len(p), nil
 }
 

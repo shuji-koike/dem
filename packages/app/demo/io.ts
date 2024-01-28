@@ -6,12 +6,11 @@ import {
   uploadBytes,
   uploadString,
 } from "firebase/storage"
+import initGzip, { compress, decompress } from "wasm-gzip"
+import gzipWasm from "wasm-gzip/wasm_gzip_bg.wasm?url"
 
 import mainWasm from "/static/main.wasm?url"
 import GoWorker from "/static/worker.js?worker"
-
-import initGzip, { compress, decompress } from "wasm-gzip"
-import gzipWasm from "wasm-gzip/wasm_gzip_bg.wasm?url"
 
 export async function openDemo(
   file: File | Response | string | null | undefined,
@@ -63,10 +62,10 @@ export function parseDemo(
   if (!file) return Promise.resolve(null)
   return new Promise((resolve) => {
     const worker: Worker = new GoWorker()
-    worker.postMessage(["wasmParaseDemo", mainWasm, file])
+    worker.postMessage({ cmd: "wasmParaseDemo", mainWasm, payload: file })
     worker.onmessage = function ({ data: [cmd, ...args] }) {
       switch (cmd) {
-        case "wasmParaseDemo":
+        case "wasmParaseDemo:MatchEnd":
           resolve(args[0])
           worker.terminate()
           break
