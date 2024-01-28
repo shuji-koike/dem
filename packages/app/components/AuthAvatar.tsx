@@ -1,9 +1,20 @@
 import { css } from "@emotion/react"
-import { Alert, Avatar, Divider, Menu, MenuItem } from "@mui/material"
+import ContentCopy from "@mui/icons-material/ContentCopy"
 import {
-  getAuth,
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  Divider,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material"
+import {
   GoogleAuthProvider,
   OAuthProvider,
+  getAuth,
   signInWithPopup,
 } from "firebase/auth"
 import React from "react"
@@ -39,7 +50,34 @@ export const AuthAvatar: React.FC<{
               Sign out
             </MenuItem>
             <Divider />
-            <MenuItem disabled>{alert}</MenuItem>
+            <MenuItem disableRipple>
+              <Box
+                width={"20em"}
+                display={"flex"}
+                flexDirection={"column"}
+                gap={1}
+              >
+                <ButtonGroup size="small">
+                  <Button>
+                    <Typography fontSize={10}>user.id:{user.uid}</Typography>
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      navigator.clipboard.writeText(`user.id:${user.uid}`)
+                    }
+                  >
+                    <ContentCopy />
+                  </Button>
+                </ButtonGroup>
+                <Alert
+                  color="info"
+                  sx={{ minWidth: "20em", whiteSpace: "pre-wrap" }}
+                >
+                  When reporting an issue, please include your user ID to help
+                  me track down the problem.
+                </Alert>
+              </Box>
+            </MenuItem>
           </Menu>
         ) : (
           <Menu open anchorEl={anchorEl} onClose={close}>
@@ -61,18 +99,22 @@ export const AuthAvatar: React.FC<{
               Sign in with Steam (coming soon)
             </MenuItem>
             <Divider />
-            <MenuItem disabled>{alert}</MenuItem>
+            <MenuItem disabled>
+              <Alert
+                color="warning"
+                sx={{ minWidth: "20em", whiteSpace: "pre-wrap" }}
+              >
+                Currently, there is no additional functionality behind signing
+                in.
+                <br />
+                Although, when a problem or bug is found or reported, it may be
+                easier for me to track down the issue if you are signed in.
+                <br />I will <em>NOT</em> contact you unless you contact me
+                first.
+              </Alert>
+            </MenuItem>
           </Menu>
         ))}
     </>
   )
 }
-
-const alert = (
-  <Alert color="info" sx={{ width: "20em", whiteSpace: "pre-wrap" }}>
-    Currently, there is no additional functionality behind signing in. <br />
-    Although, when a problem or bug is found or reported, it may be easier for
-    me to track down the issue if you are signed in.
-    <br />I will <em>NOT</em> contact you unless you contact me first.
-  </Alert>
-)
