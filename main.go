@@ -82,7 +82,7 @@ func load(path string) (Match, error) {
 			}
 			defer file.Close()
 			match, err = Parse(file, func(m Match) {
-				log.Printf("load: rounds=%d", len(m.Rounds))
+				debug.Printf("load: rounds=%d", len(m.Rounds))
 			})
 			if err == nil && !*dryRun {
 				err = goutil.WriteJSON(path+*postfix, match)

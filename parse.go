@@ -91,7 +91,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			state.IsWarmupPeriod())
 		BombTime, err := state.Rules().BombTime()
 		if err != nil {
-			warn.Printf("%6d| RoundStart\tBombTime is unknown", parser.CurrentFrame())
+			debug.Printf("%6d| RoundStart\tBombTime\t%s", parser.CurrentFrame(), err.Error())
 			BombTime = time.Duration(40 * time.Second)
 		}
 		round = Round{
@@ -189,7 +189,8 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 		}
 		nade, ok := nades[int(e.Grenade.UniqueID())]
 		if !ok {
-			warn.Printf("%6d| SmokeExpired\tProjectile Not Found", parser.CurrentFrame())
+			// FIXME
+			debug.Printf("%6d| SmokeExpired\tNade Not Found", parser.CurrentFrame())
 		}
 		match.NadeEvents = append(match.NadeEvents, NadeEvent{
 			ID:         e.GrenadeEntityID,
@@ -268,7 +269,8 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 		}
 	})
 
-	parser.RegisterEventHandler(func(_ events.FrameDone) {
+	parser.RegisterEventHandler(func(e events.FrameDone) {
+		debug.Printf("%6d| FrameDone\t%p\n", parser.CurrentFrame(), e)
 		if !state.IsMatchStarted() || state.IsWarmupPeriod() {
 			return
 		}
