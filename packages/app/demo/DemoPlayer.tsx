@@ -67,6 +67,7 @@ export const DemoPlayer: React.FC<{
       Escape: () => setTick?.(undefined),
       q: () => setTick?.(undefined),
       x: () => console.info(frame),
+      p: () => console.info(match),
       " ": () => setState({ ...state, paused: !state.paused }),
     }
     dict[e.key]?.()

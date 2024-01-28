@@ -40,7 +40,8 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 	if err != nil {
 		return
 	}
-	mapMetadata := GetLegacyMapMetadata(header.MapName)
+	var MapName = header.MapName
+	mapMetadata := GetLegacyMapMetadata(MapName)
 	log.Printf("%6d| GetLegacyMapMetadata\t%#v", 0, mapMetadata)
 
 	normalize := func(point r3.Vector) r2.Point {
@@ -61,7 +62,9 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 
 	parser.RegisterNetMessageHandler(func(msg *msgs2.CSVCMsg_ServerInfo) {
 		log.Printf("%6d| CSVCMsg_ServerInfo\t%s", parser.CurrentFrame(), msg.GetMapName())
-		mapMetadata = GetLegacyMapMetadata(msg.GetMapName())
+		MapName = msg.GetMapName()
+		match.MapName = MapName
+		mapMetadata = GetLegacyMapMetadata(MapName)
 	})
 
 	parser.RegisterEventHandler(func(e events.MatchStart) {
@@ -80,7 +83,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			Version:    Version,
 			TickRate:   int(math.Round(parser.TickRate())),
 			FrameRate:  int(math.Round(header.FrameRate())),
-			MapName:    header.MapName,
+			MapName:    MapName,
 			Started:    true,
 			Rounds:     make([]Round, 0),
 			KillEvents: make([]KillEvent, 0),

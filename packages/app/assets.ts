@@ -9,6 +9,8 @@ import de_nuke_lower from "../../static/maps/de_nuke_lower_radar.png"
 import de_nuke from "../../static/maps/de_nuke_radar.png"
 import de_overpass from "../../static/maps/de_overpass_radar.png"
 import de_train from "../../static/maps/de_train_radar.png"
+// https://radar-overviews.csgo.saiko.tech/de_vertigo/970160341/radar.png
+import de_vertigo from "../../static/maps/de_vertigo_970160341.png"
 
 export const assetsMapRadar: Record<string, string> = {
   de_cache,
@@ -19,4 +21,5 @@ export const assetsMapRadar: Record<string, string> = {
   de_nuke,
   de_overpass,
   de_train,
+  de_vertigo,
 }
