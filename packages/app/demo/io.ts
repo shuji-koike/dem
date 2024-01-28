@@ -77,12 +77,14 @@ export function parseDemo(
           if (!Array.isArray(args[0])) return
           // eslint-disable-next-line no-case-declarations
           const [level, message] = args[0]
-          if (level === "error") console.error(message)
+          if (level === "debug") console.debug(message)
+          else if (level === "info") console.info(message)
           else if (level === "warn") console.warn(message)
-          else if (level === "debug") console.debug(message)
-          else console.info(message)
+          else console.error(level, message)
           onOutput?.((arr) => arr.concat(`[${level}] ${message}`))
           break
+        default:
+          console.error(args)
       }
     }
   })
