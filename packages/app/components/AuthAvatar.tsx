@@ -51,12 +51,7 @@ export const AuthAvatar: React.FC<{
             </MenuItem>
             <Divider />
             <MenuItem disableRipple>
-              <Box
-                width={"20em"}
-                display={"flex"}
-                flexDirection={"column"}
-                gap={1}
-              >
+              <Box width="20em" display="flex" flexDirection="column" gap={1}>
                 <ButtonGroup size="small">
                   <Button>
                     <Typography fontSize={10}>user.id:{user.uid}</Typography>

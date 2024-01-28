@@ -40,7 +40,7 @@ export const KillEventView: React.FC<{
           ></circle>
         </>
       )}
-      <circle cx={event.X} cy={event.Y} r={16} fill={"transparent"}></circle>
+      <circle cx={event.X} cy={event.Y} r={16} fill="transparent"></circle>
       <path
         d={[
           "M",
