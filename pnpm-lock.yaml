@@ -161,7 +161,7 @@ importers:
         version: 4.6.0(firebase-admin@12.0.0)
     devDependencies:
       '@shuji-koike/boilerplate':
-        specifier: ^1.24.0
+        specifier: ^1.24.1
         version: 1.24.1
       esbuild:
         specifier: ^0.20.0
@@ -9090,6 +9090,7 @@ packages:
 
   /jwa@2.0.0:
     resolution: {integrity: sha512-jrZ2Qx916EA+fq9cEAeCROWPTfCwi1IVHqT2tapuqLEVVDKFDENFw1oL+MwrTvH6msKxsd1YTDVw6uKEcsrLEA==}
+    requiresBuild: true
     dependencies:
       buffer-equal-constant-time: 1.0.1
       ecdsa-sig-formatter: 1.0.11
