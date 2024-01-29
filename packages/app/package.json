@@ -24,7 +24,8 @@
     "react-is": "^18.2.0",
     "react-router": "^6.21.3",
     "react-router-dom": "^6.21.3",
-    "wasm-gzip": "^2.0.3"
+    "wasm-gzip": "^2.0.3",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
