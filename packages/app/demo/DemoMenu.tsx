@@ -4,7 +4,7 @@ import React from "react"
 
 import { findPlayer, icon } from "."
 import { Filter } from "./DemoPlayer"
-import { PlayerCard } from "./PlayerCard"
+import { $PlayerCard } from "./PlayerCard"
 import { PlayerLabel } from "./PlayerLabel"
 import { useSteamUsers } from "../hooks"
 
@@ -45,34 +45,24 @@ export const DemoMenu: React.FC<{
           <Tab value={3} label="Nades" />
         </Tabs>
       </nav>
-      <div>
+      <Box display="flex" flexDirection="column" gap={1}>
         {frame?.Players.filter((e) => e.Team === 3 && filter.players?.(e)).map(
           (e) => (
-            <PlayerCard
-              key={e.ID}
-              player={e}
-              steamUser={steamUsers[e.ID]}
-              css={css`
-                margin: 8px 0;
-              `}
-            />
+            <div key={e.ID}>
+              <$PlayerCard player={e} steamUser={steamUsers[e.ID]} />
+            </div>
           ),
         )}
-      </div>
-      <div>
+      </Box>
+      <Box display="flex" flexDirection="column" gap={1}>
         {frame?.Players.filter((e) => e.Team === 2 && filter.players?.(e)).map(
           (e) => (
-            <PlayerCard
-              key={e.ID}
-              player={e}
-              steamUser={steamUsers[e.ID]}
-              css={css`
-                margin: 8px 0;
-              `}
-            />
+            <div key={e.ID}>
+              <$PlayerCard player={e} steamUser={steamUsers[e.ID]} />
+            </div>
           ),
         )}
-      </div>
+      </Box>
       <Box
         display="flex"
         flexDirection="column"

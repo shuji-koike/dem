@@ -6,11 +6,11 @@ import { teamColor, icon, armorIcon, teamColorVariantMap } from "."
 import { SteamUser } from "../hooks"
 
 export const PlayerCard: React.FC<{
-  player: Player
+  player: Pick<Player, (typeof keys)[number]>
   steamUser?: SteamUser
-}> = React.memo(function PlayerCard({ player, steamUser, ...props }) {
+}> = ({ player, steamUser }) => {
   return (
-    <Box {...props} display="flex" alignItems="center" gap={1}>
+    <Box display="flex" alignItems="center" gap={1}>
       <a href={steamUser?.profileurl} target="_blank">
         <Avatar variant="rounded" src={steamUser?.avatar} />
       </a>
@@ -60,7 +60,7 @@ export const PlayerCard: React.FC<{
           value={player.Hp}
         />
         <Box display="flex" gap={3 / 4} marginTop={1 / 2} minHeight="16px">
-          <img src={armorIcon(player)} />
+          <img src={armorIcon(player.State)} />
           {player.Weapons?.filter((e) => e !== 405).map((e, i) => (
             <img
               key={i}
@@ -75,4 +75,38 @@ export const PlayerCard: React.FC<{
       </Box>
     </Box>
   )
-})
+}
+
+export const $PlayerCard = React.memo(
+  PlayerCard,
+  (
+    prev: Readonly<React.ComponentProps<typeof PlayerCard>>,
+    next: Readonly<React.ComponentProps<typeof PlayerCard>>,
+  ) => {
+    return keys.reduce(
+      (acc, key) =>
+        acc &&
+        (Array.isArray(prev.player[key])
+          ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            prev.player[key]?.join()
+          : prev.player[key]) ===
+          (Array.isArray(next.player[key])
+            ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              next.player[key]?.join()
+            : next.player[key]),
+      true,
+    )
+  },
+)
+
+const keys = [
+  "Hp",
+  "Money",
+  "Name",
+  "State",
+  "Team",
+  "Weapon",
+  "Weapons",
+] as const satisfies (keyof Player)[]

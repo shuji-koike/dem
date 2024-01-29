@@ -252,10 +252,10 @@ export function icon(name: string | number): string {
   )
 }
 
-export function armorIcon(player: Player): string {
+export function armorIcon(State: Player["State"]): string {
   return (
-    (player.State & PlayerState.HasHelmet && icon(403)) ||
-    (player.State & PlayerState.HasArmor && icon(402)) ||
+    (State & PlayerState.HasHelmet && icon(403)) ||
+    (State & PlayerState.HasArmor && icon(402)) ||
     emptyImage
   )
 }
