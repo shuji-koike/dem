@@ -1,4 +1,3 @@
-import { css } from "@emotion/react"
 import ContentCopy from "@mui/icons-material/ContentCopy"
 import {
   Alert,
@@ -32,11 +31,7 @@ export const AuthAvatar: React.FC<{
       <Avatar
         onClick={(e) => setAnchorEl(e.currentTarget)}
         src={user?.photoURL ?? undefined}
-        css={css`
-          cursor: pointer;
-          width: ${diameter}px;
-          height: ${diameter}px;
-        `}
+        sx={{ cursor: "pointer", width: diameter, height: diameter }}
       />
       {anchorEl &&
         (user ? (
