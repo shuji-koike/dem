@@ -10,7 +10,7 @@ export const KillsView: React.FC<{
   const [selected, setSelected] = React.useState<KillEvent | null>(null)
   return (
     <section>
-      <MapView match={match}>
+      <MapView>
         {match.KillEvents?.map((e, i) => (
           <KillEventView
             key={i}

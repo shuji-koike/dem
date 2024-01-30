@@ -11,7 +11,7 @@ export const NadesView: React.FC<{
   const [selected, setSelected] = React.useState<NadeEvent | null>(null)
   return (
     <section>
-      <MapView match={match}>
+      <MapView>
         {match.NadeEvents?.map((e, i) => (
           <NadeEventView
             key={i}

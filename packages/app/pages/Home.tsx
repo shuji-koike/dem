@@ -2,17 +2,17 @@ import { getAnalytics, logEvent } from "firebase/analytics"
 import React from "react"
 import { useLocation, useNavigate } from "react-router"
 
-import { AppContext } from "../app"
 import { BrowserAlert } from "../components/BrowserAlert"
 import { DemoFilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
 import { isValidFile, openDemo } from "../demo/io"
 import { useDrragAndDropFile } from "../hooks/useDrragAndDropFile"
+import { useMatch } from "../store/useMatch"
 
 export const Home: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const { match, setMatch } = React.useContext(AppContext)
+  const { match, setMatch } = useMatch()
   useDrragAndDropFile(async (files) => {
     if (isValidFile(files[0]))
       setMatch(await openDemo(files[0], console.debug, setMatch))
@@ -21,7 +21,7 @@ export const Home: React.FC = () => {
     if (match) setMatch(undefined)
   }, [location.pathname])
   return match && match.Rounds?.length ? (
-    <MatchView match={match} />
+    <MatchView />
   ) : (
     <article>
       <p>Drag and drop a ".dem" file into this window.</p>

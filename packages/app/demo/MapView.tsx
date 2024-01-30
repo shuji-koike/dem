@@ -1,11 +1,12 @@
 import React from "react"
 
 import { assetsMapRadar } from "../assets"
+import { useMatch } from "../store/useMatch"
 
 export const MapView: React.FC<{
-  match: Match
   children?: React.ReactNode
-}> = ({ match, children }) => {
+}> = ({ children }) => {
+  const { match } = useMatch()
   return (
     <svg viewBox="0 0 1024 1024">
       <filter id="grayscale">
@@ -19,7 +20,7 @@ export const MapView: React.FC<{
         y={0}
         width={1024}
         height={1024}
-        href={assetsMapRadar[match.MapName]}
+        href={match ? assetsMapRadar[match.MapName] : undefined}
         filter="url(#grayscale)"
       ></image>
       {children}

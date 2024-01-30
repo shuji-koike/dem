@@ -7,15 +7,13 @@ import { Filter } from "./DemoPlayer"
 import { $PlayerCard } from "./PlayerCard"
 import { PlayerLabel } from "./PlayerLabel"
 import { useSteamUsers } from "../hooks"
+import { useMatch } from "../store/useMatch"
 
 export const DemoMenu: React.FC<{
-  match: Match
-  round?: Round
-  frame?: Frame
-  setTick?: (tick: number | undefined) => void
   filter: Filter
   setFilter: (e: Filter) => void
-}> = ({ match, round, frame, setTick, filter, setFilter }) => {
+}> = ({ filter, setFilter }) => {
+  const { match, round, frame, setTick } = useMatch()
   const steamUsers = useSteamUsers(frame?.Players.map((e) => e.ID))
   const [tab, setTab] = React.useState(1)
   React.useEffect(() => {
@@ -71,7 +69,7 @@ export const DemoMenu: React.FC<{
         alignItems="flex-end"
         paddingY={1}
       >
-        {match.KillEvents.filter((e) => filter.kills?.(e)).map((e, i) => (
+        {match?.KillEvents.filter((e) => filter.kills?.(e)).map((e, i) => (
           <Box
             key={i}
             display="flex"
@@ -103,7 +101,7 @@ export const DemoMenu: React.FC<{
         alignItems="flex-end"
         paddingY={1}
       >
-        {match.NadeEvents.filter((e) => filter.nades?.(e)).map((e, i) => (
+        {match?.NadeEvents.filter((e) => filter.nades?.(e)).map((e, i) => (
           <Box
             key={i}
             display="flex"

@@ -11,12 +11,7 @@ export default {
 export const Loading: Story = () => {
   return (
     <Box display="flex" justifyContent="space-between" alignItems="center">
-      <DemoNav
-        match={{
-          Rounds: [],
-          Ended: false,
-        }}
-      />
+      <DemoNav />
     </Box>
   )
 }

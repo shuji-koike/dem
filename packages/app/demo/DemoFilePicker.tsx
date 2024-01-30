@@ -3,7 +3,7 @@ import React from "react"
 import { openDemo, isValidFile } from "./io"
 
 export const DemoFilePicker: React.FC<{
-  setMatch?: React.Dispatch<React.SetStateAction<Match | null | undefined>>
+  setMatch?: React.Dispatch<Match | null | undefined>
   onLoad?: (match: Match | null, name: string) => void
 }> = ({ setMatch, onLoad }) => {
   const [output, setOutput] = React.useState<string[]>([])

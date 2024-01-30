@@ -1,13 +1,14 @@
 import React from "react"
 
 import { DemoPlayer } from "./DemoPlayer"
+import { useMatch } from "../store/useMatch"
 
-export const MatchView: React.FC<{ match?: Match | null }> = ({ match }) => {
-  const [tick, setTick] = React.useState<number | undefined>(0)
+export const MatchView: React.FC = () => {
+  const { match } = useMatch()
   if (!match) return <></>
   return (
     <>
-      <DemoPlayer match={match} tick={tick} setTick={setTick} />
+      <DemoPlayer />
     </>
   )
 }

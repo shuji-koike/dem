@@ -113,17 +113,17 @@ export function pointsToString(arr: Point[]): string {
 }
 
 export function findRound(
-  match: Match,
+  match: Match | null | undefined,
   tick: number | undefined,
 ): Round | undefined {
   if (typeof tick !== "number") return
-  return match.Rounds?.find(
+  return match?.Rounds?.find(
     (e) => (e.Frames[e.Frames.length - 1]?.Tick ?? 0) > tick,
   )
 }
 
 export function findFrame(
-  match: Match,
+  match: Match | null | undefined,
   tick: number | undefined,
 ): Frame | undefined {
   if (typeof tick !== "number") return

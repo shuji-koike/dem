@@ -14,17 +14,15 @@ import {
   labelFormat,
   teamColor,
 } from "."
+import { useMatch } from "../store/useMatch"
 
-export const DemoSlider: React.FC<{
-  match: Match
-  round: Round
-  frame: Frame
-  setFrame: (e: Frame | undefined) => void
-}> = ({ match, round, frame, setFrame }) => {
+export const DemoSlider: React.FC = () => {
+  const { match, round, frame, setFrame } = useMatch()
   const theme = useTheme()
-  const toTime = frameToTime.bind(undefined, match, round)
-  const marks = React.useMemo(
-    () => [
+  const toTime = (frame: Frame) =>
+    (match && round && frameToTime(match, round, frame)) ?? 0
+  function makeMarks(match: Match, round: Round) {
+    return [
       ...round.Frames.filter((e) => e.Bomb.State & BombState.Defused)
         .slice(0, 1)
         .map((e) => ({
@@ -61,19 +59,24 @@ export const DemoSlider: React.FC<{
         value: findIndex(round.Frames, (f) => f.Tick >= e.Tick),
         label: <Icon color={teamColor(e.Team)} icon={faTimes} />,
       })),
-    ],
+    ]
+  }
+  const marks = React.useMemo(
+    () => (match && round && frame ? makeMarks(match, round) : []),
     [match, round],
   )
   return (
     <Slider
-      value={round.Frames.indexOf(frame)}
-      max={round.Frames.length - 1}
+      value={frame ? round?.Frames.indexOf(frame) : 0}
+      max={round ? round.Frames.length - 1 : 0}
       onChange={(_, value) => {
-        if (typeof value === "number") setFrame(round.Frames[value])
+        if (typeof value === "number") setFrame(round?.Frames[value])
       }}
       marks={uniqBy(marks, "value")}
       valueLabelDisplay="auto"
-      valueLabelFormat={(e) => labelFormat(match, round, round.Frames[e])}
+      valueLabelFormat={(e) =>
+        match && round ? labelFormat(match, round, round.Frames[e]) : ""
+      }
       size="small"
     />
   )

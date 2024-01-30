@@ -1,7 +1,6 @@
 import { css } from "@emotion/react"
 import React from "react"
 
-import { findRound, findFrame } from "."
 import { DemoMenu } from "./DemoMenu"
 import { DemoNav } from "./DemoNav"
 import { DemoSlider } from "./DemoSlider"
@@ -9,22 +8,22 @@ import { FrameView, TrailView } from "./FrameView"
 import { MapEventView } from "./MapEventView"
 import { MapView } from "./MapView"
 import { HeaderSlot } from "../components/layout"
+import { useMatch } from "../store/useMatch"
 
-export const DemoPlayer: React.FC<{
-  match: Match
-  tick?: number
-  setTick?: (tick: number | undefined) => void
-}> = ({ match, tick, setTick }) => {
+export const DemoPlayer: React.FC = () => {
+  const {
+    match,
+    round,
+    frame,
+    currentRound,
+    currentFrame,
+    setRound,
+    setFrame,
+    setTick,
+  } = useMatch()
   const [state, setState] = React.useState({ paused: true, wheel: true })
-  const [round, setRound] = React.useState(findRound(match, tick))
-  const [frame, setFrame] = React.useState(findFrame(match, tick))
   const [filter, setFilter] = React.useState<Filter>({})
   const ref = React.createRef<HTMLFormElement>()
-  const currentRound = round?.Round || 0
-  const currentFrame = frame ? round?.Frames.indexOf(frame) || 0 : 0
-  React.useEffect(() => {
-    if (frame && !round?.Frames.includes(frame)) setFrame(round?.Frames[0])
-  }, [round])
   React.useEffect(() => ref.current?.focus(), [ref.current])
   React.useEffect(() => {
     return clearTimeout.bind(
@@ -44,20 +43,12 @@ export const DemoPlayer: React.FC<{
     if (frame) setFrame(frame)
   }
   function setCurrentRound(n: number) {
-    const round = match.Rounds?.find((e) => e.Round === n)
+    const round = match?.Rounds?.find((e) => e.Round === n)
     if (round) {
       setFrame(round.Frames[0])
       setRound(round)
     }
   }
-  const changeTick = React.useCallback(
-    function changeTick({ Tick }: { Tick: number | undefined }) {
-      setRound(findRound(match, Tick))
-      setFrame(findFrame(match, Tick))
-      setTick?.(Tick)
-    },
-    [match, setTick],
-  )
   function onKeyDown(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {
       ArrowUp: () => setCurrentRound(currentRound - 1),
@@ -82,6 +73,7 @@ export const DemoPlayer: React.FC<{
       e.stopPropagation()
     }
   }
+  if (!match) return null
   return (
     <form
       ref={ref}
@@ -93,39 +85,20 @@ export const DemoPlayer: React.FC<{
     >
       <div css={backdrop} />
       <HeaderSlot>
-        <DemoNav match={match} round={round} onChange={setRound} />
+        <DemoNav />
       </HeaderSlot>
       <article>
-        <MapView match={match}>
-          <TrailView round={round} />
-          <FrameView frame={frame} />
-          <MapEventView
-            match={match}
-            round={round}
-            filter={filter}
-            changeTick={changeTick}
-          />
+        <MapView>
+          <TrailView />
+          <FrameView />
+          <MapEventView filter={filter} />
         </MapView>
       </article>
       <aside>
-        <DemoMenu
-          match={match}
-          round={round}
-          frame={frame}
-          setTick={(Tick) => changeTick({ Tick })}
-          filter={filter}
-          setFilter={setFilter}
-        />
+        <DemoMenu filter={filter} setFilter={setFilter} />
       </aside>
       <footer>
-        {round && frame && (
-          <DemoSlider
-            match={match}
-            round={round}
-            frame={frame}
-            setFrame={setFrame}
-          />
-        )}
+        {round && frame && <DemoSlider />}
         <pre>
           index:{currentFrame}, frame:{frame?.Frame}, tick:{frame?.Tick}
         </pre>

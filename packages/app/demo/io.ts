@@ -15,7 +15,7 @@ import GoWorker from "/static/worker.js?worker"
 export async function openDemo(
   file: File | Response | string | null | undefined,
   onOutput?: React.Dispatch<React.SetStateAction<string[]>>,
-  onRoundEnd?: React.Dispatch<React.SetStateAction<Match | null | undefined>>,
+  onRoundEnd?: React.Dispatch<Match | null | undefined>,
 ): Promise<Match | null> {
   if (!file) return null
   if (typeof file === "string") {
@@ -57,7 +57,7 @@ async function parseJson(
 export function parseDemo(
   file: File | null,
   onOutput?: React.Dispatch<React.SetStateAction<string[]>>,
-  onRoundEnd?: React.Dispatch<React.SetStateAction<Match | null | undefined>>,
+  onRoundEnd?: React.Dispatch<Match | null | undefined>,
 ): Promise<Match | null> {
   if (!file) return Promise.resolve(null)
   return new Promise((resolve) => {

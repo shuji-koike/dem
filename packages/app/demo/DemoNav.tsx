@@ -4,30 +4,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 
 import { teamColor } from "."
+import { useMatch } from "../store/useMatch"
 
-export const DemoNav: React.FC<{
-  match: Pick<Match, "Rounds" | "Ended">
-  round?: Round
-  onChange?: (round: Round) => void
-}> = ({ match, round, onChange }) => {
+export const DemoNav: React.FC = () => {
+  const { match, round, setRound } = useMatch()
   return (
     <>
-      {match.Rounds?.map((e) => (
+      {match?.Rounds?.map((e) => (
         <DemoNavItem
           key={e.Tick}
           active={e.Round === round?.Round}
           color={teamColor(e.Winner)}
-          onClick={() => onChange?.(e)}
+          onClick={() => setRound(e)}
         >
           {e.Round + 1}
         </DemoNavItem>
       ))}
-      {!match.Ended && (
+      {!match?.Ended && (
         <>
           <DemoNavItem>
             <FontAwesomeIcon icon={faSyncAlt} size="sm" color="#444" spin />
           </DemoNavItem>
-          {[...Array(Math.max(0, 16 - (match.Rounds?.length ?? 0)))].map(
+          {[...Array(Math.max(0, 16 - (match?.Rounds?.length ?? 0)))].map(
             (_, i) => (
               <DemoNavItem key={i}>
                 <FontAwesomeIcon icon={faSyncAlt} size="xs" color="#333" />

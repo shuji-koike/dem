@@ -11,8 +11,10 @@ import {
   teamColor,
   icon,
 } from "."
+import { useMatch } from "../store/useMatch"
 
-export const FrameView: React.FC<{ frame?: Frame }> = ({ frame }) => {
+export const FrameView: React.FC = () => {
+  const { frame } = useMatch()
   return frame ? (
     <>
       <MolotovView frame={frame}></MolotovView>
@@ -91,7 +93,8 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
   )
 }
 
-export const TrailView: React.FC<{ round?: Round }> = ({ round }) => {
+export const TrailView: React.FC = () => {
+  const { round } = useMatch()
   const ref = React.useRef<HTMLCanvasElement>(null)
   React.useEffect(() => {
     const context = ref.current?.getContext?.("2d")
