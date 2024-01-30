@@ -136,7 +136,7 @@ const style = css`
     position: fixed;
     top: 72px;
     right: 0px;
-    width: 250px;
+    width: 300px;
     padding: 0 8px;
     max-height: calc(100vh - 140px); // FIXME
     overflow-y: auto;
