@@ -323,6 +323,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 					player.Weapon = p.ActiveWeapon().Type
 				}
 				for _, w := range p.Weapons() {
+					// FIXME astralis-vs-natus-vincere-m2-inferno.dem round 7, electronic gets 2 AKs
 					player.Weapons = append(player.Weapons, w.Type)
 				}
 				if p.HasDefuseKit() {
