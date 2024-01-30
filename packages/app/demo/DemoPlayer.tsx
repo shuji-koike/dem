@@ -65,12 +65,15 @@ export const DemoPlayer: React.FC<{
       ArrowLeft: () => setCurrentFrame(currentFrame - 1),
       ArrowRight: () => setCurrentFrame(currentFrame + 1),
       Escape: () => setTick?.(undefined),
-      q: () => setTick?.(undefined),
-      x: () => console.info(frame),
       p: () => console.info(match),
+      q: () => setTick?.(undefined),
+      r: () => console.info(round),
+      x: () => console.info(frame),
       " ": () => setState({ ...state, paused: !state.paused }),
     }
-    dict[e.key]?.()
+    const keyRound = Number(e.key) - 1 + (e.key ? 0 : 10) + (e.ctrlKey ? 10 : 0)
+    if (Number.isInteger(Number(e.key))) setCurrentRound(keyRound)
+    else dict[e.key]?.()
   }
   function onWheel(e: React.WheelEvent) {
     if (state.wheel && Math.abs(e.deltaX) < 10) {
