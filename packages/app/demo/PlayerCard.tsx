@@ -83,6 +83,7 @@ export const $PlayerCard = React.memo(
     prev: Readonly<React.ComponentProps<typeof PlayerCard>>,
     next: Readonly<React.ComponentProps<typeof PlayerCard>>,
   ) => {
+    if (prev.steamUser?.avatar !== next.steamUser?.avatar) return false
     return keys.reduce(
       (acc, key) =>
         acc &&
