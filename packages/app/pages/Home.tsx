@@ -6,14 +6,14 @@ import { BrowserAlert } from "../components/BrowserAlert"
 import { DemoFilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
 import { isValidFile, openDemo } from "../demo/io"
-import { useDrragAndDropFile } from "../hooks/useDrragAndDropFile"
+import { useDropFile } from "../hooks/useDropFile"
 import { useMatch } from "../hooks/useMatch"
 
 export const Home: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const { match, setMatch } = useMatch()
-  useDrragAndDropFile(async (files) => {
+  useDropFile(async (files) => {
     if (isValidFile(files[0])) {
       logEvent(getAnalytics(), "openDemo", { name: files[0].name })
       setMatch(await openDemo(files[0], console.debug, setMatch))

@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-export function useDrragAndDropFile(callback?: (files: FileList) => void) {
+export function useDropFile(callback?: (files: FileList) => void) {
   function onDrop(event: DragEvent) {
     if (event.type === "drop" && event.dataTransfer?.files?.length) {
       callback?.(event.dataTransfer.files)
