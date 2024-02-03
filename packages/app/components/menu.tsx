@@ -1,6 +1,4 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core"
-import { faFile, faHome } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Home, StorageOutlined } from "@mui/icons-material"
 import {
   Dialog,
   List,
@@ -11,7 +9,6 @@ import {
 import React from "react"
 import { NavLink } from "react-router-dom"
 
-import { LayoutContext } from "./layout"
 import { DemoTabView } from "../demo/DemoTabView"
 import { useToggle } from "../hooks"
 import { useMatch } from "../hooks/useMatch"
@@ -22,7 +19,12 @@ export const MatchMenu: React.FC = () => {
   const open = useToggle()
   return (
     <>
-      <MenuButton icon={faHome} label="Score" />
+      <ListItemButton>
+        <ListItemIcon>
+          <Home />
+        </ListItemIcon>
+        <ListItemText primary="Score" />
+      </ListItemButton>
       <Dialog open={open.state}>
         {open.state && match && <DemoTabView match={match} />}
       </Dialog>
@@ -30,45 +32,21 @@ export const MatchMenu: React.FC = () => {
   )
 }
 
-const MenuLink: React.FC<{
-  icon: IconProp
-  label?: string
-  divider?: boolean
-  to: string
-}> = ({ icon, label, divider, ...props }) => {
-  const { showDrawer } = React.useContext(LayoutContext)
-  return (
-    <ListItemButton divider={divider} component={NavLink} {...props}>
-      <ListItemIcon>
-        <FontAwesomeIcon icon={icon} />
-      </ListItemIcon>
-      {showDrawer && <ListItemText primary={label} />}
-    </ListItemButton>
-  )
-}
-
-const MenuButton: React.FC<
-  React.ComponentProps<typeof ListItemButton> & {
-    icon: IconProp
-    label?: string
-  }
-> = ({ icon, label, ...props }) => {
-  const { showDrawer } = React.useContext(LayoutContext)
-  return (
-    <ListItemButton {...props}>
-      <ListItemIcon>
-        <FontAwesomeIcon icon={icon} />
-      </ListItemIcon>
-      {showDrawer && <ListItemText primary={label} />}
-    </ListItemButton>
-  )
-}
-
 export const menu = (
   <List>
-    <MenuLink icon={faHome} label="Home" to="/" />
+    <ListItemButton component={NavLink} to="/">
+      <ListItemIcon>
+        <Home />
+      </ListItemIcon>
+      <ListItemText primary="Home" />
+    </ListItemButton>
     {import.meta.env.DEV && (
-      <MenuLink icon={faFile} label="Files" to="/files" divider />
+      <ListItemButton component={NavLink} to="/files" divider>
+        <ListItemIcon>
+          <StorageOutlined />
+        </ListItemIcon>
+        <ListItemText primary="Files" />
+      </ListItemButton>
     )}
   </List>
 )
