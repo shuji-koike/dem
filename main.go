@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"errors"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -13,9 +14,10 @@ import (
 	"strings"
 	"sync"
 
-	"golang.org/x/sync/singleflight"
-
+	"github.com/akiver/cs-demo-analyzer/pkg/api"
+	"github.com/akiver/cs-demo-analyzer/pkg/api/constants"
 	"github.com/shuji-koike/goutil"
+	"golang.org/x/sync/singleflight"
 )
 
 var dryRun = flag.Bool("dry", false, "dry run")
@@ -26,6 +28,7 @@ var dir = flag.String("dir", "/srv/app", "demo dir")
 var postfix = flag.String("postfix", ".json.gz", "postfix for cache files")
 var useMemCache = flag.Bool("useMemCache", false, "use memory cache")
 var useFileCache = flag.Bool("useFileCache", false, "use file cache")
+var analyzeDemo = flag.Bool("analyzeDemo", false, "use akiver/cs-demo-analyzer")
 
 var group singleflight.Group
 var cache = sync.Map{}
@@ -43,6 +46,8 @@ func main() {
 		} else {
 			Parse(bytes.NewReader(buf), nil)
 		}
+	} else if *analyzeDemo {
+		analyzeAndExportDemo(os.Args[2])
 	} else {
 		for _, path := range os.Args[1:] {
 			if !strings.HasPrefix(path, "-") {
@@ -94,4 +99,17 @@ func load(path string) (Match, error) {
 		return match, err
 	})
 	return v.(Match), err
+}
+
+func analyzeAndExportDemo(demoPath string) {
+	err := api.AnalyzeAndExportDemo(demoPath, "", api.AnalyzeAndExportDemoOptions{
+		IncludePositions: true,
+		Source:           constants.DemoSourceValve,
+		Format:           constants.ExportFormatJSON,
+		MinifyJSON:       false,
+	})
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }
