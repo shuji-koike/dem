@@ -16,7 +16,7 @@ import GoWorker from "/static/worker.js?worker"
 
 export async function openDemo(
   file: File | Response | string | null | undefined,
-  onOutput?: React.Dispatch<React.SetStateAction<string[]>>,
+  setOutput?: React.Dispatch<string>,
   onRoundEnd?: React.Dispatch<Match | null | undefined>,
 ): Promise<Match | null> {
   if (!file) return null
@@ -31,7 +31,7 @@ export async function openDemo(
   if (file instanceof File && file.name.endsWith(".json.gz"))
     return parseJson(file)
   if (file instanceof File && file.name.endsWith(".dem"))
-    return parseDemo(file, onOutput, onRoundEnd)
+    return parseDemo(file, setOutput, onRoundEnd)
   if (file instanceof File) throw new Error("unsupported file type!")
   const never: never = file
   throw new Error(never)
@@ -58,7 +58,7 @@ async function parseJson(
 
 export function parseDemo(
   file: File | null,
-  onOutput?: React.Dispatch<React.SetStateAction<string[]>>,
+  setOutput?: React.Dispatch<string>,
   onRoundEnd?: React.Dispatch<Match | null | undefined>,
 ): Promise<Match | null> {
   if (!file) return Promise.resolve(null)
@@ -83,7 +83,7 @@ export function parseDemo(
           else if (level === "info") console.info(message)
           else if (level === "warn") console.warn(message)
           else console.error(level, message)
-          onOutput?.((arr) => arr.concat(`[${level}] ${message}`))
+          setOutput?.(`[${level}] ${message}`)
           break
         default:
           console.error(args)
