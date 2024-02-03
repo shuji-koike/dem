@@ -14,8 +14,10 @@ export const Home: React.FC = () => {
   const navigate = useNavigate()
   const { match, setMatch } = useMatch()
   useDrragAndDropFile(async (files) => {
-    if (isValidFile(files[0]))
+    if (isValidFile(files[0])) {
+      logEvent(getAnalytics(), "openDemo", { name: files[0].name })
       setMatch(await openDemo(files[0], console.debug, setMatch))
+    }
   })
   React.useEffect(() => {
     if (match) setMatch(undefined)
@@ -26,10 +28,7 @@ export const Home: React.FC = () => {
     <article>
       <p>Drag and drop a ".dem" file into this window.</p>
       <p>Or click the button below and select a ".dem" file.</p>
-      <DemoFilePicker
-        setMatch={setMatch}
-        onLoad={() => logEvent(getAnalytics(), "DemoFilePicker:onLoad")}
-      />
+      <DemoFilePicker />
       <BrowserAlert />
       {import.meta.env.DEV && (
         <nav className="debug">

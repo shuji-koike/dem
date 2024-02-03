@@ -6,6 +6,8 @@ import {
   uploadBytes,
   uploadString,
 } from "firebase/storage"
+import { Archive } from "libarchive.js"
+import archiveWorker from "libarchive.js/dist/worker-bundle.js?url"
 import initGzip, { compress, decompress } from "wasm-gzip"
 import gzipWasm from "wasm-gzip/wasm_gzip_bg.wasm?url"
 
@@ -120,8 +122,17 @@ function toName(file: File | string) {
   return encodeURIComponent(typeof file === "string" ? file : file.name)
 }
 
+export function isFile(file: unknown): file is File {
+  return file instanceof File
+}
+
 export function isValidFile(file: unknown): file is File {
   if (file instanceof File) return /\.(dem|json)(\.gz)?$/i.test(file.name)
+  return false
+}
+
+export function isArchiveFile(file: unknown): file is File & { __rar: never } {
+  if (file instanceof File) return /\.(rar)$/i.test(file.name)
   return false
 }
 
@@ -138,4 +149,19 @@ export async function gzip(input: string): Promise<Uint8Array> {
 export async function gunzip(input: Uint8Array): Promise<Uint8Array> {
   await initGzip(await fetch(gzipWasm))
   return decompress(input) ?? Promise.reject()
+}
+
+export async function rarList(file: File & { __rar: never }): Promise<File[]> {
+  Archive.init({ workerUrl: archiveWorker })
+  const archive = await Archive.open(file)
+  if (await archive.hasEncryptedData()) {
+    // eslint-disable-next-line no-alert
+    alert(`This file is password protected!
+Please send a feature request to add support for password protected files.`)
+    return []
+  }
+  // FIXME: use getFilesArray() instead of extractFiles()
+  const files = Object.values(await archive.extractFiles()).filter(isFile)
+  await archive.close()
+  return files
 }
