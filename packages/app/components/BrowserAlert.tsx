@@ -12,11 +12,13 @@ export const BrowserAlert: React.FC = () => {
   return (
     <>
       {isChrome || isChromium || (
-        <Alert color="error">Only Chrome based browsers are supported!</Alert>
-      )}
-      {(isSafari || isMobileSafari || isFirefox) && (
-        <Alert color="warning">
-          Most things should work in Safari, Firefox but not well tested.
+        <Alert color="error">
+          Only Chrome based browsers are supported!
+          {(isSafari || isMobileSafari || isFirefox) && (
+            <p>
+              Most things should work in Safari, Firefox but not well tested.
+            </p>
+          )}
         </Alert>
       )}
     </>

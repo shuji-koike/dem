@@ -1,10 +1,10 @@
-import { Alert, Box } from "@mui/material"
+import { css } from "@emotion/react"
 import { getAnalytics, logEvent } from "firebase/analytics"
 import React from "react"
-import { useLocation, useNavigate } from "react-router"
+import { useLocation } from "react-router"
 
 import { BrowserAlert } from "../components/BrowserAlert"
-import { DemoFilePicker } from "../demo/DemoFilePicker"
+import { FilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
 import { openDemo } from "../demo/io"
 import { useDropFile } from "../hooks/useDropFile"
@@ -13,9 +13,8 @@ import { useMatch } from "../hooks/useMatch"
 
 export const Home: React.FC = () => {
   const location = useLocation()
-  const navigate = useNavigate()
   const { match, setMatch } = useMatch()
-  const { file, setFiles, output, setOutput } = useFiles()
+  const { file, setFiles, setOutput } = useFiles()
   useDropFile(setFiles)
   React.useEffect(() => {
     if (!file) return
@@ -28,30 +27,15 @@ export const Home: React.FC = () => {
   return match?.Rounds?.length ? (
     <MatchView />
   ) : (
-    <article>
+    <article css={style}>
       <BrowserAlert />
-      <Alert>
-        <Box marginBottom={2}>
-          Drag and drop a ".dem" file into this window.
-          <br /> Or click the button below and select a ".dem" file.
-        </Box>
-        <DemoFilePicker />
-      </Alert>
-      {import.meta.env.DEV && (
-        <nav className="debug">
-          <button onClick={() => navigate("/dem/sample")}>
-            Open a sample File
-          </button>
-        </nav>
-      )}
-      {output.length > 0 && (
-        <pre css={{ fontSize: 12, color: "darkgreen" }}>
-          <p>Parsing DEM file {file?.name}</p>
-          {output.map((e, i) => (
-            <p key={i}>{e}</p>
-          ))}
-        </pre>
-      )}
+      <FilePicker />
     </article>
   )
 }
+
+const style = css`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`

@@ -10,6 +10,7 @@ html {
 p {
   margin: 0.5rem 0;
 }
+pre,
 pre p {
   margin: 0;
 }
