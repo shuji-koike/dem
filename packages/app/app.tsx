@@ -6,10 +6,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Layout } from "./components/layout"
 import { menu } from "./components/menu"
 import { AnalyticsProvider } from "./firebase"
-import { DemoList } from "./pages/DemoList"
-import { DemoPage } from "./pages/DemoPage"
-import { Home } from "./pages/Home"
 import { theme } from "./theme"
+
+const Home = React.lazy(() => import("./pages/Home"))
+const DemoPage = React.lazy(() => import("./pages/DemoPage"))
+const DemoList = React.lazy(() => import("./pages/DemoList"))
 
 export default function App() {
   return (

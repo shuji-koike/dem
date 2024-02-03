@@ -11,7 +11,7 @@ import { useDropFile } from "../hooks/useDropFile"
 import { useFiles } from "../hooks/useFiles"
 import { useMatch } from "../hooks/useMatch"
 
-export const Home: React.FC = () => {
+export default function Home() {
   const location = useLocation()
   const { match, setMatch } = useMatch()
   const { file, setFiles, setOutput } = useFiles()

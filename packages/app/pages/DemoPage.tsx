@@ -6,14 +6,14 @@ import { MatchView } from "../demo/MatchView"
 import { openDemo } from "../demo/io"
 import { useMatch } from "../hooks/useMatch"
 
-export const DemoPage: React.FC<{ path?: string }> = ({ path }) => {
+export default function DemoPage() {
   const { "*": paramPath } = useParams<"*">()
   const { match, setMatch } = useMatch()
   React.useEffect(() => {
     if (!match)
-      void Promise.resolve(paramPath === "sample" ? sample : path || paramPath)
+      void Promise.resolve(paramPath === "sample" ? sample : paramPath)
         .then(openDemo)
         .then(setMatch)
-  }, [path, paramPath])
+  }, [paramPath])
   return <MatchView />
 }

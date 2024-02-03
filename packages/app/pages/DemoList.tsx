@@ -13,7 +13,7 @@ import { HeaderSlot } from "../components/layout"
 import { storageList } from "../demo/io"
 import { useAuth } from "../hooks"
 
-export const DemoList: React.FC = () => {
+export default function DemoList() {
   const user = useAuth()
   const [state, setState] = React.useState<string[]>()
   React.useEffect(() => {
