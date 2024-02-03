@@ -7,7 +7,7 @@ import { DemoFilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
 import { isValidFile, openDemo } from "../demo/io"
 import { useDrragAndDropFile } from "../hooks/useDrragAndDropFile"
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const Home: React.FC = () => {
   const location = useLocation()

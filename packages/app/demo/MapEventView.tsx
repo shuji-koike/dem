@@ -3,7 +3,7 @@ import React from "react"
 import { Filter } from "./DemoPlayer"
 import { KillEventView } from "./KillEventView"
 import { NadeEventView } from "./NadeEventView"
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const MapEventView: React.FC<{
   filter: Filter

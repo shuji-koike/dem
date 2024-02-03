@@ -1,7 +1,7 @@
 import React from "react"
 
 import { DemoPlayer } from "./DemoPlayer"
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const MatchView: React.FC = () => {
   const { match } = useMatch()

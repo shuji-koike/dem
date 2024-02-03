@@ -8,7 +8,7 @@ import { FrameView, TrailView } from "./FrameView"
 import { MapEventView } from "./MapEventView"
 import { MapView } from "./MapView"
 import { HeaderSlot } from "../components/layout"
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const DemoPlayer: React.FC = () => {
   const {

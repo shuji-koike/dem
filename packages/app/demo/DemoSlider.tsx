@@ -14,7 +14,7 @@ import {
   labelFormat,
   teamColor,
 } from "."
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const DemoSlider: React.FC = () => {
   const { match, round, frame, setFrame } = useMatch()

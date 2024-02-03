@@ -7,7 +7,7 @@ import { Filter } from "./DemoPlayer"
 import { $PlayerCard } from "./PlayerCard"
 import { PlayerLabel } from "./PlayerLabel"
 import { useSteamUsers } from "../hooks"
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const DemoMenu: React.FC<{
   filter: Filter

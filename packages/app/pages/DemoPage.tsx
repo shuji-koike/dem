@@ -6,7 +6,7 @@ import { AppState } from "../app"
 import { MatchView } from "../demo/MatchView"
 import { openDemo } from "../demo/io"
 import { useLocationState } from "../hooks/useLocationState"
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const DemoPage: React.FC<{ path?: string }> = ({ path }) => {
   const state = useLocationState<AppState>()

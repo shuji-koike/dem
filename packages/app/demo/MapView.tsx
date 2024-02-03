@@ -1,7 +1,7 @@
 import React from "react"
 
 import { assetsMapRadar } from "../assets"
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const MapView: React.FC<{
   children?: React.ReactNode

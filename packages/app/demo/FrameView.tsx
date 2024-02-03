@@ -11,7 +11,7 @@ import {
   teamColor,
   icon,
 } from "."
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const FrameView: React.FC = () => {
   const { frame } = useMatch()

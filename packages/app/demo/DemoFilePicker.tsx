@@ -4,7 +4,7 @@ import { getAnalytics, logEvent } from "firebase/analytics"
 import React from "react"
 
 import { isArchiveFile, isValidFile, openDemo, rarList } from "./io"
-import { useMatch } from "../store/useMatch"
+import { useMatch } from "../hooks/useMatch"
 
 export const DemoFilePicker: React.FC = () => {
   const { setMatch } = useMatch()
