@@ -19,13 +19,11 @@ export default function App() {
         <React.Suspense fallback="">
           <BrowserRouter>
             <AnalyticsProvider>
-              <AppContextProvider>
-                <Layout menu={menu}>
-                  <React.Suspense fallback="">
-                    <React.StrictMode>{routes}</React.StrictMode>
-                  </React.Suspense>
-                </Layout>
-              </AppContextProvider>
+              <Layout menu={menu}>
+                <React.Suspense fallback="">
+                  <React.StrictMode>{routes}</React.StrictMode>
+                </React.Suspense>
+              </Layout>
             </AnalyticsProvider>
           </BrowserRouter>
         </React.Suspense>
@@ -41,23 +39,3 @@ const routes = (
     <Route path="/" element={<Home />} />
   </Routes>
 )
-
-export interface AppState extends Record<string, unknown> {
-  match?: Match | null
-  setMatch: React.Dispatch<React.SetStateAction<AppState["match"]>>
-}
-
-export const AppContext = React.createContext<AppState>({
-  setMatch() {},
-})
-
-export const AppContextProvider: React.FC<{
-  children: React.ReactNode
-}> = ({ children }) => {
-  const [match, setMatch] = React.useState<AppState["match"]>()
-  return (
-    <AppContext.Provider value={{ match, setMatch }}>
-      {children}
-    </AppContext.Provider>
-  )
-}

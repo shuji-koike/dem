@@ -17,12 +17,12 @@ export const Home: React.FC = () => {
   const { file, setFiles, setOutput } = useFiles()
   useDropFile(setFiles)
   React.useEffect(() => {
-    if (!file) return
+    if (!file || match) return
     logEvent(getAnalytics(), "openDemo", { name: file.name })
     void openDemo(file, setOutput, setMatch).then(setMatch)
   }, [file])
   React.useEffect(() => {
-    if (match) setMatch(undefined)
+    if (!file && match) setMatch(undefined)
   }, [location.pathname])
   return match?.Rounds?.length ? (
     <MatchView />

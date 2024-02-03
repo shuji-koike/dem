@@ -2,23 +2,23 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core"
 import { faFile, faHome } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
+  Dialog,
   List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Dialog,
 } from "@mui/material"
-import React, { useContext } from "react"
-import { NavLink, Route, Routes } from "react-router-dom"
+import React from "react"
+import { NavLink } from "react-router-dom"
 
 import { LayoutContext } from "./layout"
-import { AppContext } from "../app"
 import { DemoTabView } from "../demo/DemoTabView"
 import { useToggle } from "../hooks"
+import { useMatch } from "../hooks/useMatch"
 
-const MatchMenu: React.FC = () => {
-  const { match } = useContext(AppContext)
+// unused
+export const MatchMenu: React.FC = () => {
+  const { match } = useMatch()
   const open = useToggle()
   return (
     <>
@@ -38,12 +38,12 @@ const MenuLink: React.FC<{
 }> = ({ icon, label, divider, ...props }) => {
   const { showDrawer } = React.useContext(LayoutContext)
   return (
-    <ListItem button divider={divider} component={NavLink} {...props}>
+    <ListItemButton divider={divider} component={NavLink} {...props}>
       <ListItemIcon>
         <FontAwesomeIcon icon={icon} />
       </ListItemIcon>
       {showDrawer && <ListItemText primary={label} />}
-    </ListItem>
+    </ListItemButton>
   )
 }
 
@@ -67,10 +67,8 @@ const MenuButton: React.FC<
 export const menu = (
   <List>
     <MenuLink icon={faHome} label="Home" to="/" />
-    <MenuLink icon={faFile} label="Files" to="/files" divider />
-    <Routes>
-      <Route path="/dem/*" element={<MatchMenu />} />
-      <Route path="*" element="" />
-    </Routes>
+    {import.meta.env.DEV && (
+      <MenuLink icon={faFile} label="Files" to="/files" divider />
+    )}
   </List>
 )
