@@ -2,27 +2,33 @@ import { create } from "zustand"
 
 import { findFrame, findRound } from "../demo"
 
-export const useMatch = create<{
+export type MatchState = {
   match?: Match | null
   round?: Round | null
   frame?: Frame | null
   tick?: number
+  currentRound: number
+  currentFrame: number
   setMatch: React.Dispatch<Match | null | undefined>
   setRound: React.Dispatch<Round | null | undefined>
   setFrame: React.Dispatch<Frame | null | undefined>
   setTick: React.Dispatch<number | undefined>
   changeTick: React.Dispatch<{ Tick: number | undefined }>
-  currentRound: number
-  currentFrame: number
-}>((set) => ({
+}
+
+export const useMatch = create<MatchState>((set) => ({
   currentRound: 0,
   currentFrame: 0,
   setMatch: (match) =>
-    set(({ round, frame }) => ({
-      match,
-      round: match && !round ? match?.Rounds?.at(0) : round,
-      frame: match && !frame ? match?.Rounds?.at(0)?.Frames.at(0) : frame,
-    })),
+    set(({ currentRound, currentFrame }) =>
+      match
+        ? {
+            match,
+            round: match.Rounds?.at(currentRound),
+            frame: match.Rounds?.at(currentRound)?.Frames.at(currentFrame),
+          }
+        : createMatchState(),
+    ),
   setRound: (round) =>
     set(() => ({
       round,
@@ -43,3 +49,10 @@ export const useMatch = create<{
     })),
   setTick: (tick) => set(() => ({ tick })),
 }))
+
+export function createMatchState(): Partial<MatchState> {
+  return {
+    currentRound: 0,
+    currentFrame: 0,
+  }
+}

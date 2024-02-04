@@ -14,7 +14,7 @@ import {
 import { useMatch } from "../hooks/useMatch"
 
 export const FrameView: React.FC = () => {
-  const { frame } = useMatch()
+  const frame = useMatch((state) => state.frame)
   return frame ? (
     <>
       <MolotovView frame={frame}></MolotovView>
@@ -94,7 +94,7 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
 }
 
 export const TrailView: React.FC = () => {
-  const { round } = useMatch()
+  const round = useMatch((state) => state.round)
   const ref = React.useRef<HTMLCanvasElement>(null)
   React.useEffect(() => {
     const context = ref.current?.getContext?.("2d")

@@ -13,7 +13,8 @@ import { useMatch } from "../hooks/useMatch"
 
 export default function Home() {
   const location = useLocation()
-  const { match, setMatch } = useMatch()
+  const match = useMatch((state) => state.match)
+  const setMatch = useMatch((state) => state.setMatch)
   const { file, setFiles, setOutput } = useFiles()
   useDropFile(setFiles)
   React.useEffect(() => {
