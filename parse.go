@@ -229,8 +229,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 	})
 
 	parser.RegisterEventHandler(func(e events.PlayerFlashed) {
-		debug.Printf("%6d| PlayerFlashed\t%d\t%d\t%d\n", parser.CurrentFrame(),
-			e.Projectile.Entity.ID(), e.Attacker.Team, e.Player.Team)
+		debug.Printf("%6d| PlayerFlashed\n", parser.CurrentFrame()) // FIXME: NPE
 	})
 
 	parser.RegisterEventHandler(func(e events.Kill) {
