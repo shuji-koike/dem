@@ -7,6 +7,13 @@ html {
 *::after {
   box-sizing: border-box;
 }
+/* https://twitter.com/adamwathan/status/1734696245015494711 */
+/* https://defensivecss.dev/tip/flexbox-min-content-size/ */
+* {
+  min-width: 0;
+  min-height: 0;
+}
+
 p {
   margin: 0.5rem 0;
 }
