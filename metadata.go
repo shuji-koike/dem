@@ -79,7 +79,7 @@ func GetMapRadar(name string, crc uint32) string {
 func GetLegacyMapMetadata(name string) Map {
 	legacyMap, ok := MapNameToMap[name]
 	if !ok {
-		return Map{}
+		return makeMap(name, -3000, 3250, 5.5)
 	}
 	log.Printf("GetMapRadar: %s", GetMapRadar(name, mapCodes[name]))
 	return legacyMap
@@ -94,7 +94,8 @@ func makeMap(name string, x, y, scale float64) Map {
 
 // Pre-defined map translations.
 var (
-	MapDeAnubis   = makeMap("de_anubis", -3000, 3250, 5.5) // FIXME
+	MapDeAncient  = makeMap("de_ancient", -3000, 3250, 5.5) // FIXME
+	MapDeAnubis   = makeMap("de_anubis", -3000, 3250, 5.5)  // FIXME
 	MapDeCache    = makeMap("de_cache", -2000, 3250, 5.5)
 	MapDeCanals   = makeMap("de_canals", -2496, 1792, 4)
 	MapDeCbble    = makeMap("de_cbble", -3840, 3072, 6)
@@ -109,6 +110,7 @@ var (
 
 // MapNameToMap translates a map name to a Map.
 var MapNameToMap = map[string]Map{
+	"de_ancient":  MapDeAncient,
 	"de_anubis":   MapDeAnubis,
 	"de_cache":    MapDeCache,
 	"de_canals":   MapDeCanals,
