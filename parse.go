@@ -383,9 +383,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 		for _, e := range state.Infernos() {
 			arr := e.Fires().ConvexHull2D()
 			for i, f := range arr {
-				x, y := mapMetadata.TranslateScale(f.X, f.Y)
-				arr[i].X = math.Round(x)
-				arr[i].Y = math.Round(y)
+				arr[i] = normalize(r3.Vector{X: f.X, Y: f.Y})
 			}
 			frame.Nades = append(frame.Nades, Nade{
 				ID:      int(e.UniqueID()),
