@@ -15,7 +15,7 @@ import { useMatch } from "../hooks/useMatch"
 
 // unused
 export const MatchMenu: React.FC = () => {
-  const { match } = useMatch()
+  const match = useMatch((state) => state.match)
   const open = useToggle()
   return (
     <>

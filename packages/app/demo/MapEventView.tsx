@@ -8,7 +8,9 @@ import { useMatch } from "../hooks/useMatch"
 export const MapEventView: React.FC<{
   filter: Filter
 }> = React.memo(function MapEventView({ filter }) {
-  const { match, round, changeTick } = useMatch()
+  const match = useMatch((state) => state.match)
+  const round = useMatch((state) => state.round)
+  const changeTick = useMatch((state) => state.changeTick)
   return (
     <g opacity={round ? 0.4 : 0.8}>
       {filter.kills &&

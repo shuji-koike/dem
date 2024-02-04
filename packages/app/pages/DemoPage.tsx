@@ -8,7 +8,8 @@ import { useMatch } from "../hooks/useMatch"
 
 export default function DemoPage() {
   const { "*": paramPath } = useParams<"*">()
-  const { match, setMatch } = useMatch()
+  const match = useMatch((state) => state.match)
+  const setMatch = useMatch((state) => state.setMatch)
   React.useEffect(() => {
     if (!match)
       void Promise.resolve(paramPath === "sample" ? sample : paramPath)

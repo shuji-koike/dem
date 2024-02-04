@@ -7,29 +7,22 @@ import { teamColor } from "."
 import { useMatch } from "../hooks/useMatch"
 
 export const DemoNav: React.FC = () => {
-  const { match, round, setRound } = useMatch()
+  const match = useMatch((state) => state.match)
   return (
     <>
-      {match?.Rounds?.map((e) => (
-        <DemoNavItem
-          key={e.Tick}
-          active={e.Round === round?.Round}
-          color={teamColor(e.Winner)}
-          onClick={() => setRound(e)}
-        >
-          {e.Round + 1}
-        </DemoNavItem>
+      {match?.Rounds?.map((round) => (
+        <$DemoNavItem key={round.Tick} round={round} />
       ))}
       {!match?.Ended && (
         <>
-          <DemoNavItem>
+          <$DemoNavItem>
             <FontAwesomeIcon icon={faSyncAlt} size="sm" color="#444" spin />
-          </DemoNavItem>
+          </$DemoNavItem>
           {[...Array(Math.max(0, 16 - (match?.Rounds?.length ?? 0)))].map(
             (_, i) => (
-              <DemoNavItem key={i}>
+              <$DemoNavItem key={i}>
                 <FontAwesomeIcon icon={faSyncAlt} size="xs" color="#333" />
-              </DemoNavItem>
+              </$DemoNavItem>
             ),
           )}
         </>
@@ -39,35 +32,48 @@ export const DemoNav: React.FC = () => {
 }
 
 const DemoNavItem: React.FC<{
-  active?: boolean
-  size?: number
-  color?: string
-  onClick?: () => void
+  round?: Round
   children?: React.ReactNode
-}> = ({ active, size = 32, color, onClick, children }) => {
-  const style = css`
-    display: inline-block;
-    width: ${size}px;
-    height: ${size}px;
-    line-height: ${size}px;
-    border-radius: ${size / 2}px;
-    text-align: center;
-    font-family: monospace;
-    color: ${color};
-    cursor: ${onClick && "pointer"};
-    font-weight: bold;
-    filter: brightness(80%);
-    ${active ? "&" : "&:hover"} {
-      color: #fff;
-      background-color: ${color};
-    }
-    &:hover {
-      filter: brightness(120%);
-    }
-  `
+}> = ({ round, children }) => {
+  const currentRound = useMatch((state) => state.currentRound)
+  const setRound = useMatch((state) => state.setRound)
+  const active = round?.Round === currentRound
+  const color = round && teamColor(round.Winner)
   return (
-    <div css={style} onClick={onClick}>
-      {children}
+    <div
+      css={css`
+        --size: 32px;
+        --color: ${color};
+        ${style}
+      `}
+      className={active ? "active" : ""}
+      onClick={() => setRound(round)}
+    >
+      {children || (round ? round.Round + 1 : null)}
     </div>
   )
 }
+
+const $DemoNavItem = React.memo(DemoNavItem)
+
+const style = css`
+  display: inline-block;
+  width: var(--size);
+  height: var(--size);
+  line-height: var(--size);
+  border-radius: calc(var(--size) / 2);
+  text-align: center;
+  font-family: monospace;
+  color: var(--color);
+  cursor: pointer;
+  font-weight: bold;
+  filter: brightness(80%);
+  &:hover,
+  &.active {
+    color: #fff;
+    background-color: var(--color);
+  }
+  &:hover {
+    filter: brightness(120%);
+  }
+`
