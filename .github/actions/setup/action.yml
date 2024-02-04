@@ -11,11 +11,6 @@ runs:
       with:
         go-version-file: ./go.mod
         cache: true
-    - uses: actions/cache@v4
-      id: cache_go_mod
-      with:
-        path: ~/go/pkg/mod
-        key: go_mod-${{ hashFiles('go.sum') }}
     - run: go get
       shell: bash
     - run: pnpm install
