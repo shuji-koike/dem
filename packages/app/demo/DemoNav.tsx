@@ -18,10 +18,10 @@ export const DemoNav: React.FC = () => {
           <$DemoNavItem>
             <FontAwesomeIcon icon={faSyncAlt} size="sm" color="#444" spin />
           </$DemoNavItem>
-          {[...Array(Math.max(0, 16 - (match?.Rounds?.length ?? 0)))].map(
+          {[...Array(Math.max(0, 20 - (match?.Rounds?.length ?? 0)))].map(
             (_, i) => (
               <$DemoNavItem key={i}>
-                <FontAwesomeIcon icon={faSyncAlt} size="xs" color="#333" />
+                <FontAwesomeIcon icon={faSyncAlt} size="2xs" color="#333" />
               </$DemoNavItem>
             ),
           )}
@@ -44,10 +44,11 @@ const DemoNavItem: React.FC<{
       css={css`
         --size: 32px;
         --color: ${color};
+        cursor: ${round ? "pointer" : "default"};
         ${style}
       `}
       className={active ? "active" : ""}
-      onClick={() => setRound(round)}
+      onClick={() => round && setRound(round)}
     >
       {children || (round ? round.Round + 1 : null)}
     </div>
@@ -65,7 +66,6 @@ const style = css`
   text-align: center;
   font-family: monospace;
   color: var(--color);
-  cursor: pointer;
   font-weight: bold;
   filter: brightness(80%);
   &:hover,
