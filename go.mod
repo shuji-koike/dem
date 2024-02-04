@@ -1,4 +1,4 @@
-module github.com/shuji-koike/csgo
+module github.com/shuji-koike/dem
 
 go 1.21.6
 
