@@ -1,8 +1,14 @@
 import { create } from "zustand"
 
 import { findFrame, findRound } from "../demo"
+import { isArchiveFile, isValidFile, openDemo, rarList } from "../demo/io"
 
 export type MatchState = {
+  file?: File
+  files?: File[]
+  output: string[]
+  setOutput: React.Dispatch<string>
+  setFiles: React.Dispatch<File[] | FileList | null | undefined>
   match?: Match | null
   round?: Round | null
   frame?: Frame | null
@@ -16,9 +22,25 @@ export type MatchState = {
   changeTick: React.Dispatch<{ Tick: number | undefined }>
 }
 
-export const useMatch = create<MatchState>((set) => ({
+export const useMatch = create<MatchState>((set, get) => ({
   currentRound: 0,
   currentFrame: 0,
+  output: [],
+  setOutput: (log) => set(({ output }) => ({ output: output.concat(log) })),
+  setFiles: (files) =>
+    set(({ setFiles, setMatch }) => {
+      if (files === null) files = undefined
+      if (files instanceof FileList) files = [...(files || [])]
+      const head = files?.at(0)
+      if (isValidFile(head)) {
+        void openDemo(head, get().setOutput, setMatch).then(setMatch)
+        return { files, file: head }
+      } else if (isArchiveFile(head)) {
+        void rarList(head).then(setFiles)
+        return { files, file: head }
+      }
+      return { files }
+    }),
   setMatch: (match) =>
     set(({ currentRound, currentFrame }) =>
       match

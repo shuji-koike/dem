@@ -1,30 +1,16 @@
 import { css } from "@emotion/react"
-import { getAnalytics, logEvent } from "firebase/analytics"
 import React from "react"
-import { useLocation } from "react-router"
 
 import { BrowserAlert } from "../components/BrowserAlert"
 import { FilePicker } from "../demo/DemoFilePicker"
 import { MatchView } from "../demo/MatchView"
-import { openDemo } from "../demo/io"
 import { useDropFile } from "../hooks/useDropFile"
-import { useFiles } from "../hooks/useFiles"
 import { useMatch } from "../hooks/useMatch"
 
 export default function Home() {
-  const location = useLocation()
   const match = useMatch((state) => state.match)
-  const setMatch = useMatch((state) => state.setMatch)
-  const { file, setFiles, setOutput } = useFiles()
+  const setFiles = useMatch((state) => state.setFiles)
   useDropFile(setFiles)
-  React.useEffect(() => {
-    if (!file || match) return
-    logEvent(getAnalytics(), "openDemo", { name: file.name })
-    void openDemo(file, setOutput, setMatch).then(setMatch)
-  }, [file])
-  React.useEffect(() => {
-    if (!file && match) setMatch(undefined)
-  }, [location.pathname])
   return match?.Rounds?.length ? (
     <MatchView />
   ) : (

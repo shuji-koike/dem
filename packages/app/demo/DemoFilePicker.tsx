@@ -3,11 +3,11 @@ import { Alert, Box } from "@mui/material"
 import React from "react"
 import { useNavigate } from "react-router"
 
-import { isValidFile } from "./io"
-import { useFiles } from "../hooks/useFiles"
+import { isArchiveFile, isValidFile } from "./io"
+import { useMatch } from "../hooks/useMatch"
 
 export const FilePicker: React.FC = () => {
-  const { file, files, setFiles, output } = useFiles()
+  const { file, files, setFiles, output } = useMatch()
   const navigate = useNavigate()
   return (
     <>
@@ -32,6 +32,33 @@ export const FilePicker: React.FC = () => {
           </button>
         )}
       </Alert>
+      {isArchiveFile(file) && (
+        <Alert
+          icon={
+            !files || files.length <= 1 ? (
+              <HourglassBottomOutlined />
+            ) : (
+              <InfoOutlined />
+            )
+          }
+        >
+          {!files || files.length <= 1 ? (
+            <p>Extracting files from an archive file...</p>
+          ) : (
+            <p>Select a file to extract.</p>
+          )}
+          <ul>
+            {files?.filter(isValidFile).map((e, i) => (
+              <li key={i}>
+                <label>
+                  <input type="checkbox" onChange={() => setFiles([e])} />
+                  <span css={{ cursor: "pointer" }}>{e.name}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </Alert>
+      )}
       {file && isValidFile(file) && (
         <Alert>DEM File selected. Analyzing process starting...</Alert>
       )}
@@ -43,21 +70,6 @@ export const FilePicker: React.FC = () => {
               <p key={i}>{e}</p>
             ))}
           </pre>
-        </Alert>
-      )}
-      {files && files?.length > 1 && (
-        <Alert>
-          Select a file to extract.
-          <ul>
-            {files.map((e, i) => (
-              <li key={i}>
-                <label>
-                  <input type="checkbox" onChange={() => setFiles([e])} />
-                  <span css={{ cursor: "pointer" }}>{e.name}</span>
-                </label>
-              </li>
-            ))}
-          </ul>
         </Alert>
       )}
     </>

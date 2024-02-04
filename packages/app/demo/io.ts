@@ -163,5 +163,5 @@ Please send a feature request to add support for password protected files.`)
   // FIXME: use getFilesArray() instead of extractFiles()
   const files = Object.values(await archive.extractFiles()).filter(isFile)
   await archive.close()
-  return files
+  return [file, ...files]
 }
