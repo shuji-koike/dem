@@ -71,8 +71,8 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 		match = Match{
 			TypeName:   "Match",
 			Version:    Version,
-			TickRate:   int(math.Round(parser.TickRate())),
-			FrameRate:  int(math.Round(header.FrameRate())),
+			TickRate:   int(math.Max(math.Round(parser.TickRate()), 1)),  // FIXME
+			FrameRate:  int(math.Max(math.Round(header.FrameRate()), 1)), // FIXME
 			MapName:    MapName,
 			Started:    true,
 			Rounds:     make([]Round, 0),
@@ -147,6 +147,10 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 	parser.RegisterEventHandler(func(e events.GrenadeProjectileThrow) {
 		debug.Printf("%6d| GrenadeProjectileThrow\t%d\n", parser.CurrentFrame(),
 			e.Projectile.UniqueID())
+		if e.Projectile.Thrower == nil {
+			warn.Printf("%6d| GrenadeProjectileThrow\tThrower is nil\n", parser.CurrentFrame())
+			return
+		}
 		nades[int(e.Projectile.UniqueID())] = NadeEvent{
 			Position: e.Projectile.Thrower.Position(),
 			Velocity: e.Projectile.Thrower.Velocity(),
@@ -350,7 +354,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			}
 			if p.FlashDuration > 0 {
 				d := p.FlashDuration
-				d -= float32(state.IngameTick()-p.FlashTick) / float32(header.FrameRate())
+				d -= float32(state.IngameTick()-p.FlashTick) / float32(parser.TickRate())
 				if d > 0 {
 					player.Flashed = d
 				}
