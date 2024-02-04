@@ -33,7 +33,13 @@ export const PlayerCard: React.FC<{
           <Typography
             flexGrow={1}
             maxWidth={100}
-            color={player.Hp > 20 ? teamColor(player.Team) : "gray"}
+            color={
+              player.Hp < 1
+                ? "gray"
+                : player.Hp < 20
+                  ? "error"
+                  : teamColor(player.Team)
+            }
             fontWeight="bold"
             fontSize={12}
             noWrap
@@ -55,7 +61,11 @@ export const PlayerCard: React.FC<{
           css={{ height: 2 }}
           variant="determinate"
           color={
-            player.Hp > 20 ? teamColorVariantMap.get(player.Team) : "error"
+            player.Hp < 1
+              ? "primary"
+              : player.Hp < 20
+                ? "error"
+                : teamColorVariantMap.get(player.Team)
           }
           value={player.Hp}
         />
