@@ -92,7 +92,7 @@ export const AuthAvatar: React.FC<{
             <MenuItem disabled>
               <Alert
                 color="warning"
-                sx={{ minWidth: "20em", whiteSpace: "pre-wrap" }}
+                sx={{ width: "20em", whiteSpace: "pre-wrap" }}
               >
                 Currently, there is no additional functionality behind signing
                 in.
