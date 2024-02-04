@@ -18,7 +18,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <React.Suspense fallback="">
-          <BrowserRouter>
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
             <AnalyticsProvider>
               <Layout menu={menu}>
                 <React.Suspense fallback="">

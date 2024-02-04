@@ -3,13 +3,35 @@ on:
   push:
     branches:
       - master
-      - staging
+  workflow_dispatch:
+concurrency:
+  group: "deploy"
+  cancel-in-progress: false
+permissions:
+  contents: "read"
+  id-token: "write"
+  pages: "write"
 jobs:
-  deploy:
+  pages:
     runs-on: ubuntu-latest
-    permissions:
-      contents: "read"
-      id-token: "write"
+    environment:
+      name: "github-pages"
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
+      - run: npx vite build
+      - run: npx vite build --base /dem/
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./dist"
+      - uses: actions/deploy-pages@v4
+        id: deployment
+  firebase:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -19,6 +41,11 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - run: npx tsx build.ts
         working-directory: packages/functions
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./dist"
+      - uses: actions/deploy-pages@v4
+        id: deployment
       - uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: projects/787830619763/locations/global/workloadIdentityPools/github/providers/csgo
