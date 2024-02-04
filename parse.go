@@ -346,6 +346,9 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 				if p.IsReloading {
 					player.State ^= IsReloading
 				}
+				if p.IsUnknown {
+					player.State ^= IsUnknown
+				}
 				sort.Slice(player.Weapons, func(i, j int) bool {
 					return int(player.Weapons[i]) < int(player.Weapons[j])
 				})
