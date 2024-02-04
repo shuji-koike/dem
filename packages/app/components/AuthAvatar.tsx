@@ -14,7 +14,7 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
   getAuth,
-  signInWithPopup,
+  signInWithRedirect,
 } from "firebase/auth"
 import React from "react"
 
@@ -73,7 +73,7 @@ export const AuthAvatar: React.FC<{
           <Menu open anchorEl={anchorEl} onClose={close}>
             <MenuItem
               onClick={() =>
-                signInWithPopup(getAuth(), new GoogleAuthProvider()).then(close)
+                signInWithRedirect(getAuth(), new GoogleAuthProvider())
               }
             >
               Sign in with Google
@@ -81,9 +81,7 @@ export const AuthAvatar: React.FC<{
             <MenuItem
               disabled
               onClick={() =>
-                signInWithPopup(getAuth(), new OAuthProvider("steam")).then(
-                  close,
-                )
+                signInWithRedirect(getAuth(), new OAuthProvider("steam"))
               }
             >
               Sign in with Steam (coming soon)
