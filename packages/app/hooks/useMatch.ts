@@ -63,13 +63,13 @@ export const useMatch = create<MatchState>((set, get) => ({
       frame,
       currentFrame: frame ? round?.Frames.indexOf(frame) ?? 0 : 0,
     })),
-  changeTick: ({ Tick: tick }) =>
+  setTick: (tick) =>
     set(({ match }) => ({
       tick,
       round: findRound(match, tick),
       frame: findFrame(match, tick),
     })),
-  setTick: (tick) => set(() => ({ tick })),
+  changeTick: ({ Tick }) => get().setTick(Tick),
 }))
 
 export function createMatchState(): Partial<MatchState> {
