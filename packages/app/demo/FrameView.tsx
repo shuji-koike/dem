@@ -17,13 +17,13 @@ export const FrameView: React.FC = () => {
   const frame = useMatch((state) => state.frame)
   return frame ? (
     <>
-      <MolotovView frame={frame}></MolotovView>
+      <MolotovView frame={frame} />
       {(frame.Players || []).map((e) => (
-        <FramePlayer key={e.ID} player={e}></FramePlayer>
+        <FramePlayer key={e.ID} player={e} />
       ))}
-      <BombView frame={frame}></BombView>
+      <BombView frame={frame} />
       {(frame.Nades || []).map((e) => (
-        <NadeView key={e.ID} nade={e}></NadeView>
+        <NadeView key={e.ID} nade={e} />
       ))}
     </>
   ) : (
@@ -53,7 +53,7 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
           fill="transparent"
           stroke={teamColor(player.Team)}
           strokeWidth={2}
-        ></path>
+         />
       ) : (
         <>
           <circle
@@ -111,7 +111,7 @@ export const TrailView: React.FC = () => {
   if (isSafari) return // ref https://bugs.webkit.org/show_bug.cgi?id=23113
   return (
     <foreignObject x={0} y={0} width={1024} height={1024}>
-      <canvas ref={ref} width="1024" height="1024"></canvas>
+      <canvas ref={ref} width="1024" height="1024" />
     </foreignObject>
   )
 }

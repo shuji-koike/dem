@@ -23,7 +23,7 @@ export const KillEventView: React.FC<{
             cy={event.From.Y}
             r={8}
             fill="transparent"
-          ></circle>
+           />
           <path
             d={["M", event.From.X, event.From.Y, "L", event.X, event.Y].join(
               " ",
@@ -31,16 +31,16 @@ export const KillEventView: React.FC<{
             fill="transparent"
             stroke="rgba(255,255,255,0.25)"
             strokeWidth={0.5}
-          ></path>
+           />
           <circle
             cx={event.From.X}
             cy={event.From.Y}
             r={active ? 4 : 2}
             fill={teamOpponentColor(event.Team)}
-          ></circle>
+           />
         </>
       )}
-      <circle cx={event.X} cy={event.Y} r={16} fill="transparent"></circle>
+      <circle cx={event.X} cy={event.Y} r={16} fill="transparent" />
       <path
         d={[
           "M",
@@ -59,7 +59,7 @@ export const KillEventView: React.FC<{
         fill="transparent"
         stroke={teamColor(event.Team)}
         strokeWidth={size / 2}
-      ></path>
+       />
     </g>
   )
 }

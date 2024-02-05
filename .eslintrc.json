@@ -1,9 +1,12 @@
 {
   "root": true,
+  "extends": ["@shuji-koike/eslint-config"],
   "env": {
     "browser": true,
     "es6": true,
     "node": true
   },
-  "extends": ["@shuji-koike/eslint-config"]
+  "rules": {
+    "react/self-closing-comp": ["error"]
+  }
 }

@@ -112,6 +112,6 @@ export const HeaderSlot: React.FC<{
 // TODO
 const logo = (
   <Link to="/">
-    <Typography variant="h1"></Typography>
+    <Typography variant="h1" />
   </Link>
 )
