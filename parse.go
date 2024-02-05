@@ -132,11 +132,16 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			state.IsWarmupPeriod())
 		round.Winner = e.Winner
 		round.Reason = e.Reason
+	})
+	parser.RegisterEventHandler(func(e events.RoundEndOfficial) {
+		log.Printf("%6d| RoundEndOfficial\t[%d]\n", parser.CurrentFrame(), round.Round)
 		if match.Started && !match.Ended && round.Started &&
 			round.Winner != common.TeamSpectators &&
 			round.Reason != events.RoundEndReason(0) {
 			match.Rounds = append(match.Rounds, round)
 			handler(match)
+		} else {
+			log.Printf("%6d| RoundEndOfficial\t[%d]\tdiscarded\n", parser.CurrentFrame(), round.Round)
 		}
 	})
 	parser.RegisterEventHandler(func(e events.AnnouncementWinPanelMatch) {
