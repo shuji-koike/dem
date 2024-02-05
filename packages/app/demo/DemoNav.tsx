@@ -1,9 +1,16 @@
 import { css } from "@emotion/react"
-import { faSyncAlt } from "@fortawesome/free-solid-svg-icons"
+import {
+  faExplosion,
+  faSkull,
+  faStopwatch,
+  faSyncAlt,
+  faTools,
+} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 
 import { teamColor } from "."
+import { RoundEndReason } from "../enum"
 import { useMatch } from "../hooks/useMatch"
 
 export const DemoNav: React.FC = () => {
@@ -11,12 +18,14 @@ export const DemoNav: React.FC = () => {
   return (
     <>
       {match?.Rounds?.map((round) => (
-        <$DemoNavItem key={round.Tick} round={round} />
+        <$DemoNavItem key={round.Tick} round={round}>
+          {roundEndReasonToIcon(round)}
+        </$DemoNavItem>
       ))}
       {!match?.Ended && (
         <>
           <$DemoNavItem>
-            <FontAwesomeIcon icon={faSyncAlt} size="sm" color="#444" spin />
+            <FontAwesomeIcon icon={faSyncAlt} size="xs" color="#444" spin />
           </$DemoNavItem>
           {[...Array(Math.max(0, 20 - (match?.Rounds?.length ?? 0)))].map(
             (_, i) => (
@@ -42,10 +51,10 @@ const DemoNavItem: React.FC<{
   return (
     <div
       css={css`
+        ${style}
         --size: 32px;
         --color: ${color};
         cursor: ${round ? "pointer" : "default"};
-        ${style}
       `}
       className={active ? "active" : ""}
       onClick={() => round && setRound(round)}
@@ -53,6 +62,21 @@ const DemoNavItem: React.FC<{
       {children || (round ? round.Round + 1 : null)}
     </div>
   )
+}
+
+function roundEndReasonToIcon(round: Round) {
+  switch (round.Reason) {
+    case RoundEndReason.RoundEndReasonCTWin:
+    case RoundEndReason.RoundEndReasonTerroristsWin:
+      return <FontAwesomeIcon icon={faSkull} />
+    case RoundEndReason.RoundEndReasonBombDefused:
+      return <FontAwesomeIcon icon={faTools} />
+    case RoundEndReason.RoundEndReasonTargetBombed:
+      return <FontAwesomeIcon icon={faExplosion} />
+    case RoundEndReason.RoundEndReasonTargetSaved:
+      return <FontAwesomeIcon icon={faStopwatch} />
+  }
+  return null
 }
 
 const $DemoNavItem = React.memo(DemoNavItem)
@@ -66,6 +90,7 @@ const style = css`
   text-align: center;
   font-family: monospace;
   color: var(--color);
+  font-size: 14px;
   font-weight: bold;
   filter: brightness(80%);
   &:hover,

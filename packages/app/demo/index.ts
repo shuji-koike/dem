@@ -127,7 +127,7 @@ export function findFrame(
   tick: number | undefined,
 ): Frame | undefined {
   if (typeof tick !== "number") return
-  return findRound(match, tick)?.Frames.find((e) => e.Tick > tick)
+  return findRound(match, tick)?.Frames.find((e) => e.Tick >= tick)
 }
 
 export function findPlayer(match: Match, ID: number): Player | null {

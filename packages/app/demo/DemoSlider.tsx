@@ -1,12 +1,15 @@
 import styled from "@emotion/styled"
-import { faBomb, faTimes, faTools } from "@fortawesome/free-solid-svg-icons"
+import {
+  faExplosion,
+  faTimes,
+  faTools,
+} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Slider, Typography, useTheme } from "@mui/material"
 import { uniqBy } from "lodash"
 import React from "react"
 
 import {
-  bombColor,
   BombState,
   findIndex,
   frameToColor,
@@ -33,7 +36,7 @@ export const DemoSlider: React.FC = () => {
         .slice(0, 1)
         .map((e) => ({
           value: round.Frames.indexOf(e),
-          label: <Icon color={bombColor(e.Bomb.State)} icon={faBomb} />,
+          label: <Icon color={teamColor(2)} icon={faExplosion} />,
         })),
       ...round.Frames.filter(
         (e, _, arr, time = toTime(e)) =>
