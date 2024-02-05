@@ -312,11 +312,7 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 			Nades:   make([]Nade, 0),
 		}
 		frame.Bomb.Point = normalize(state.Bomb().Position())
-		for _, p := range state.Participants().Connected() {
-			switch p.Team {
-			case common.TeamSpectators, common.TeamUnassigned:
-				continue
-			}
+		for _, p := range state.Participants().Playing() {
 			player := Player{
 				ID:    p.SteamID64,
 				Name:  p.Name,
