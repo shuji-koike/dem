@@ -56,7 +56,7 @@ export const Layout: React.FC<{
           }
         `}
       >
-        <Toolbar>
+        <Toolbar variant="dense">
           <MenuButton />
           {title && (
             <Typography component="h1" variant="h6" color="inherit" noWrap>

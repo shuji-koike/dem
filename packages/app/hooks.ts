@@ -5,7 +5,7 @@ import { httpsCallable, getFunctions } from "firebase/functions"
 import { useEffect, useMemo, useState } from "react"
 
 export function useAuth(): User | null {
-  const [user, setUser] = useState(getAuth().currentUser)
+  const [user, setUser] = useState(() => getAuth().currentUser)
   useEffect(() => getAuth().onAuthStateChanged(setUser), [])
   useEffect(() => setSentryUser({ id: user?.uid }), [user])
   return user

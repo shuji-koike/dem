@@ -13,6 +13,9 @@ html {
   min-width: 0;
   min-height: 0;
 }
+.MuiAlert-icon {
+  min-width: auto;
+}
 
 p {
   margin: 0 0 0.5rem;
