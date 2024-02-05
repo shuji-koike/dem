@@ -21,12 +21,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - run: GOOS=js GOARCH=wasm go build -o ./static/main.wasm .
-      - run: npx vite build --base /dem/
+      - run: npx vite build --base /dem/ --outDir _site
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - uses: actions/upload-pages-artifact@v3
-        with:
-          path: "./dist"
       - uses: actions/deploy-pages@v4
         id: deployment
   firebase:
