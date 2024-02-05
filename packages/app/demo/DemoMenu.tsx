@@ -124,6 +124,7 @@ export const DemoMenu: React.FC<{
 const style = css`
   display: flex;
   flex-direction: column;
+  gap: 16px;
   > nav {
     position: sticky;
     top: 0;
