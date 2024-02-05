@@ -6,7 +6,7 @@ import React from "react"
 import { createRoot } from "react-dom/client"
 
 Sentry.init({
-  dsn: "https://ba991785f82ca8f5667270da5a454902@o1274316.ingest.sentry.io/4506644827144192",
+  dsn: import.meta.env["VITE_SENTRY_DSN"],
   integrations: [
     new Sentry.BrowserTracing(),
     Sentry.replayIntegration({
