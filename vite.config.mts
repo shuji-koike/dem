@@ -15,7 +15,7 @@ export default defineConfig({
     process.env["CI"] &&
       sentryVitePlugin({
         org: "shujikoike",
-        project: "csgo",
+        project: "dem",
       }),
   ],
   build: {
