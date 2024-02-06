@@ -10,6 +10,7 @@ import {
   rotatePoint,
   teamColor,
   icon,
+  findKillEvent,
 } from "."
 import { useMatch } from "../hooks/useMatch"
 
@@ -30,8 +31,15 @@ export const FrameView: React.FC = () => {
 }
 
 export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
+  const killedTick = useMatch(
+    (state) => findKillEvent(state.match, state.round, player.ID)?.Tick,
+  )
+  const setTick = useMatch((state) => state.setTick)
+  const onClick =
+    !player.Hp && killedTick ? () => setTick(killedTick) : undefined
   return (
-    <g onClick={() => console.debug(JSON.stringify(player))}>
+    <g onClick={onClick} cursor={onClick ? "pointer" : "default"}>
+      <circle cx={player.X} cy={player.Y} r="8" fill="transparent" />
       {!player.Hp ? (
         <path
           d={[
@@ -84,7 +92,6 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
         fontSize="14"
         fill={player.Hp ? "#eee" : "#888"}
         fontFamily="monospace"
-        cursor="default"
       >
         {player.Name}
       </text>

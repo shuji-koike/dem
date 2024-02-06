@@ -138,6 +138,17 @@ export function findPlayer(match: Match, ID: number): Player | null {
   return null
 }
 
+export function findKillEvent(
+  match: Match | null | undefined,
+  round: Round | null | undefined,
+  id: Player["ID"],
+) {
+  if (!match || !round) return
+  return match.KillEvents.find(
+    (e) => e.Round === round.Round && e.Victim === id,
+  )
+}
+
 class PlayerScore {
   ID: number
   Name = ""
