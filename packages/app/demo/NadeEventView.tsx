@@ -18,13 +18,13 @@ export const NadeEventView: React.FC<{
         fill="transparent"
         stroke="rgba(255,255,255,0.25)"
         strokeWidth={active ? 2 : 0.25}
-       />
+      />
       <circle
         cx={event.Trajectory?.[0]?.X}
         cy={event.Trajectory?.[0]?.Y}
         r={active ? 4 : 2}
         fill={teamColor(event.Team)}
-       />
+      />
       {event.Trajectory?.slice(-1)?.map((p, i) => (
         <g
           key={i}
@@ -40,7 +40,7 @@ export const NadeEventView: React.FC<{
             fill="#fff"
             stroke={teamColor(event.Team)}
             strokeWidth={1.5}
-           />
+          />
         </g>
       ))}
     </g>

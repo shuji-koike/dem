@@ -11,50 +11,28 @@ import { HeaderSlot } from "../components/layout"
 import { useMatch } from "../hooks/useMatch"
 
 export const DemoPlayer: React.FC = () => {
-  const {
-    match,
-    round,
-    frame,
-    currentRound,
-    currentFrame,
-    setRound,
-    setFrame,
-    setTick,
-  } = useMatch()
-  const [state, setState] = React.useState({ paused: true, wheel: true })
+  const { match, round, frame, currentFrame, setRound, setFrame, setTick } =
+    useMatch()
+  const [state, setState] = React.useState({ paused: true })
   const [filter, setFilter] = React.useState<Filter>({})
   const ref = React.createRef<HTMLFormElement>()
   React.useEffect(() => ref.current?.focus(), [ref.current])
   React.useEffect(() => {
     return clearTimeout.bind(
       window,
-      setTimeout(
-        () => !state.paused && setCurrentFrame(currentFrame + 1),
-        1000 / 8,
-      ),
+      setTimeout(() => !state.paused && setFrame(currentFrame + 1), 1000 / 8),
     )
-  }, [])
+  }, [currentFrame, state.paused])
   React.useEffect(() => {
     document.body.style.overscrollBehavior = "none"
     return () => void (document.body.style.overscrollBehavior = "auto")
   }, [])
-  function setCurrentFrame(n: number) {
-    const frame = round?.Frames[n]
-    if (frame) setFrame(frame)
-  }
-  function setCurrentRound(n: number) {
-    const round = match?.Rounds?.find((e) => e.Round === n)
-    if (round) {
-      setFrame(round.Frames[0])
-      setRound(round)
-    }
-  }
   function onKeyDown(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {
-      ArrowUp: () => setCurrentRound(currentRound - 1),
-      ArrowDown: () => setCurrentRound(currentRound + 1),
-      ArrowLeft: () => setCurrentFrame(currentFrame - 1),
-      ArrowRight: () => setCurrentFrame(currentFrame + 1),
+      ArrowUp: () => setRound((round?.Round ?? 0) - 1),
+      ArrowDown: () => setRound((round?.Round ?? 0) + 1),
+      ArrowLeft: () => setFrame(currentFrame - 1),
+      ArrowRight: () => setFrame(currentFrame + 1),
       Escape: () => setTick?.(undefined),
       p: () => console.info(match),
       q: () => setTick?.(undefined),
@@ -63,13 +41,13 @@ export const DemoPlayer: React.FC = () => {
       " ": () => setState({ ...state, paused: !state.paused }),
     }
     const keyRound = Number(e.key) - 1 + (e.key ? 0 : 10) + (e.ctrlKey ? 10 : 0)
-    if (Number.isInteger(Number(e.key))) setCurrentRound(keyRound)
+    if (Number.isInteger(Number(e.key))) setRound(keyRound)
     else dict[e.key]?.()
   }
   function onWheel(e: React.WheelEvent) {
-    if (state.wheel && Math.abs(e.deltaX) < 10) {
-      if (e.deltaY < 0) setCurrentFrame(currentFrame + 1)
-      if (e.deltaY > 0) setCurrentFrame(currentFrame - 1)
+    if (Math.abs(e.deltaX) < 10) {
+      if (e.deltaY < 0) setFrame(currentFrame + 1)
+      if (e.deltaY > 0) setFrame(currentFrame - 1)
       e.stopPropagation()
     }
   }

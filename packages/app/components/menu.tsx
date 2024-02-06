@@ -9,6 +9,7 @@ import {
 import React from "react"
 import { NavLink } from "react-router-dom"
 
+import { DebugNav } from "../demo/DebugNav"
 import { DemoTabView } from "../demo/DemoTabView"
 import { useToggle } from "../hooks"
 import { useMatch } from "../hooks/useMatch"
@@ -48,5 +49,6 @@ export const menu = (
         <ListItemText primary="Files" />
       </ListItemButton>
     )}
+    {import.meta.env.DEV && <DebugNav />}
   </List>
 )

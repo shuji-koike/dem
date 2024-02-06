@@ -1,6 +1,10 @@
 import React from "react"
 
-export const DebugView: React.FC<{ match: Match }> = ({ match }) => {
+import { useMatch } from "../hooks/useMatch"
+
+export const DebugView: React.FC = () => {
+  const match = useMatch((state) => state.match)
+  if (!match) return null
   return (
     <section>
       <pre>

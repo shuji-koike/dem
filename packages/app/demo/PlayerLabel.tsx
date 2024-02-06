@@ -6,7 +6,7 @@ import { teamColor } from "."
 export const PlayerLabel: React.FC<
   BoxProps & { player: Player | null | undefined }
 > = ({ player, children, ...rest }) => {
-  if (!player) return <></>
+  if (!player) return null
   return (
     <Box fontWeight="bold" color={teamColor(player.Team)} {...rest}>
       {player.Name}

@@ -12,18 +12,15 @@ export type MatchState = {
   match?: Match | null
   round?: Round | null
   frame?: Frame | null
-  tick?: number
-  currentRound: number
   currentFrame: number
   setMatch: React.Dispatch<Match | null | undefined>
-  setRound: React.Dispatch<Round | null | undefined>
-  setFrame: React.Dispatch<Frame | null | undefined>
+  setRound: React.Dispatch<Round | number | null | undefined>
+  setFrame: React.Dispatch<Frame | number | null | undefined>
   setTick: React.Dispatch<number | undefined>
   changeTick: React.Dispatch<{ Tick: number | undefined }>
 }
 
 export const useMatch = create<MatchState>((set, get) => ({
-  currentRound: 0,
   currentFrame: 0,
   output: [],
   setOutput: (log) => set(({ output }) => ({ output: output.concat(log) })),
@@ -42,30 +39,34 @@ export const useMatch = create<MatchState>((set, get) => ({
       return { files }
     }),
   setMatch: (match) =>
-    set(({ currentRound, currentFrame }) =>
+    set(({ round, frame }) =>
       match
         ? {
             match,
-            round: match.Rounds?.at(currentRound),
-            frame: match.Rounds?.at(currentRound)?.Frames.at(currentFrame),
+            round: round ? findRound(match, round.Tick) : match.Rounds?.at(0),
+            frame: frame
+              ? findFrame(match, frame.Tick)
+              : match.Rounds?.at(0)?.Frames?.at(0),
           }
         : createMatchState(),
     ),
   setRound: (round) =>
-    set(() => ({
-      round,
-      frame: round?.Frames[0],
-      currentRound: round?.Round ?? 0,
-      currentFrame: 0,
-    })),
+    typeof round === "number"
+      ? get().setRound(get().match?.Rounds?.at(round) ?? get().round)
+      : set(() => ({
+          round,
+          frame: round?.Frames[0],
+          currentFrame: 0,
+        })),
   setFrame: (frame) =>
-    set(({ round }) => ({
-      frame,
-      currentFrame: frame ? round?.Frames.indexOf(frame) ?? 0 : 0,
-    })),
+    typeof frame === "number"
+      ? get().setFrame(get().round?.Frames.at(frame))
+      : set(({ round }) => ({
+          frame,
+          currentFrame: frame ? round?.Frames.indexOf(frame) ?? 0 : 0,
+        })),
   setTick: (tick) =>
     set(({ match }) => ({
-      tick,
       round: findRound(match, tick),
       frame: findFrame(match, tick),
     })),
@@ -74,7 +75,6 @@ export const useMatch = create<MatchState>((set, get) => ({
 
 export function createMatchState(): Partial<MatchState> {
   return {
-    currentRound: 0,
     currentFrame: 0,
   }
 }

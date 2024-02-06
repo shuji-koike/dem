@@ -44,15 +44,14 @@ const DemoNavItem: React.FC<{
   round?: Round
   children?: React.ReactNode
 }> = ({ round, children }) => {
-  const currentRound = useMatch((state) => state.currentRound)
   const setRound = useMatch((state) => state.setRound)
-  const active = round?.Round === currentRound
+  const active = useMatch((state) => round?.Round === state.round?.Round)
   const color = round && teamColor(round.Winner)
   return (
     <div
       css={css`
         ${style}
-        --size: 32px;
+        --size: 24px;
         --color: ${color};
         cursor: ${round ? "pointer" : "default"};
       `}
@@ -63,6 +62,7 @@ const DemoNavItem: React.FC<{
     </div>
   )
 }
+const $DemoNavItem = React.memo(DemoNavItem)
 
 function roundEndReasonToIcon(round: Round) {
   switch (round.Reason) {
@@ -78,8 +78,6 @@ function roundEndReasonToIcon(round: Round) {
   }
   return null
 }
-
-const $DemoNavItem = React.memo(DemoNavItem)
 
 const style = css`
   display: inline-block;

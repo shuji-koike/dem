@@ -26,11 +26,11 @@ export const DemoTabView: React.FC<{
         <Tab label="Nades" />
         <Tab label="Debug" />
       </Tabs>
-      {value === 0 && <ScoreBoardView match={match} />}
+      {value === 0 && <ScoreBoardView />}
       {value === 1 && <RoundsView match={match} setTick={setTick} />}
       {value === 2 && <KillsView match={match} setTick={setTick} />}
       {value === 3 && <NadesView match={match} setTick={setTick} />}
-      {value === 4 && <DebugView match={match} />}
+      {value === 4 && <DebugView />}
     </Paper>
   )
 }

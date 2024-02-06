@@ -75,10 +75,10 @@ export const DemoMenu: React.FC<{
             display="flex"
             alignItems="baseline"
             gap={1}
-            onClick={() => setTick?.(e.Tick)}
-            sx={{ cursor: "pointer" }}
             fontSize={12}
             flexWrap="wrap"
+            sx={{ cursor: "pointer" }}
+            onClick={() => setTick?.(e.Tick)}
           >
             {e.AttackerBlind && <img src={icon("blinded")} height={14} />}
             <PlayerLabel player={findPlayer(match, e.Killer)} />
@@ -108,9 +108,9 @@ export const DemoMenu: React.FC<{
             alignItems="baseline"
             justifyContent="end"
             gap={1 / 2}
-            onClick={() => setTick?.(e.Tick)}
             fontSize={12}
             sx={{ cursor: "pointer" }}
+            onClick={() => setTick?.(e.Tick)}
           >
             <img height={16} src={icon(e.Weapon)} />
             <PlayerLabel player={findPlayer(match, e.Thrower)} />

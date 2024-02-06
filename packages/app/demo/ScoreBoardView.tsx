@@ -1,9 +1,11 @@
-import React from "react"
+import React, { useMemo } from "react"
 
 import { getScores } from "."
+import { useMatch } from "../hooks/useMatch"
 
-export const ScoreBoardView: React.FC<{ match: Match }> = ({ match }) => {
-  const scores = getScores(match)
+export const ScoreBoardView: React.FC = () => {
+  const match = useMatch((state) => state.match)
+  const scores = useMemo(() => match && getScores(match), [match])
   return (
     <section>
       <table>
@@ -20,7 +22,7 @@ export const ScoreBoardView: React.FC<{ match: Match }> = ({ match }) => {
           </tr>
         </thead>
         <tbody>
-          {scores.map((e) => (
+          {scores?.map((e) => (
             <tr key={e.ID}>
               <td>{e.ID}</td>
               <td>{e.Name}</td>

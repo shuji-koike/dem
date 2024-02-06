@@ -26,9 +26,7 @@ export const FrameView: React.FC = () => {
         <NadeView key={e.ID} nade={e} />
       ))}
     </>
-  ) : (
-    <></>
-  )
+  ) : null
 }
 
 export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
@@ -53,7 +51,7 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
           fill="transparent"
           stroke={teamColor(player.Team)}
           strokeWidth={2}
-         />
+        />
       ) : (
         <>
           <circle
@@ -86,6 +84,7 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
         fontSize="14"
         fill={player.Hp ? "#eee" : "#888"}
         fontFamily="monospace"
+        cursor="default"
       >
         {player.Name}
       </text>

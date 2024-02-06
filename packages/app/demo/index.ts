@@ -117,9 +117,7 @@ export function findRound(
   tick: number | undefined,
 ): Round | undefined {
   if (typeof tick !== "number") return
-  return match?.Rounds?.find(
-    (e) => (e.Frames[e.Frames.length - 1]?.Tick ?? 0) > tick,
-  )
+  return match?.Rounds?.find((e) => (e.Frames.at(-1)?.Tick ?? 0) > tick)
 }
 
 export function findFrame(
