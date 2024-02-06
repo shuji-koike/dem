@@ -4,6 +4,7 @@
   "timezone": "Asia/Tokyo",
   "dependencyDashboard": true,
   "configMigration": true,
+  "schedule": "after 10am and before 11am on monday",
   "prHourlyLimit": 0,
   "rangeStrategy": "bump",
   "packageRules": [
