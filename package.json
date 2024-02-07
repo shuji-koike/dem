@@ -9,7 +9,7 @@
   "scripts": {
     "start": "vite dev",
     "build": "vite build",
-    "lint": "eslint --cache --fix .; prettier --write --loglevel warn .;tsc --noEmit",
+    "lint": "eslint --cache --fix .; prettier --write --log-level warn .;tsc --noEmit",
     "storybook": "start-storybook -p 6006"
   },
   "devDependencies": {

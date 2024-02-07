@@ -3,7 +3,7 @@
   "compilerOptions": {
     "lib": ["ESNext"],
     "module": "CommonJS",
-    "outDir": "build",
+    "outDir": "build"
   },
-  "files": ["index.ts"],
+  "files": ["index.ts"]
 }
