@@ -3,7 +3,6 @@ module github.com/shuji-koike/dem
 go 1.21.6
 
 require (
-	github.com/akiver/cs-demo-analyzer v1.2.1
 	github.com/golang/geo v0.0.0-20230421003525-6adc56603217
 	github.com/markus-wa/demoinfocs-golang/v4 v4.0.1
 	github.com/shuji-koike/goutil v1.0.0

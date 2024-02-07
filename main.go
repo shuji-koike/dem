@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"errors"
 	"flag"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -14,8 +13,6 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/akiver/cs-demo-analyzer/pkg/api"
-	"github.com/akiver/cs-demo-analyzer/pkg/api/constants"
 	"github.com/shuji-koike/goutil"
 	"golang.org/x/sync/singleflight"
 )
@@ -46,8 +43,6 @@ func main() {
 		} else {
 			Parse(bytes.NewReader(buf), nil)
 		}
-	} else if *analyzeDemo {
-		analyzeAndExportDemo(os.Args[2])
 	} else {
 		for _, path := range os.Args[1:] {
 			if !strings.HasPrefix(path, "-") {
@@ -99,17 +94,4 @@ func load(path string) (Match, error) {
 		return match, err
 	})
 	return v.(Match), err
-}
-
-func analyzeAndExportDemo(demoPath string) {
-	err := api.AnalyzeAndExportDemo(demoPath, "", api.AnalyzeAndExportDemoOptions{
-		IncludePositions: true,
-		Source:           constants.DemoSourceValve,
-		Format:           constants.ExportFormatJSON,
-		MinifyJSON:       false,
-	})
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
 }
