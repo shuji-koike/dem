@@ -1,6 +1,6 @@
 module github.com/shuji-koike/dem
 
-go 1.21.6
+go 1.22.0
 
 require (
 	github.com/golang/geo v0.0.0-20230421003525-6adc56603217
