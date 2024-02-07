@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
