@@ -19,7 +19,6 @@ import (
 
 var dryRun = flag.Bool("dry", false, "dry run")
 var stdin = flag.Bool("stdin", false, "read from stdin")
-var server = flag.Bool("server", false, "start http server")
 var port = flag.Int("port", 4000, "port to listen http requests")
 var dir = flag.String("dir", "/srv/app", "demo dir")
 var postfix = flag.String("postfix", ".json.gz", "postfix for cache files")
@@ -34,9 +33,7 @@ func main() {
 	log.Printf("main: pid=%d %s %v", os.Getpid(), runtime.GOARCH, os.Args)
 	flag.Parse()
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
-	if *server {
-		new(Server).Listen(*port)
-	} else if *stdin {
+	if *stdin {
 		buf, err := io.ReadAll(os.Stdin)
 		if err != nil {
 			log.Printf("main: error reading stdin %s", err.Error())
