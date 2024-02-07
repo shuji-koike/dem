@@ -207,6 +207,19 @@ export function labelFormat(
   return new Date(time * 1000).toISOString().slice(14, 19)
 }
 
+export function getRoundScore(
+  match: Match | null | undefined,
+  Round: number | null | undefined,
+) {
+  const map = new Map<Team, number>()
+  if (!match || !Round) return map
+  for (const e of match?.Rounds ?? []) {
+    if (Round <= e.Round) break
+    map.set(e.Winner, (map.get(e.Winner) ?? 0) + 1)
+  }
+  return map
+}
+
 export function getScores(match: Match): PlayerScore[] {
   const dict: { [key: number]: PlayerScore } = {}
   match.KillEvents.map((e) => [e.Killer, e.Assister, e.Victim])

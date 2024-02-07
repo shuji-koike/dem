@@ -3,6 +3,7 @@ import React from "react"
 
 import { DemoMenu } from "./DemoMenu"
 import { DemoNav } from "./DemoNav"
+import { DemoScore } from "./DemoScore"
 import { DemoSlider } from "./DemoSlider"
 import { FrameView, TrailView } from "./FrameView"
 import { MapEventView } from "./MapEventView"
@@ -27,7 +28,7 @@ export const DemoPlayer: React.FC = () => {
     document.body.style.overscrollBehavior = "none"
     return () => void (document.body.style.overscrollBehavior = "auto")
   }, [])
-  function onKeyDown(e: React.KeyboardEvent) {
+  function onKeyUp(e: React.KeyboardEvent) {
     const dict: { [key: string]: () => void } = {
       ArrowUp: () => setRound((round?.Round ?? 0) - 1),
       ArrowDown: () => setRound((round?.Round ?? 0) + 1),
@@ -38,7 +39,7 @@ export const DemoPlayer: React.FC = () => {
       q: () => setTick?.(undefined),
       r: () => console.info(round),
       x: () => console.info(frame),
-      " ": () => setState({ ...state, paused: !state.paused }),
+      a: () => setState({ ...state, paused: !state.paused }),
     }
     const keyRound = Number(e.key) - 1 + (e.key ? 0 : 10) + (e.ctrlKey ? 10 : 0)
     if (Number.isInteger(Number(e.key))) setRound(keyRound)
@@ -56,7 +57,7 @@ export const DemoPlayer: React.FC = () => {
     <form
       ref={ref}
       tabIndex={0}
-      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
       onWheel={onWheel}
       onSubmit={(e) => e.preventDefault()}
       css={style}
@@ -75,6 +76,7 @@ export const DemoPlayer: React.FC = () => {
       <aside>
         <DemoMenu filter={filter} setFilter={setFilter} />
       </aside>
+      <DemoScore />
       <footer>
         {round && frame && <DemoSlider />}
         <pre>
