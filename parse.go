@@ -19,7 +19,7 @@ import (
 
 const Version = "v0.0.0-alpha"
 
-var Sample = flag.Int("sample", 32, "frame sample rate")
+var Sample = flag.Float64("sample", 16, "frame sample rate")
 var FlgTrajectory = flag.Bool("trajectory", false, "enable trajectory")
 
 var debug = log.New(io.Discard, "", log.LstdFlags)
@@ -301,7 +301,9 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 		if !match.Started || match.Ended || !round.Started {
 			return
 		}
-		if parser.CurrentFrame()%*Sample != 0 {
+
+		fps := int(math.Max(math.Round(*Sample*header.FrameRate()/64), 1))
+		if parser.CurrentFrame()%fps != 0 {
 			return
 		}
 		frame := Frame{

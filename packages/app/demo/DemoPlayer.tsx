@@ -21,7 +21,7 @@ export const DemoPlayer: React.FC = () => {
   React.useEffect(() => {
     return clearTimeout.bind(
       window,
-      setTimeout(() => !state.paused && setFrame(currentFrame + 1), 1000 / 8),
+      setTimeout(() => !state.paused && setFrame(currentFrame + 1), 1000 / 16),
     )
   }, [currentFrame, state.paused])
   React.useEffect(() => {
