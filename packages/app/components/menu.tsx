@@ -1,5 +1,6 @@
 import { Home, StorageOutlined, FileOpen } from "@mui/icons-material"
 import {
+  Collapse,
   Dialog,
   List,
   ListItemButton,
@@ -21,29 +22,33 @@ export const Menu: React.FC = () => {
   const selectMatch = useMatch((state) => state.selectMatch)
   const open = useToggle()
   return (
-    <List>
+    <List dense>
       <ListItemButton component={NavLink} to="/" onClick={() => setMatch(null)}>
         <ListItemIcon>
           <Home />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItemButton>
-      {matchs.map((match) => (
-        <ListItemButton key={match.UUID} onClick={() => selectMatch(match)}>
-          <ListItemIcon>
-            <FileOpen />
-          </ListItemIcon>
-          <ListItemText primary={match.FileName} />
-        </ListItemButton>
-      ))}
-      {import.meta.env.DEV && (
-        <ListItemButton component={NavLink} to="/files" divider>
+      {!!matchs.length && (
+        <ListItemButton disabled>
           <ListItemIcon>
             <StorageOutlined />
           </ListItemIcon>
           <ListItemText primary="Files" />
         </ListItemButton>
       )}
+      <Collapse in timeout="auto" unmountOnExit>
+        <List dense sx={{ pl: 2 }}>
+          {matchs.map((match) => (
+            <ListItemButton key={match.UUID} onClick={() => selectMatch(match)}>
+              <ListItemIcon>
+                <FileOpen />
+              </ListItemIcon>
+              <ListItemText primary={match.FileName} />
+            </ListItemButton>
+          ))}
+        </List>
+      </Collapse>
       {import.meta.env.DEV && <DebugNav />}
       <Dialog open={open.state}>
         {open.state && match && <DemoTabView match={match} />}

@@ -9,25 +9,12 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material"
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
 import { useLocation, NavLink, Link } from "react-router-dom"
 
 import { AuthAvatar } from "./AuthAvatar"
-
-interface LayoutState {
-  hideHeader: boolean
-  showDrawer: boolean
-  setLayout: (state: Partial<LayoutState>) => void
-}
-
-const layoutState = Object.freeze<LayoutState>({
-  hideHeader: false,
-  showDrawer: false,
-  setLayout() {},
-})
-
-export const LayoutContext = React.createContext<LayoutState>(layoutState)
+import { useLayout } from "../hooks/useLayout"
 
 // https://git.io/JvUzq
 export const Layout: React.FC<{
@@ -37,24 +24,22 @@ export const Layout: React.FC<{
   children: React.ReactNode
 }> = ({ title, nav, menu, children }) => {
   const location = useLocation()
-  const [layout, setState] = React.useState<LayoutState>(layoutState)
-  function setLayout(layout: Partial<LayoutState>) {
-    setState((state) => ({ ...state, ...layout }))
-  }
-  React.useEffect(() => setLayout({ showDrawer: false }), [location])
+  const { hideHeader, showDrawer, setLayout } = useLayout()
+  const drawer = useRef<React.ElementRef<typeof Drawer>>(null)
+  useEffect(() => setLayout({ showDrawer: false }), [location])
+  useEffect(() => {
+    function onMouseMove(event: MouseEvent) {
+      if (event.clientX < 50 && !showDrawer) setLayout({ showDrawer: true })
+    }
+    document.addEventListener("mousemove", onMouseMove)
+    return () => document.removeEventListener("mousemove", onMouseMove)
+  }, [showDrawer])
   return (
-    <LayoutContext.Provider value={{ ...layout, setLayout }}>
+    <>
       <AppBar
         color="transparent"
-        css={css`
-          display: ${layout.hideHeader && "none"};
-          position: sticky;
-          backdrop-filter: blur(1px);
-          h1 {
-            font-size: 1.5rem;
-            margin: 0;
-          }
-        `}
+        css={style}
+        sx={{ display: hideHeader ? "none" : undefined }}
       >
         <Toolbar variant="dense">
           <MenuButton />
@@ -76,7 +61,8 @@ export const Layout: React.FC<{
         </Toolbar>
       </AppBar>
       <Drawer
-        open={layout.showDrawer}
+        ref={drawer}
+        open={showDrawer}
         onClose={() => setLayout({ showDrawer: false })}
       >
         <Toolbar sx={{ width: 300 }}>
@@ -85,12 +71,12 @@ export const Layout: React.FC<{
         {menu}
       </Drawer>
       {children}
-    </LayoutContext.Provider>
+    </>
   )
 }
 
 const MenuButton: React.FC = () => {
-  const { showDrawer, setLayout } = React.useContext(LayoutContext)
+  const { showDrawer, setLayout } = useLayout()
   return (
     <IconButton
       size="small"
@@ -115,3 +101,12 @@ const logo = (
     <Typography variant="h1" />
   </Link>
 )
+
+const style = css`
+  position: sticky;
+  backdrop-filter: blur(1px);
+  h1 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+`
