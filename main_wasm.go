@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"log"
+	"strings"
 	"syscall/js"
 )
 
@@ -28,16 +29,24 @@ func (logger *Logger) Write(p []byte) (int, error) {
 
 func wasmParaseDemo(this js.Value, args []js.Value) interface{} {
 	log.Printf("start")
-	if len(args) < 1 {
+	if len(args) < 2 {
 		log.Printf("args error")
 	}
-	buf := make([]byte, args[0].Get("byteLength").Int())
-	js.CopyBytesToGo(buf, args[0])
-	match, err := Parse(bytes.NewReader(buf), func(m Match) {
-		if len(args) > 1 {
-			args[1].Invoke(toJson(m))
+	name := args[0].String()
+	buf := make([]byte, args[1].Get("byteLength").Int())
+	js.CopyBytesToGo(buf, args[1])
+	reader := bytes.NewReader(buf)
+	callback := func(m Match) {
+		args[2].Invoke(toJson(m))
+	}
+	if strings.HasSuffix(strings.ToLower(name), ".rar") {
+		err := ParseRar(reader, name, callback)
+		if err != nil {
+			log.Printf("parse error %s", err.Error())
 		}
-	})
+		return nil
+	}
+	match, err := Parse(reader, name, callback)
 	if err != nil {
 		log.Printf("parse error %s", err.Error())
 	}

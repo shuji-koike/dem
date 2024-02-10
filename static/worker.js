@@ -4,10 +4,11 @@ onmessage = async function ({ data: { cmd, mainWasm, payload } }) {
   if (cmd === "wasmParaseDemo") {
     await initWasm(mainWasm)
     const data = self.$wasmParaseDemo(
+      payload.name,
       new Uint8Array(await payload.arrayBuffer()),
       onRoundEnd,
     )
-    self.postMessage([cmd, JSON.parse(data)])
+    if (data) self.postMessage([cmd, JSON.parse(data)])
   }
 }
 

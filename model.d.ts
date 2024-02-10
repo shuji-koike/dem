@@ -7,7 +7,9 @@ declare enum Team {
 
 interface Match {
   __typename: "Match"
+  FileName: string
   Version: string
+  UUID: string
   TickRate: number
   FrameRate: number
   MapName: string

@@ -4,7 +4,7 @@ import React from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import { Layout } from "./components/layout"
-import { menu } from "./components/menu"
+import { Menu } from "./components/menu"
 import { AnalyticsProvider } from "./firebase"
 import { theme } from "./theme"
 
@@ -20,7 +20,7 @@ export default function App() {
         <React.Suspense fallback="">
           <BrowserRouter basename={import.meta.env.BASE_URL}>
             <AnalyticsProvider>
-              <Layout menu={menu}>
+              <Layout menu={<Menu />}>
                 <React.Suspense fallback="">
                   <React.StrictMode>{routes}</React.StrictMode>
                 </React.Suspense>

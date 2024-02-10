@@ -1,7 +1,7 @@
 import { create } from "zustand"
 
 import { findFrame, findRound } from "../demo"
-import { isArchiveFile, isValidFile, openDemo, rarList } from "../demo/io"
+import { isArchiveFile, isValidFile, openDemo } from "../demo/io"
 
 export type MatchState = {
   file?: File
@@ -9,6 +9,7 @@ export type MatchState = {
   output: string[]
   setOutput: React.Dispatch<string>
   setFiles: React.Dispatch<File[] | FileList | null | undefined>
+  matchs: Match[]
   match?: Match | null
   round?: Round | null
   frame?: Frame | null
@@ -17,39 +18,48 @@ export type MatchState = {
   setRound: React.Dispatch<Round | number | null | undefined>
   setFrame: React.Dispatch<Frame | number | null | undefined>
   setTick: React.Dispatch<number | undefined>
+  selectMatch: React.Dispatch<Match>
   changeTick: React.Dispatch<{ Tick: number | undefined }>
 }
 
 export const useMatch = create<MatchState>((set, get) => ({
   currentFrame: 0,
   output: [],
+  matchs: [],
   setOutput: (log) => set(({ output }) => ({ output: output.concat(log) })),
   setFiles: (files) =>
-    set(({ setFiles, setMatch }) => {
+    set(() => {
       if (files === null) files = undefined
       if (files instanceof FileList) files = [...(files || [])]
       const head = files?.at(0)
-      if (isValidFile(head)) {
-        void openDemo(head, get().setOutput, setMatch).then(setMatch)
-        return { files, file: head }
-      } else if (isArchiveFile(head)) {
-        void rarList(head).then(setFiles)
+      if (isValidFile(head) || isArchiveFile(head)) {
+        void openDemo(head, get().setOutput, get().setMatch).then((match) =>
+          get().setMatch(match),
+        )
         return { files, file: head }
       }
       return { files }
     }),
   setMatch: (match) =>
-    set(({ round, frame }) =>
-      match
-        ? {
-            match,
-            round: round ? findRound(match, round.Tick) : match.Rounds?.at(0),
-            frame: frame
-              ? findFrame(match, frame.Tick)
-              : match.Rounds?.at(0)?.Frames?.at(0),
-          }
-        : createMatchState(),
-    ),
+    set(() => {
+      if (!match) return { match }
+      else if (!get().match || match.UUID === get().match?.UUID)
+        get().selectMatch(match)
+      return {
+        matchs: [match, ...get().matchs.filter((e) => e.UUID !== match.UUID)],
+      }
+    }),
+  selectMatch: (match) => {
+    const round = get().round
+    const frame = get().frame
+    set({
+      match,
+      round: round ? findRound(match, round.Tick) : match.Rounds?.at(0),
+      frame: frame
+        ? findFrame(match, frame.Tick)
+        : match.Rounds?.at(0)?.Frames?.at(0),
+    })
+  },
   setRound: (round) =>
     typeof round === "number"
       ? get().setRound(get().match?.Rounds?.at(round) ?? get().round)
@@ -72,9 +82,3 @@ export const useMatch = create<MatchState>((set, get) => ({
     })),
   changeTick: ({ Tick }) => get().setTick(Tick),
 }))
-
-export function createMatchState(): Partial<MatchState> {
-  return {
-    currentFrame: 0,
-  }
-}

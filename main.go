@@ -21,23 +21,50 @@ func main() {
 	flag.Parse()
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	if *stdin {
-		Parse(os.Stdin, nil)
+		Parse(os.Stdin, "stdin", nil)
 	} else {
 		for _, path := range os.Args[1:] {
-			if !strings.HasPrefix(path, "-") {
-				file, err := os.Open(path)
-				if err != nil {
-					log.Printf("main: error on load %s", err.Error())
-				}
-				match, err := Parse(file, func(m Match) {
-					debug.Printf("load: rounds=%d", len(m.Rounds))
-				})
-				if err == nil && !*dryRun {
-					err = goutil.WriteJSON(path+*postfix, match)
-				}
-				break
+			if strings.HasPrefix(path, "-") {
+				continue
+			}
+			if strings.HasSuffix(strings.ToLower(path), ".dem") {
+				OpenDem(path)
+			}
+			if strings.HasSuffix(strings.ToLower(path), ".rar") {
+				OpenRar(path)
 			}
 		}
 	}
 	log.Printf("main: end")
+}
+
+func OpenDem(path string) (err error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	match, err := Parse(file, path, nil)
+	if err == nil && !*dryRun {
+		err = goutil.WriteJSON(path+*postfix, match)
+	}
+	return err
+}
+
+func OpenRar(path string) (err error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	err = ParseRar(file, path, func(match Match) {
+		if !match.Ended {
+			return
+		}
+		err = goutil.WriteJSON(path+*postfix, match)
+		if err != nil {
+			log.Printf(err.Error())
+		}
+	})
+	return err
 }

@@ -6,11 +6,13 @@ import (
 	"log"
 	"math"
 	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
 	"github.com/golang/geo/r2"
 	"github.com/golang/geo/r3"
+	"github.com/google/uuid"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/common"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/events"
@@ -30,7 +32,7 @@ func init() {
 }
 
 // Parse ...
-func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
+func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, err error) {
 	log.Printf("%6d| Parse: start", 0)
 	if handler == nil {
 		handler = func(_ Match) {}
@@ -70,7 +72,9 @@ func Parse(reader io.Reader, handler func(m Match)) (match Match, err error) {
 	startMatch := func() {
 		match = Match{
 			TypeName:   "Match",
+			FileName:   filepath.Base(path),
 			Version:    Version,
+			UUID:       uuid.NewString(),
 			TickRate:   int(math.Max(math.Round(parser.TickRate()), 1)),  // FIXME
 			FrameRate:  int(math.Max(math.Round(header.FrameRate()), 1)), // FIXME
 			MapName:    MapName,

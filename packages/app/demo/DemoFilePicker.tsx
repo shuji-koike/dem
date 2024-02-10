@@ -19,7 +19,6 @@ export const FilePicker: React.FC = () => {
         <input
           type="file"
           accept=".dem,.rar,.json,.gz"
-          disabled={!!files?.length}
           onChange={(e) => setFiles(e.currentTarget.files)}
         />
         {import.meta.env.DEV && (

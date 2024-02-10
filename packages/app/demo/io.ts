@@ -32,6 +32,8 @@ export async function openDemo(
     return parseJson(file)
   if (file instanceof File && file.name.endsWith(".dem"))
     return parseDemo(file, setOutput, onRoundEnd)
+  if (file instanceof File && file.name.endsWith(".rar"))
+    return parseDemo(file, setOutput, onRoundEnd)
   if (file instanceof File) throw new Error("unsupported file type!")
   const never: never = file
   throw new Error(never)
