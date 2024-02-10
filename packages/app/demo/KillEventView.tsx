@@ -1,6 +1,6 @@
 import React from "react"
 
-import { teamOpponentColor, teamColor } from "."
+import { teamColor, teamOpponentColor } from "."
 
 export const KillEventView: React.FC<{
   event: KillEvent

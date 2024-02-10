@@ -1,6 +1,6 @@
 import React from "react"
 
-import { sumCache, Team } from "."
+import { Team, sumCache } from "."
 
 export const RoundsView: React.FC<{
   match: Match

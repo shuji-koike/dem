@@ -5,12 +5,12 @@ import {
   NadeColor,
   bombColor,
   colorToMatrix,
+  findKillEvent,
+  icon,
   pointToTuple,
   pointsToString,
   rotatePoint,
   teamColor,
-  icon,
-  findKillEvent,
 } from "."
 import { useMatch } from "../hooks/useMatch"
 

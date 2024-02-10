@@ -1,7 +1,7 @@
 import { setUser as setSentryUser } from "@sentry/react"
 import { getApp } from "firebase/app"
-import { getAuth, User } from "firebase/auth"
-import { httpsCallable, getFunctions } from "firebase/functions"
+import { User, getAuth } from "firebase/auth"
+import { getFunctions, httpsCallable } from "firebase/functions"
 import { useEffect, useMemo, useState } from "react"
 
 export function useAuth(): User | null {

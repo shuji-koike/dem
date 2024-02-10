@@ -1,8 +1,8 @@
 import {
-  faFileImage,
-  faFileExcel,
-  faChevronRight,
   faChevronDown,
+  faChevronRight,
+  faFileExcel,
+  faFileImage,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { TreeItem, TreeView } from "@mui/lab"

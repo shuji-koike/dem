@@ -1,4 +1,4 @@
-import { InfoOutlined, HourglassBottomOutlined } from "@mui/icons-material"
+import { HourglassBottomOutlined, InfoOutlined } from "@mui/icons-material"
 import { Alert, Box } from "@mui/material"
 import React from "react"
 import { useNavigate } from "react-router"

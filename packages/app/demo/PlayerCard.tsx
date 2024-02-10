@@ -2,7 +2,7 @@ import { css } from "@emotion/react"
 import { Avatar, Box, LinearProgress, Typography } from "@mui/material"
 import React from "react"
 
-import { teamColor, icon, armorIcon, teamColorVariantMap } from "."
+import { armorIcon, icon, teamColor, teamColorVariantMap } from "."
 import { SteamUser } from "../hooks"
 
 export const PlayerCard: React.FC<{

@@ -11,7 +11,7 @@ import {
 } from "@mui/material"
 import React, { useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
-import { useLocation, NavLink, Link } from "react-router-dom"
+import { Link, NavLink, useLocation } from "react-router-dom"
 
 import { AuthAvatar } from "./AuthAvatar"
 import { useLayout } from "../hooks/useLayout"
