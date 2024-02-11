@@ -97,15 +97,12 @@ const style = css`
   color: #fff;
   > article {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
+    margin: auto;
     width: 100vh;
     height: 100vh;
     max-width: 100vw;
     max-height: 100vw;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
   > aside {
     position: fixed;
