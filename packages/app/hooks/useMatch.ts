@@ -62,7 +62,9 @@ export const useMatch = create<MatchState>((set, get) => ({
   },
   setRound: (round) =>
     typeof round === "number"
-      ? get().setRound(get().match?.Rounds?.at(round) ?? get().round)
+      ? get().setRound(
+          get().match?.Rounds?.at(Math.max(0, round)) ?? get().round,
+        )
       : set(() => ({
           round,
           frame: round?.Frames[0],
@@ -70,7 +72,9 @@ export const useMatch = create<MatchState>((set, get) => ({
         })),
   setFrame: (frame) =>
     typeof frame === "number"
-      ? get().setFrame(get().round?.Frames.at(frame))
+      ? get().setFrame(
+          get().round?.Frames.at(Math.max(0, frame)) ?? get().frame,
+        )
       : set(({ round }) => ({
           frame,
           currentFrame: frame ? round?.Frames.indexOf(frame) ?? 0 : 0,
