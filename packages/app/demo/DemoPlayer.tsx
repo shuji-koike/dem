@@ -1,13 +1,14 @@
 import { css } from "@emotion/react"
 import React from "react"
 
-import { DemoMenu } from "./DemoMenu"
+import { Team } from "."
 import { DemoNav } from "./DemoNav"
 import { DemoScore } from "./DemoScore"
 import { DemoSlider } from "./DemoSlider"
 import { FrameView, TrailView } from "./FrameView"
 import { MapEventView } from "./MapEventView"
 import { MapView } from "./MapView"
+import { PlayerList } from "./PlayerList"
 import { HeaderSlot } from "../components/layout"
 import { useMatch } from "../hooks/useMatch"
 
@@ -15,7 +16,6 @@ export const DemoPlayer: React.FC = () => {
   const { match, round, frame, currentFrame, setRound, setFrame, setTick } =
     useMatch()
   const [state, setState] = React.useState({ paused: true })
-  const [filter, setFilter] = React.useState<Filter>({})
   const ref = React.createRef<HTMLFormElement>()
   React.useEffect(() => ref.current?.focus(), [ref.current])
   React.useEffect(() => {
@@ -70,11 +70,14 @@ export const DemoPlayer: React.FC = () => {
         <MapView>
           <TrailView />
           <FrameView />
-          <MapEventView filter={filter} />
+          <MapEventView />
         </MapView>
       </article>
       <aside>
-        <DemoMenu filter={filter} setFilter={setFilter} />
+        <PlayerList team={Team.CounterTerrorists} />
+      </aside>
+      <aside>
+        <PlayerList team={Team.Terrorists} />
       </aside>
       <DemoScore />
       <footer>
@@ -85,12 +88,6 @@ export const DemoPlayer: React.FC = () => {
       </footer>
     </form>
   )
-}
-
-export interface Filter {
-  players?: (e: Player) => boolean
-  kills?: (e: KillEvent) => boolean
-  nades?: (e: NadeEvent) => boolean
 }
 
 const style = css`
@@ -106,36 +103,25 @@ const style = css`
     height: 100vh;
     max-width: 100vw;
     max-height: 100vw;
-    @media (max-height: 700px) {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   > aside {
     position: fixed;
-    top: 72px;
-    right: 0px;
-    width: 300px;
-    padding: 0 8px;
-    max-height: calc(100vh - 140px); // FIXME
-    overflow-y: auto;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    @media (max-height: 700px) {
-      width: 100%;
-      > * > nav {
-        display: none;
-      }
-      > * {
-        flex-direction: row;
-        justify-content: space-between;
-      }
-      > * > * {
-        width: 200px;
-      }
-    }
+    padding: 8px;
+    width: 240px;
+  }
+  > aside + aside {
+    right: 0;
+  }
+  // FIXME
+  > aside + aside > * > * > * {
+    flex-direction: row-reverse;
+  }
+  > aside > * {
+    backdrop-filter: blur(1px);
+    filter: drop-shadow(0 0 4px rgba(18, 18, 18, 0.5));
   }
   > footer {
     position: fixed;
