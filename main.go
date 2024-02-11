@@ -52,12 +52,7 @@ func OpenDem(path string) (err error) {
 }
 
 func OpenRar(path string) (err error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	err = ParseRar(file, path, func(match Match) {
+	err = ParseRar(path, func(match Match) {
 		if !match.Ended {
 			return
 		}
