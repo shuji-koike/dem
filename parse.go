@@ -423,6 +423,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 		log.Printf("%6d| ParseToEnd\tEnded=%t\n", parser.CurrentFrame(), match.Ended)
 	}
 	match.Ended = true
+	handler(match)
 	return
 }
 
