@@ -42,6 +42,8 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 	if err != nil {
 		return
 	}
+	log.Printf("%6d| ParseHeader\t%#v", 0, header)
+
 	var MapName = header.MapName
 	mapMetadata := GetLegacyMapMetadata(MapName)
 	log.Printf("%6d| GetLegacyMapMetadata\t%#v", 0, mapMetadata)
