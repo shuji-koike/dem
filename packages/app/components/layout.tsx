@@ -27,14 +27,6 @@ export const Layout: React.FC<{
   const { hideHeader, showDrawer, setLayout } = useLayout()
   const drawer = useRef<React.ElementRef<typeof Drawer>>(null)
   useEffect(() => setLayout({ showDrawer: false }), [location])
-  useEffect(() => {
-    function onMouseMove(event: MouseEvent) {
-      if (event.clientX < 50 && event.clientY < 100 && !showDrawer)
-        setLayout({ showDrawer: true })
-    }
-    document.addEventListener("mousemove", onMouseMove)
-    return () => document.removeEventListener("mousemove", onMouseMove)
-  }, [showDrawer])
   return (
     <>
       <AppBar
