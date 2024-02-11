@@ -29,7 +29,8 @@ export const Layout: React.FC<{
   useEffect(() => setLayout({ showDrawer: false }), [location])
   useEffect(() => {
     function onMouseMove(event: MouseEvent) {
-      if (event.clientX < 50 && !showDrawer) setLayout({ showDrawer: true })
+      if (event.clientX < 50 && event.clientY < 100 && !showDrawer)
+        setLayout({ showDrawer: true })
     }
     document.addEventListener("mousemove", onMouseMove)
     return () => document.removeEventListener("mousemove", onMouseMove)
