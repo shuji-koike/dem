@@ -308,7 +308,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			return
 		}
 
-		fps := int(math.Max(math.Round(*Sample*header.FrameRate()/64), 1))
+		fps := int(math.Max(math.Round(*Sample*math.Max(header.FrameRate(), 64)/64), 1))
 		if parser.CurrentFrame()%fps != 0 {
 			return
 		}
