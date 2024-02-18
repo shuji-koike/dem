@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -10,7 +11,33 @@ import (
 	"github.com/nwaples/rardecode"
 )
 
-func ParseRar(path string, handler func(m Match)) (err error) {
+func ParseRar(file io.Reader, path string, handler func(m Match)) (err error) {
+	reader, err := rardecode.NewReader(file, "")
+	if err != nil {
+		return err
+	}
+	for {
+		head, err := reader.Next()
+		if head == nil {
+			break
+		}
+		if err != nil {
+			log.Printf("Error! %s", err)
+			continue
+		}
+		if !strings.HasSuffix(strings.ToLower(head.Name), ".dem") {
+			continue
+		}
+		match, err := Parse(reader, fmt.Sprintf("%s/%s", path, head.Name), handler)
+		if err != nil {
+			return err
+		}
+		handler(match)
+	}
+	return err
+}
+
+func ParseRarConcurrent(path string, handler func(m Match)) (err error) {
 	var wg sync.WaitGroup
 	var count = 0
 	for {
@@ -26,7 +53,6 @@ func ParseRar(path string, handler func(m Match)) (err error) {
 			return err
 		}
 		var head *rardecode.FileHeader
-		// call reader.Next N times
 		for i := 0; i < count; i++ {
 			head, err = reader.Next()
 		}
@@ -34,7 +60,7 @@ func ParseRar(path string, handler func(m Match)) (err error) {
 			break
 		}
 		if err != nil {
-			log.Printf("main: Error! %s", err)
+			log.Printf("Error! %s", err)
 			continue
 		}
 		if !strings.HasSuffix(strings.ToLower(head.Name), ".dem") {

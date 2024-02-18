@@ -14,6 +14,7 @@ import (
 
 var dryRun = flag.Bool("dry", false, "dry run")
 var stdin = flag.Bool("stdin", false, "read from stdin")
+var concurrent = flag.Bool("concurrent", false, "parse rar files concurrently")
 var postfix = flag.String("postfix", ".json.gz", "postfix for cache files")
 
 func main() {
@@ -52,14 +53,33 @@ func OpenDem(path string) (err error) {
 }
 
 func OpenRar(path string) (err error) {
-	err = ParseRar(path, func(match Match) {
-		if !match.Ended {
-			return
-		}
-		err = goutil.WriteJSON(path+*postfix, match)
+	if *concurrent {
+		err = ParseRarConcurrent(path, func(match Match) {
+			if !match.Ended {
+				return
+			}
+			err = goutil.WriteJSON(path+"-"+match.FileName+*postfix, match)
+			if err != nil {
+				log.Print(err.Error())
+			}
+		})
+		return err
+	} else {
+		file, err := os.Open(path)
 		if err != nil {
-			log.Printf(err.Error())
+			return err
 		}
-	})
-	return err
+		defer file.Close()
+		err = ParseRar(file, path, func(match Match) {
+			log.Printf("match: Rounds:%d", len(match.Rounds))
+			if !match.Ended {
+				return
+			}
+			err = goutil.WriteJSON(path+"-"+match.FileName+*postfix, match)
+			if err != nil {
+				log.Print(err.Error())
+			}
+		})
+		return err
+	}
 }
