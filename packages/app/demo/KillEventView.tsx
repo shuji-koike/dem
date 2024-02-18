@@ -15,6 +15,7 @@ export const KillEventView: React.FC<{
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
       onClick={() => onClick?.(event)}
+      cursor="pointer"
     >
       {event.From.X && event.From.Y && (
         <>
@@ -40,7 +41,7 @@ export const KillEventView: React.FC<{
           />
         </>
       )}
-      <circle cx={event.X} cy={event.Y} r={16} fill="transparent" />
+      <circle cx={event.X} cy={event.Y} r={12} fill="transparent" />
       <path
         d={[
           "M",
