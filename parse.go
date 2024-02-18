@@ -77,8 +77,8 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			FileName:   filepath.Base(path),
 			Version:    Version,
 			UUID:       uuid.NewString(),
-			TickRate:   int(math.Max(math.Round(parser.TickRate()), 1)),  // FIXME
-			FrameRate:  int(math.Max(math.Round(header.FrameRate()), 1)), // FIXME
+			TickRate:   int(math.Max(math.Round(parser.TickRate()), 64)),  // FIXME
+			FrameRate:  int(math.Max(math.Round(header.FrameRate()), 64)), // FIXME
 			MapName:    MapName,
 			Started:    true,
 			Rounds:     make([]Round, 0),
