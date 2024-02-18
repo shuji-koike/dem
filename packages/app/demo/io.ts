@@ -1,3 +1,4 @@
+import { getAnalytics, logEvent } from "firebase/analytics"
 import {
   getDownloadURL,
   getStorage,
@@ -26,6 +27,11 @@ export async function openDemo(
     return parseJson(await fetch(file))
   }
   if (file instanceof Response) return parseJson(file)
+  try {
+    logEvent(getAnalytics(), "openDemo", { file: file?.name })
+  } catch (err) {
+    console.error(err)
+  }
   if (file instanceof File && file.name.endsWith(".json"))
     return parseJson(file)
   if (file instanceof File && file.name.endsWith(".json.gz"))
