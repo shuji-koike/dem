@@ -204,7 +204,7 @@ export function labelFormat(
   if (!frame) return
   const time = frameToTime(match, round, frame)
   if (Number.isNaN(time)) return
-  return new Date(time * 1000).toISOString().slice(14, 19)
+  return new Date(time * 1000).toISOString().slice(14, 19).replace(/^0/, "")
 }
 
 export function getRoundScore(
