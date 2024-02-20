@@ -39,11 +39,14 @@ export const DemoPlayer: React.FC = () => {
       q: () => setTick?.(undefined),
       r: () => console.info(round),
       x: () => console.info(frame),
-      a: () => setState({ ...state, paused: !state.paused }),
+      " ": () => setState({ ...state, paused: !state.paused }),
     }
     const keyRound = Number(e.key) - 1 + (e.key ? 0 : 10) + (e.ctrlKey ? 10 : 0)
-    if (Number.isInteger(Number(e.key))) setRound(keyRound)
-    else dict[e.key]?.()
+    if (Number.isInteger(parseInt(e.key))) setRound(keyRound)
+    else {
+      dict[e.key]?.()
+      e.preventDefault()
+    }
   }
   function onWheel(e: React.WheelEvent) {
     if (Math.abs(e.deltaX) < 10) {
