@@ -63,7 +63,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 	state := parser.GameState()
 	var round Round
 	var bomb Bomb
-	nades := make(map[int]NadeEvent)
+	nades := make(map[int64]NadeEvent)
 	activeNades := make(map[ulid.ULID]*common.Equipment)
 
 	getNadeIsActive := func(e *common.Equipment) bool {
@@ -181,7 +181,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			warn.Printf("%6d| GrenadeProjectileThrow\tThrower is nil\n", parser.CurrentFrame())
 			return
 		}
-		nades[int(e.Projectile.UniqueID())] = NadeEvent{
+		nades[e.Projectile.UniqueID()] = NadeEvent{
 			Position: e.Projectile.Thrower.Position(),
 			Velocity: e.Projectile.Thrower.Velocity(),
 			Yaw:      e.Projectile.Thrower.ViewDirectionX(),
@@ -203,7 +203,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 				trajectory[i] = normalize(proj.Trajectory2[i].Position)
 			}
 		}
-		nade, ok := nades[int(e.Grenade.UniqueID())]
+		nade, ok := nades[e.Grenade.UniqueID()]
 		if !ok {
 			debug.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
 		}
@@ -242,7 +242,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 				trajectory[i] = normalize(proj.Trajectory2[i].Position)
 			}
 		}
-		nade, ok := nades[int(e.Grenade.UniqueID())]
+		nade, ok := nades[e.Grenade.UniqueID()]
 		if !ok {
 			// FIXME
 			debug.Printf("%6d| SmokeExpired\tNade Not Found", parser.CurrentFrame())
