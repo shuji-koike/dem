@@ -18,7 +18,6 @@ export const FrameView: React.FC = () => {
   const frame = useMatch((state) => state.frame)
   return frame ? (
     <>
-      <TrailView frame={frame}/>
       <MolotovView frame={frame} />
       {(frame.Players || []).map((e) => (
         <FramePlayer key={e.ID} player={e} />
@@ -100,21 +99,19 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
   )
 }
 
-export const TrailView: React.FC<{ frame: Frame }> = ({ frame }) => {
-
-
+export const TrailView: React.FC = () => {
+  const frame = useMatch((state) => state.frame)
   const round = useMatch((state) => state.round)
   const ref = React.useRef<HTMLCanvasElement>(null)
   React.useEffect(() => {
     const context = ref.current?.getContext?.("2d")
     if (context) {
       context.clearRect(0, 0, 1024, 1024)
+      if(frame) {
+        const index = round?.Frames.indexOf(frame)
+        const futureFrames = round?.Frames.slice(index)
 
-      const index = round?.Frames.indexOf(frame)
-      const futureFrames = round?.Frames.slice(index)
-
-      if(futureFrames) {
-        futureFrames.forEach((e) => {
+        futureFrames?.forEach((e) => {
           for (const player of e.Players) {
             context.fillStyle = teamColor(player.Team)
             context.fillRect(player.X, player.Y, 1, 1)

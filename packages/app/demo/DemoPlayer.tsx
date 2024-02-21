@@ -5,7 +5,7 @@ import { Team } from "."
 import { DemoNav } from "./DemoNav"
 import { DemoScore } from "./DemoScore"
 import { DemoSlider } from "./DemoSlider"
-import { FrameView } from "./FrameView"
+import { FrameView, TrailView } from "./FrameView"
 import { MapEventView } from "./MapEventView"
 import { MapView } from "./MapView"
 import { PlayerList } from "./PlayerList"
@@ -71,6 +71,7 @@ export const DemoPlayer: React.FC = () => {
       </HeaderSlot>
       <article>
         <MapView>
+          <TrailView />
           <FrameView />
           <MapEventView />
         </MapView>
