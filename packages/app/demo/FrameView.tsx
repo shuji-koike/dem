@@ -107,7 +107,7 @@ export const TrailView: React.FC = () => {
     const context = ref.current?.getContext?.("2d")
     if (context) {
       context.clearRect(0, 0, 1024, 1024)
-      if(frame) {
+      if (frame) {
         const index = round?.Frames.indexOf(frame)
         const futureFrames = round?.Frames.slice(index)
 
