@@ -100,20 +100,22 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
 }
 
 export const TrailView: React.FC = () => {
+  const frame = useMatch((state) => state.frame)
   const round = useMatch((state) => state.round)
   const ref = React.useRef<HTMLCanvasElement>(null)
   React.useEffect(() => {
     const context = ref.current?.getContext?.("2d")
     if (context) {
       context.clearRect(0, 0, 1024, 1024)
-      round?.Frames.forEach((e) => {
+      const from = frame ? round?.Frames.indexOf(frame) : 0
+      round?.Frames.slice(from)?.forEach((e) => {
         for (const player of e.Players) {
           context.fillStyle = teamColor(player.Team)
           context.fillRect(player.X, player.Y, 1, 1)
         }
       })
     }
-  }, [round])
+  }, [frame, round])
   if (isSafari) return // ref https://bugs.webkit.org/show_bug.cgi?id=23113
   return (
     <foreignObject x={0} y={0} width={1024} height={1024}>
