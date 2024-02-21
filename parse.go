@@ -17,6 +17,7 @@ import (
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/common"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/events"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/msgs2"
+	"github.com/oklog/ulid/v2"
 )
 
 const Version = "v0.0.0-alpha"
@@ -62,7 +63,25 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 	state := parser.GameState()
 	var round Round
 	var bomb Bomb
-	nades := make(map[int]NadeEvent)
+	nades := make(map[int64]NadeEvent)
+	activeNades := make(map[ulid.ULID]*common.Equipment)
+
+	getNadeIsActive := func(e *common.Equipment) bool {
+		if e == nil || e.Entity == nil {
+			return false
+		}
+		_, ok := activeNades[e.UniqueID2()]
+		if ok {
+			return true
+		}
+		if e.Type == common.EqSmoke {
+			prop, ok := e.Entity.PropertyValue("m_nSmokeEffectTickBegin")
+			if ok && prop.IntVal != 0 {
+				return true
+			}
+		}
+		return false
+	}
 
 	parser.RegisterNetMessageHandler(func(msg *msgs2.CSVCMsg_ServerInfo) {
 		log.Printf("%6d| CSVCMsg_ServerInfo\t%s", parser.CurrentFrame(), msg.GetMapName())
@@ -162,7 +181,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			warn.Printf("%6d| GrenadeProjectileThrow\tThrower is nil\n", parser.CurrentFrame())
 			return
 		}
-		nades[int(e.Projectile.UniqueID())] = NadeEvent{
+		nades[e.Projectile.UniqueID()] = NadeEvent{
 			Position: e.Projectile.Thrower.Position(),
 			Velocity: e.Projectile.Thrower.Velocity(),
 			Yaw:      e.Projectile.Thrower.ViewDirectionX(),
@@ -184,7 +203,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 				trajectory[i] = normalize(proj.Trajectory2[i].Position)
 			}
 		}
-		nade, ok := nades[int(e.Grenade.UniqueID())]
+		nade, ok := nades[e.Grenade.UniqueID()]
 		if !ok {
 			debug.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
 		}
@@ -204,6 +223,11 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 		})
 	})
 
+	parser.RegisterEventHandler(func(e events.SmokeStart) {
+		log.Printf("%6d| SmokeStart\t%d\t%v\n", parser.CurrentFrame(),
+			e.GrenadeEntityID, e.Grenade.UniqueID2())
+		activeNades[e.Grenade.UniqueID2()] = e.Grenade
+	})
 	parser.RegisterEventHandler(func(e events.SmokeExpired) {
 		debug.Printf("%6d| SmokeExpired\t%d\t%d\t%d\n", parser.CurrentFrame(),
 			e.GrenadeEntityID, e.Thrower.Team, e.Thrower.SteamID64)
@@ -218,7 +242,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 				trajectory[i] = normalize(proj.Trajectory2[i].Position)
 			}
 		}
-		nade, ok := nades[int(e.Grenade.UniqueID())]
+		nade, ok := nades[e.Grenade.UniqueID()]
 		if !ok {
 			// FIXME
 			debug.Printf("%6d| SmokeExpired\tNade Not Found", parser.CurrentFrame())
@@ -385,7 +409,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 				Point:   normalize(e.Position()),
 				Thrower: getSteamID(e.Thrower),
 				Team:    getTeam(e.Thrower),
-				Active:  getNadeIsActive(e),
+				Active:  getNadeIsActive(e.WeaponInstance),
 			})
 			sort.Slice(frame.Nades, func(i, j int) bool {
 				return frame.Nades[i].ID < frame.Nades[j].ID
@@ -444,13 +468,4 @@ func getWeapon(p *common.Equipment) common.EquipmentType {
 		return common.EqUnknown
 	}
 	return p.Type
-}
-func getNadeIsActive(e *common.GrenadeProjectile) bool {
-	if e.WeaponInstance.Type == common.EqSmoke {
-		prop, ok := e.Entity.PropertyValue("m_nSmokeEffectTickBegin")
-		if ok && prop.IntVal != 0 {
-			return true
-		}
-	}
-	return false
 }
