@@ -107,19 +107,18 @@ export const TrailView: React.FC = () => {
     const context = ref.current?.getContext?.("2d")
     if (context) {
       context.clearRect(0, 0, 1024, 1024)
-      if (frame) {
-        const index = round?.Frames.indexOf(frame)
-        const futureFrames = round?.Frames.slice(index)
 
-        futureFrames?.forEach((e) => {
-          for (const player of e.Players) {
-            context.fillStyle = teamColor(player.Team)
-            context.fillRect(player.X, player.Y, 1, 1)
-          }
-        })
-      }
+      const index = frame ? round?.Frames.indexOf(frame) : 0
+      const futureFrames = round?.Frames.slice(index)
+
+      futureFrames?.forEach((e) => {
+        for (const player of e.Players) {
+          context.fillStyle = teamColor(player.Team)
+          context.fillRect(player.X, player.Y, 1, 1)
+        }
+      })
     }
-  }, [frame])
+  }, [frame, round])
   if (isSafari) return // ref https://bugs.webkit.org/show_bug.cgi?id=23113
   return (
     <foreignObject x={0} y={0} width={1024} height={1024}>
