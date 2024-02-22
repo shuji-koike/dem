@@ -13,6 +13,6 @@
       "groupName": "all minor and patch dependencies"
     }
   ],
-  "postUpdateOptions": ["pnpmDedupe"],
+  "postUpdateOptions": ["pnpmDedupe", "gomodTidy"],
   "addLabels": ["deps"]
 }
