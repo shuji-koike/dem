@@ -10,6 +10,7 @@ import {
   pointToTuple,
   pointsToString,
   rotatePoint,
+  smoke2dRadius,
   teamColor,
 } from "."
 import { useMatch } from "../hooks/useMatch"
@@ -170,9 +171,9 @@ export const NadeView: React.FC<{ nade: Nade }> = ({ nade }) => {
     <circle
       cx={nade.X}
       cy={nade.Y}
-      r="24"
       fill="#fff"
       fillOpacity={0.5}
+      r={r}
       stroke={teamColor(nade.Team)}
       strokeOpacity={0.75}
       strokeWidth="2"

@@ -1,6 +1,7 @@
 import { Theme } from "@mui/material"
 
 import icons from "../../../static/icons.json"
+import mapData from "../../../static/map_data.json"
 
 export enum Team {
   Unassigned = 0,
@@ -49,6 +50,14 @@ export const teamColorVariantMap = new Map([
   [Team.Terrorists, "warning"],
   [Team.CounterTerrorists, "success"],
 ] as const)
+
+export function mapScale(x: unknown): number {
+  return (isMapName(x) && mapData[x].scale) || 1
+}
+
+export function isMapName(x: unknown): x is keyof typeof mapData {
+  return typeof x === "string" && x in mapData
+}
 
 export function teamColor(team: Team): string {
   return teamColorMap.get(team) ?? throwDataError()
@@ -280,6 +289,11 @@ export function armorIcon(State: Player["State"]): string {
     (State & PlayerState.HasArmor && icon(402)) ||
     emptyImage
   )
+}
+
+export function smoke2dRadius(match: Match | null | undefined): number {
+  const scale = mapScale(match?.MapName)
+  return scale ? 144 / scale : NaN
 }
 
 export const emptyImage =
