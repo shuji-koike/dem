@@ -28,7 +28,8 @@ export async function openDemo(
   }
   if (file instanceof Response) return parseJson(file)
   try {
-    logEvent(getAnalytics(), "openDemo", { file: file?.name })
+    if (import.meta.env.PROD)
+      logEvent(getAnalytics(), "openDemo", { file: file?.name })
   } catch (err) {
     console.error(err)
   }
