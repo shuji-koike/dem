@@ -166,17 +166,18 @@ export const MolotovView: React.FC<{ frame: Frame }> = ({ frame }) => {
 }
 
 export const NadeView: React.FC<{ nade: Nade }> = ({ nade }) => {
+  const r = useMatch((state) => smoke2dRadius(state.match))
   if (!nade.Weapon) return null
   return nade.Weapon === 505 && nade.Active ? (
     <circle
       cx={nade.X}
       cy={nade.Y}
-      fill="#fff"
-      fillOpacity={0.5}
       r={r}
+      fill="#ccc"
+      fillOpacity={0.25}
       stroke={teamColor(nade.Team)}
-      strokeOpacity={0.75}
-      strokeWidth="2"
+      strokeOpacity={0.5}
+      strokeWidth="1"
     />
   ) : (
     <circle
