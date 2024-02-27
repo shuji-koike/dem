@@ -29,7 +29,7 @@ var debug = log.New(io.Discard, "", log.LstdFlags)
 var warn = log.New(os.Stderr, "", log.LstdFlags)
 
 func init() {
-	demoinfocs.DefaultParserConfig.MsgQueueBufferSize = 128 * 1024
+	demoinfocs.DefaultParserConfig.MsgQueueBufferSize = 0
 }
 
 // Parse ...
