@@ -22,6 +22,7 @@ var mapCodes = map[string]uint32{
 // Map represents a CS:GO map. It contains information required to translate
 // in-game world coordinates to coordinates relative to (0, 0) on the provided map-overviews (radar images).
 type Map struct {
+	Name  string  `json:"name"`
 	PosX  float64 `json:"pos_x,string"`
 	PosY  float64 `json:"pos_y,string"`
 	Scale float64 `json:"scale,string"`
@@ -89,7 +90,7 @@ func GetLegacyMapMetadata(name string) Map {
 
 // makeMap creates a map stuct initialized with the given parameters.
 func makeMap(name string, x, y, scale float64) Map {
-	return Map{PosX: x, PosY: y, Scale: scale}
+	return Map{Name: name, PosX: x, PosY: y, Scale: scale}
 }
 
 // Pre-defined map translations.
