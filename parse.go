@@ -416,16 +416,21 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			})
 		}
 		for _, e := range state.Infernos() {
-			arr := e.Fires().ConvexHull2D()
-			for i, f := range arr {
-				arr[i] = normalize(r3.Vector{X: f.X, Y: f.Y})
-			}
 			frame.Nades = append(frame.Nades, Nade{
 				ID:      int(e.UniqueID()),
 				Thrower: getSteamID(e.Thrower()),
 				Team:    getTeam(e.Thrower()),
 				Active:  true,
-				Flames:  arr,
+				Flames: func() []r2.Point {
+					defer func() {
+						recover() // FIXME
+					}()
+					arr := e.Fires().ConvexHull2D()
+					for i, f := range arr {
+						arr[i] = normalize(r3.Vector{X: f.X, Y: f.Y})
+					}
+					return arr
+				}(),
 			})
 		}
 		round.Frames = append(round.Frames, frame)
