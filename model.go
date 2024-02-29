@@ -9,7 +9,7 @@ import (
 
 // Match ...
 type Match struct {
-	TypeName   string `json:"__typename"`
+	TypeName   string
 	FileName   string
 	Version    string
 	UUID       string
@@ -25,7 +25,7 @@ type Match struct {
 
 // Round ...
 type Round struct {
-	TypeName  string `json:"__typename"`
+	TypeName  string
 	Tick      int
 	Frame     int
 	Round     int

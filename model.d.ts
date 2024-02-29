@@ -6,7 +6,7 @@ declare enum Team {
 }
 
 interface Match {
-  __typename: "Match"
+  TypeName: "Match"
   FileName: string
   Version: string
   UUID: string
@@ -21,7 +21,7 @@ interface Match {
 }
 
 interface Round {
-  __typename: "Round"
+  TypeName: "Round"
   Tick: number
   Frame: number
   Round: number
