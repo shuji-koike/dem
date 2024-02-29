@@ -15,7 +15,7 @@ import { useMatch } from "../hooks/useMatch"
 export const DemoPlayer: React.FC = () => {
   const { match, round, frame, currentFrame, setRound, setFrame, setTick } =
     useMatch()
-  const [state, setState] = React.useState({ paused: true })
+  const { paused, toggle } = useMatch()
   const ref = React.createRef<HTMLFormElement>()
   React.useEffect(() => ref.current?.focus(), [ref.current])
   React.useEffect(() => {
@@ -41,7 +41,7 @@ export const DemoPlayer: React.FC = () => {
       q: () => setTick?.(undefined),
       r: () => console.info(round),
       x: () => console.info(frame),
-      " ": () => setState({ ...state, paused: !state.paused }),
+      " ": () => toggle(),
     }
     const keyRound = Number(e.key) - 1 + (e.key ? 0 : 10) + (e.ctrlKey ? 10 : 0)
     if (Number.isInteger(parseInt(e.key))) setRound(keyRound)

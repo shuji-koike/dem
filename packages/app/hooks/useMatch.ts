@@ -13,6 +13,7 @@ export type MatchState = {
   match?: Match | null
   round?: Round | null
   frame?: Frame | null
+  paused: boolean
   currentFrame: number
   setMatch: React.Dispatch<Match | null | undefined>
   setRound: React.Dispatch<Round | number | null | undefined>
@@ -20,9 +21,11 @@ export type MatchState = {
   setTick: React.Dispatch<number | undefined>
   selectMatch: React.Dispatch<Match>
   changeTick: React.Dispatch<{ Tick: number | undefined }>
+  toggle(value?: boolean): void
 }
 
 export const useMatch = create<MatchState>((set, get) => ({
+  paused: true,
   currentFrame: 0,
   output: [],
   matchs: [],
@@ -85,4 +88,7 @@ export const useMatch = create<MatchState>((set, get) => ({
       frame: findFrame(match, tick),
     })),
   changeTick: ({ Tick }) => get().setTick(Tick),
+  toggle(value) {
+    set({ paused: value ?? !get().paused })
+  },
 }))

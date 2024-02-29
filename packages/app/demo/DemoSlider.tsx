@@ -20,7 +20,7 @@ import {
 import { useMatch } from "../hooks/useMatch"
 
 export const DemoSlider: React.FC = () => {
-  const { match, round, frame, setFrame } = useMatch()
+  const { match, round, frame, setFrame, toggle } = useMatch()
   const theme = useTheme()
   const toTime = (frame: Frame) =>
     (match && round && frameToTime(match, round, frame)) ?? 0
@@ -73,6 +73,7 @@ export const DemoSlider: React.FC = () => {
       value={frame ? round?.Frames.indexOf(frame) : 0}
       max={round ? round.Frames.length - 1 : 0}
       onChange={(_, value) => {
+        toggle(true)
         if (typeof value === "number") setFrame(round?.Frames[value])
       }}
       marks={uniqBy(marks, "value")}
