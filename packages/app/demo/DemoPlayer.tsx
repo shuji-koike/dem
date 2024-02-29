@@ -19,11 +19,13 @@ export const DemoPlayer: React.FC = () => {
   const ref = React.createRef<HTMLFormElement>()
   React.useEffect(() => ref.current?.focus(), [ref.current])
   React.useEffect(() => {
-    return clearTimeout.bind(
-      window,
-      setTimeout(() => !state.paused && setFrame(currentFrame + 1), 1000 / 16),
+    return cancelAnimationFrame.bind(
+      null,
+      requestAnimationFrame(function render() {
+        if (!paused) setFrame(currentFrame + 1)
+      }),
     )
-  }, [currentFrame, state.paused])
+  }, [currentFrame, paused])
   React.useEffect(() => {
     document.body.style.overscrollBehavior = "none"
     return () => void (document.body.style.overscrollBehavior = "auto")
