@@ -1,8 +1,7 @@
 name: deploy
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [released]
   workflow_dispatch:
 concurrency:
   group: "deploy"
