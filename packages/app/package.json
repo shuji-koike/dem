@@ -14,8 +14,10 @@
     "@mui/icons-material": "^5.15.11",
     "@mui/lab": "5.0.0-alpha.166",
     "@mui/material": "^5.15.11",
+    "@react-three/fiber": "^8.15.16",
     "@sentry/react": "^7.102.1",
     "@sentry/tracing": "^7.102.1",
+    "@types/three": "^0.162.0",
     "firebase": "^10.8.0",
     "libarchive.js": "^2.0.2",
     "lodash": "^4.17.21",
@@ -25,6 +27,7 @@
     "react-is": "^18.2.0",
     "react-router": "^6.22.1",
     "react-router-dom": "^6.22.1",
+    "three": "^0.162.0",
     "wasm-gzip": "^2.0.3",
     "zod": "^3.22.4",
     "zustand": "^4.5.1"
