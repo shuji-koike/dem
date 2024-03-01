@@ -264,6 +264,10 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 		if !match.Started || match.Ended || !round.Started {
 			return
 		}
+		var from = r3.Vector{}
+		if e.Killer != nil {
+			from = e.Killer.Position()
+		}
 		match.KillEvents = append(match.KillEvents, KillEvent{
 			Killer:        getSteamID(e.Killer),
 			Victim:        getSteamID(e.Victim),
@@ -281,7 +285,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			Frame:         parser.CurrentFrame(),
 			Round:         state.TotalRoundsPlayed(),
 			Vector:        e.Victim.Position(),
-			From:          e.Killer.Position(),
+			From:          from,
 		})
 	})
 
