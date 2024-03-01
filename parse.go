@@ -53,12 +53,6 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 		x, y := mapMetadata.TranslateScale(point.X, point.Y)
 		return r2.Point{X: math.Round(x), Y: math.Round(y)}
 	}
-	normalizeSafe := func(p *common.Player) r2.Point {
-		if p == nil {
-			return r2.Point{}
-		}
-		return normalize(p.Position())
-	}
 
 	state := parser.GameState()
 	var round Round
@@ -208,18 +202,17 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			debug.Printf("%6d| FlashExplode\tProjectile Not Found", parser.CurrentFrame())
 		}
 		match.NadeEvents = append(match.NadeEvents, NadeEvent{
-			ID:         e.GrenadeEntityID,
-			Weapon:     e.GrenadeType,
-			Thrower:    uint64(e.Thrower.SteamID64),
-			Team:       e.Thrower.Team,
-			Position:   nade.Position,
-			Velocity:   nade.Velocity,
-			Yaw:        nade.Yaw,
-			Pitch:      nade.Pitch,
-			Trajectory: trajectory,
-			Tick:       state.IngameTick(),
-			Frame:      parser.CurrentFrame(),
-			Round:      state.TotalRoundsPlayed(),
+			ID:       e.GrenadeEntityID,
+			Weapon:   e.GrenadeType,
+			Thrower:  uint64(e.Thrower.SteamID64),
+			Team:     e.Thrower.Team,
+			Position: nade.Position,
+			Velocity: nade.Velocity,
+			Yaw:      nade.Yaw,
+			Pitch:    nade.Pitch,
+			Tick:     state.IngameTick(),
+			Frame:    parser.CurrentFrame(),
+			Round:    state.TotalRoundsPlayed(),
 		})
 	})
 
@@ -248,18 +241,17 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			debug.Printf("%6d| SmokeExpired\tNade Not Found", parser.CurrentFrame())
 		}
 		match.NadeEvents = append(match.NadeEvents, NadeEvent{
-			ID:         e.GrenadeEntityID,
-			Weapon:     e.GrenadeType,
-			Thrower:    uint64(e.Thrower.SteamID64),
-			Team:       e.Thrower.Team,
-			Position:   nade.Position,
-			Velocity:   nade.Velocity,
-			Yaw:        nade.Yaw,
-			Pitch:      nade.Pitch,
-			Trajectory: trajectory,
-			Tick:       state.IngameTick(),
-			Frame:      parser.CurrentFrame(),
-			Round:      state.TotalRoundsPlayed(),
+			ID:       e.GrenadeEntityID,
+			Weapon:   e.GrenadeType,
+			Thrower:  uint64(e.Thrower.SteamID64),
+			Team:     e.Thrower.Team,
+			Position: nade.Position,
+			Velocity: nade.Velocity,
+			Yaw:      nade.Yaw,
+			Pitch:    nade.Pitch,
+			Tick:     state.IngameTick(),
+			Frame:    parser.CurrentFrame(),
+			Round:    state.TotalRoundsPlayed(),
 		})
 	})
 
@@ -288,8 +280,8 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			Tick:          state.IngameTick(),
 			Frame:         parser.CurrentFrame(),
 			Round:         state.TotalRoundsPlayed(),
-			Point:         normalizeSafe(e.Victim),
-			From:          normalizeSafe(e.Killer),
+			Vector:        e.Victim.Position(),
+			From:          e.Killer.Position(),
 		})
 	})
 
@@ -343,7 +335,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			Players: make([]Player, 0),
 			Nades:   make([]Nade, 0),
 		}
-		frame.Bomb.Point = normalize(state.Bomb().Position())
+		frame.Bomb.Vector = state.Bomb().Position()
 		for _, p := range state.Participants().Playing() {
 			player := Player{
 				ID:    p.SteamID64,
@@ -352,7 +344,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 				Money: p.Money(),
 			}
 			if p.IsAlive() {
-				player.Point = normalize(p.Position())
+				player.Vector = p.Position()
 				player.Yaw = math.Round(float64(p.ViewDirectionX()))
 				player.Hp = p.Health() // TODO
 				if p.ActiveWeapon() != nil {
@@ -385,7 +377,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 					return int(player.Weapons[i]) < int(player.Weapons[j])
 				})
 			} else {
-				player.Point = normalize(p.LastAlivePosition)
+				player.Vector = p.LastAlivePosition
 			}
 			if p.FlashDuration > 0 {
 				d := p.FlashDuration
@@ -406,7 +398,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 			frame.Nades = append(frame.Nades, Nade{
 				ID:      int(e.UniqueID()),
 				Weapon:  e.WeaponInstance.Type,
-				Point:   normalize(e.Position()),
+				Vector:  e.Position(),
 				Thrower: getSteamID(e.Thrower),
 				Team:    getTeam(e.Thrower),
 				Active:  getNadeIsActive(e.WeaponInstance),
@@ -421,16 +413,7 @@ func Parse(reader io.Reader, path string, handler func(m Match)) (match Match, e
 				Thrower: getSteamID(e.Thrower()),
 				Team:    getTeam(e.Thrower()),
 				Active:  true,
-				Flames: func() []r2.Point {
-					defer func() {
-						recover() // FIXME
-					}()
-					arr := e.Fires().ConvexHull2D()
-					for i, f := range arr {
-						arr[i] = normalize(r3.Vector{X: f.X, Y: f.Y})
-					}
-					return arr
-				}(),
+				Flames:  e.Fires().Active().ConvexHull3D().Triangles(),
 			})
 		}
 		round.Frames = append(round.Frames, frame)

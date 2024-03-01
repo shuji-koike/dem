@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/golang/geo/r2"
 	"github.com/golang/geo/r3"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/common"
 	"github.com/markus-wa/demoinfocs-golang/v4/pkg/demoinfocs/events"
@@ -51,7 +50,7 @@ type Frame struct {
 
 // Player ...
 type Player struct {
-	r2.Point
+	r3.Vector
 	ID      uint64
 	Name    string
 	Yaw     float64
@@ -66,34 +65,33 @@ type Player struct {
 
 // Nade ...
 type Nade struct {
-	r2.Point
+	r3.Vector
 	ID      int
 	Weapon  common.EquipmentType
 	Thrower uint64
 	Team    common.Team
 	Active  bool
-	Flames  []r2.Point
+	Flames  [][3]r3.Vector
 }
 
 // NadeEvent ...
 type NadeEvent struct {
-	ID         int
-	Weapon     common.EquipmentType
-	Thrower    uint64
-	Team       common.Team
-	Position   r3.Vector
-	Velocity   r3.Vector
-	Yaw        float32
-	Pitch      float32
-	Trajectory []r2.Point
-	Tick       int
-	Frame      int
-	Round      int
+	ID       int
+	Weapon   common.EquipmentType
+	Thrower  uint64
+	Team     common.Team
+	Position r3.Vector
+	Velocity r3.Vector
+	Yaw      float32
+	Pitch    float32
+	Tick     int
+	Frame    int
+	Round    int
 }
 
 // KillEvent ...
 type KillEvent struct {
-	r2.Point
+	r3.Vector
 	Killer        uint64
 	Victim        uint64
 	Assister      uint64
@@ -106,7 +104,7 @@ type KillEvent struct {
 	NoScope       bool
 	ThroughSmoke  bool
 	Distance      float32
-	From          r2.Point
+	From          r3.Vector
 	Tick          int
 	Frame         int
 	Round         int
@@ -114,7 +112,7 @@ type KillEvent struct {
 
 // Bomb ...
 type Bomb struct {
-	r2.Point
+	r3.Vector
 	State BombState
 }
 

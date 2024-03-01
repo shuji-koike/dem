@@ -44,7 +44,7 @@ interface Frame {
   Bomb: Bomb
 }
 
-interface Player extends Point {
+interface Player extends Vector {
   ID: number
   Name: string
   Yaw: number
@@ -57,13 +57,13 @@ interface Player extends Point {
   Weapons: number[] | null
 }
 
-interface Nade extends Point {
+interface Nade extends Vector {
   ID: number
   Weapon: number
   Thrower: number
   Team: Team
   Active: boolean
-  Flames: Point[] | null
+  Flames: Vector[][] | null
 }
 
 interface NadeEvent {
@@ -75,13 +75,12 @@ interface NadeEvent {
   Velocity: Vector
   Yaw: number
   Pitch: number
-  Trajectory: Point[] | null
   Tick: number
   Frame: number
   Round: number
 }
 
-interface KillEvent extends Point {
+interface KillEvent extends Vector {
   Killer: number
   Victim: number
   Assister: number
@@ -94,7 +93,7 @@ interface KillEvent extends Point {
   NoScope: boolean
   ThroughSmoke: boolean
   Distance: number
-  From: Point
+  From: Vector
   Tick: number
   Frame: number
   Round: number
@@ -111,6 +110,6 @@ interface Vector {
   Z: number
 }
 
-interface Bomb extends Point {
+interface Bomb extends Vector {
   State: number
 }

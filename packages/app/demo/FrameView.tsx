@@ -12,6 +12,7 @@ import {
   rotatePoint,
   smoke2dRadius,
   teamColor,
+  vectorToPoint,
 } from "."
 import { useMatch } from "../hooks/useMatch"
 
@@ -32,6 +33,8 @@ export const FrameView: React.FC = () => {
 }
 
 export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
+  const match = useMatch((state) => state.match)
+  const { X, Y } = vectorToPoint(player, match)
   const killedTick = useMatch(
     (state) => findKillEvent(state.match, state.round, player.ID)?.Tick,
   )
@@ -40,22 +43,12 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
     !player.Hp && killedTick ? () => setTick(killedTick) : undefined
   return (
     <g onClick={onClick} cursor={onClick ? "pointer" : "default"}>
-      <circle cx={player.X} cy={player.Y} r="8" fill="transparent" />
+      <circle cx={X} cy={Y} r="8" fill="transparent" />
       {!player.Hp ? (
         <path
           d={[
-            "M",
-            player.X - 4,
-            player.Y - 4,
-            "L",
-            player.X + 4,
-            player.Y + 4,
-            "M",
-            player.X - 4,
-            player.Y + 4,
-            "L",
-            player.X + 4,
-            player.Y - 4,
+            ...["M", X - 4, Y - 4, "L", X + 4, Y + 4],
+            ...["M", X - 4, Y + 4, "L", X + 4, Y - 4],
           ].join(" ")}
           fill="transparent"
           stroke={teamColor(player.Team)}
@@ -63,23 +56,18 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
         />
       ) : (
         <>
+          <circle cx={X} cy={Y} r="8" fill={teamColor(player.Team)} />
           <circle
-            cx={player.X}
-            cy={player.Y}
-            r="8"
-            fill={teamColor(player.Team)}
-          />
-          <circle
-            cx={player.X}
-            cy={player.Y}
+            cx={X}
+            cy={Y}
             r="12"
             fill="white"
             fillOpacity={player.Flashed ? 0.5 : 0}
           />
           <path
             d={[
-              ...["M", ...pointToTuple(rotatePoint(player, -player.Yaw, 2))],
-              ...["L", ...pointToTuple(rotatePoint(player, -player.Yaw, 12))],
+              ...["M", ...pointToTuple(rotatePoint({ X, Y }, -player.Yaw, 2))],
+              ...["L", ...pointToTuple(rotatePoint({ X, Y }, -player.Yaw, 12))],
             ].join(" ")}
             strokeWidth={2}
             stroke="#fff"
@@ -88,8 +76,8 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
         </>
       )}
       <text
-        x={player.X + 15}
-        y={player.Y}
+        x={X + 15}
+        y={Y}
         fontSize="14"
         fill={player.Hp ? "#eee" : "#888"}
         fontFamily="monospace"
@@ -101,8 +89,9 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
 }
 
 export const TrailView: React.FC = () => {
-  const frame = useMatch((state) => state.frame)
+  const match = useMatch((state) => state.match)
   const round = useMatch((state) => state.round)
+  const frame = useMatch((state) => state.frame)
   const ref = React.useRef<HTMLCanvasElement>(null)
   React.useEffect(() => {
     const context = ref.current?.getContext?.("2d")
@@ -112,7 +101,8 @@ export const TrailView: React.FC = () => {
       round?.Frames.slice(from)?.forEach((e) => {
         for (const player of e.Players) {
           context.fillStyle = teamColor(player.Team)
-          context.fillRect(player.X, player.Y, 1, 1)
+          const { X, Y } = vectorToPoint(player, match)
+          context.fillRect(X, Y, 1, 1)
         }
       })
     }
@@ -126,11 +116,13 @@ export const TrailView: React.FC = () => {
 }
 
 export const BombView: React.FC<{ frame: Frame }> = ({ frame }) => {
+  const match = useMatch((state) => state.match)
+  const { X, Y } = vectorToPoint(frame.Bomb, match)
   return (
     <g>
       <image
-        x={frame.Bomb.X - 8}
-        y={frame.Bomb.Y - 13}
+        x={X - 8}
+        y={Y - 13}
         href={icon("404")}
         width="15"
         height="25"
@@ -148,30 +140,35 @@ export const BombView: React.FC<{ frame: Frame }> = ({ frame }) => {
 }
 
 export const MolotovView: React.FC<{ frame: Frame }> = ({ frame }) => {
+  const match = useMatch((state) => state.match)
   return (
     <g>
-      {frame.Nades?.filter((e) => e.Flames?.length).map((nade, i) => (
-        <polygon
-          key={i}
-          points={pointsToString(nade.Flames || [])}
-          stroke={teamColor(nade.Team)}
-          strokeOpacity={0.75}
-          strokeWidth="2"
-          fill="#8e0c05"
-          fillOpacity={0.25}
-        />
-      ))}
+      {frame.Nades?.filter((e) => e.Flames?.length).map((nade) =>
+        nade.Flames?.map((flame, i) => (
+          <polygon
+            key={i}
+            points={pointsToString(flame, match)}
+            stroke={teamColor(nade.Team)}
+            strokeOpacity={0.75}
+            strokeWidth="0.5"
+            fill="#8e0c05"
+            fillOpacity={0.25}
+          />
+        )),
+      )}
     </g>
   )
 }
 
 export const NadeView: React.FC<{ nade: Nade }> = ({ nade }) => {
+  const match = useMatch((state) => state.match)
+  const { X, Y } = vectorToPoint(nade, match)
   const r = useMatch((state) => smoke2dRadius(state.match))
-  if (!nade.Weapon) return null
+  if (!match || !nade.Weapon) return null
   return nade.Weapon === 505 && nade.Active ? (
     <circle
-      cx={nade.X}
-      cy={nade.Y}
+      cx={X}
+      cy={Y}
       r={r}
       fill="#ccc"
       fillOpacity={0.25}
@@ -181,8 +178,8 @@ export const NadeView: React.FC<{ nade: Nade }> = ({ nade }) => {
     />
   ) : (
     <circle
-      cx={nade.X}
-      cy={nade.Y}
+      cx={X}
+      cy={Y}
       r="5"
       fill={NadeColor[nade.Weapon]}
       stroke={teamColor(nade.Team)}

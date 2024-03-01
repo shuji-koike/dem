@@ -117,8 +117,15 @@ export function pointToTuple(p: Point): [number, number] {
   return [p.X, p.Y]
 }
 
-export function pointsToString(arr: Point[]): string {
-  return arr.map(pointToTuple).flat().join(" ")
+export function pointsToString(
+  arr: Vector[],
+  match: Match | null | undefined,
+): string {
+  return arr
+    .map((e) => vectorToPoint(e, match))
+    .map(pointToTuple)
+    .flat()
+    .join(" ")
 }
 
 export function findRound(
@@ -289,6 +296,18 @@ export function armorIcon(State: Player["State"]): string {
     (State & PlayerState.HasArmor && icon(402)) ||
     emptyImage
   )
+}
+
+export function vectorToPoint(
+  vector: Vector,
+  match: Match | null | undefined,
+): Point {
+  if (!isMapName(match?.MapName)) return { X: 0, Y: 0 }
+  const data = mapData[match.MapName]
+  return {
+    X: (vector.X - data.pos_x) / data.scale,
+    Y: (data.pos_y - vector.Y) / data.scale,
+  }
 }
 
 export function smoke2dRadius(match: Match | null | undefined): number {
