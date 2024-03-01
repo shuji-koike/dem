@@ -78,6 +78,7 @@ interface NadeEvent {
   Tick: number
   Frame: number
   Round: number
+  Trajectory?: Vector[]
 }
 
 interface KillEvent extends Vector {
