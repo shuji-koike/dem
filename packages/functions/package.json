@@ -1,6 +1,6 @@
 {
-  "name": "@shuji-koike/csgo-functions",
-  "version": "0.0.0-alpha",
+  "name": "@shuji-koike/dem-functions",
+  "version": "v1.0.3-beta",
   "private": true,
   "engines": {
     "node": "20"

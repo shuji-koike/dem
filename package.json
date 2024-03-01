@@ -1,6 +1,6 @@
 {
   "name": "@shuji-koike/dem",
-  "version": "v1.0.2-beta",
+  "version": "v1.0.3-beta",
   "private": true,
   "engines": {
     "node": "20"
