@@ -17,7 +17,7 @@
     "firebase-functions": "^4.7.0"
   },
   "devDependencies": {
-    "@shuji-koike/boilerplate": "^1.24.4",
+    "@shuji-koike/boilerplate": "^1.24.5",
     "esbuild": "^0.20.1",
     "firebase-functions-test": "^3.1.1",
     "jest": "^29.7.0",
