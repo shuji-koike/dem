@@ -1,4 +1,4 @@
-import { create } from "zustand"
+import { createStore, useStore } from "zustand"
 
 import { findFrame, findRound } from "../demo"
 import { isArchiveFile, isValidFile, openDemo } from "../demo/io"
@@ -24,7 +24,14 @@ export type MatchState = {
   toggle(value?: boolean): void
 }
 
-export const useMatch = create<MatchState>((set, get) => ({
+export function useMatch(): MatchState
+export function useMatch<T>(selector: (state: MatchState) => T): T
+export function useMatch<T>(selector?: (state: MatchState) => T) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return useStore(matchStore, selector!)
+}
+
+export const matchStore = createStore<MatchState>((set, get) => ({
   paused: true,
   currentFrame: 0,
   output: [],

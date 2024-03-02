@@ -13,9 +13,17 @@ import { HeaderSlot } from "../components/layout"
 import { useMatch } from "../hooks/useMatch"
 
 export const DemoPlayer: React.FC = () => {
-  const { match, round, frame, currentFrame, setRound, setFrame, setTick } =
-    useMatch()
-  const { paused, toggle } = useMatch()
+  const {
+    match,
+    round,
+    frame,
+    currentFrame,
+    setRound,
+    setFrame,
+    setTick,
+    paused,
+    toggle,
+  } = useMatch()
   const ref = React.createRef<HTMLFormElement>()
   React.useEffect(() => ref.current?.focus(), [ref.current])
   React.useEffect(() => {

@@ -2,6 +2,7 @@ import { Theme } from "@mui/material"
 
 import icons from "../../../static/icons.json"
 import mapData from "../../../static/map_data.json"
+import { matchStore } from "../hooks/useMatch"
 
 export enum Team {
   Unassigned = 0,
@@ -117,12 +118,9 @@ export function pointToTuple(p: Point): [number, number] {
   return [p.X, p.Y]
 }
 
-export function pointsToString(
-  arr: Vector[],
-  match: Match | null | undefined,
-): string {
+export function pointsToString(arr: Vector[]): string {
   return arr
-    .map((e) => vectorToPoint(e, match))
+    .map((e) => vectorToPoint(e))
     .map(pointToTuple)
     .flat()
     .join(" ")
@@ -298,10 +296,9 @@ export function armorIcon(State: Player["State"]): string {
   )
 }
 
-export function vectorToPoint(
-  vector: Vector,
-  match: Match | null | undefined,
-): Point {
+export function vectorToPoint(vector: Vector): Point {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { match } = matchStore.getState()
   if (!isMapName(match?.MapName)) return { X: 0, Y: 0 }
   const data = mapData[match.MapName]
   return {

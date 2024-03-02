@@ -33,8 +33,7 @@ export const FrameView: React.FC = () => {
 }
 
 export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
-  const match = useMatch((state) => state.match)
-  const { X, Y } = vectorToPoint(player, match)
+  const { X, Y } = vectorToPoint(player)
   const killedTick = useMatch(
     (state) => findKillEvent(state.match, state.round, player.ID)?.Tick,
   )
@@ -89,7 +88,6 @@ export const FramePlayer: React.FC<{ player: Player }> = ({ player }) => {
 }
 
 export const TrailView: React.FC = () => {
-  const match = useMatch((state) => state.match)
   const round = useMatch((state) => state.round)
   const frame = useMatch((state) => state.frame)
   const ref = React.useRef<HTMLCanvasElement>(null)
@@ -101,7 +99,7 @@ export const TrailView: React.FC = () => {
       round?.Frames.slice(from)?.forEach((e) => {
         for (const player of e.Players) {
           context.fillStyle = teamColor(player.Team)
-          const { X, Y } = vectorToPoint(player, match)
+          const { X, Y } = vectorToPoint(player)
           context.fillRect(X, Y, 1, 1)
         }
       })
@@ -116,8 +114,7 @@ export const TrailView: React.FC = () => {
 }
 
 export const BombView: React.FC<{ frame: Frame }> = ({ frame }) => {
-  const match = useMatch((state) => state.match)
-  const { X, Y } = vectorToPoint(frame.Bomb, match)
+  const { X, Y } = vectorToPoint(frame.Bomb)
   return (
     <g>
       <image
@@ -140,14 +137,13 @@ export const BombView: React.FC<{ frame: Frame }> = ({ frame }) => {
 }
 
 export const MolotovView: React.FC<{ frame: Frame }> = ({ frame }) => {
-  const match = useMatch((state) => state.match)
   return (
     <g>
       {frame.Nades?.filter((e) => e.Flames?.length).map((nade) =>
         nade.Flames?.map((flame, i) => (
           <polygon
             key={i}
-            points={pointsToString(flame, match)}
+            points={pointsToString(flame)}
             stroke={teamColor(nade.Team)}
             strokeOpacity={0.75}
             strokeWidth="0.5"
@@ -161,10 +157,9 @@ export const MolotovView: React.FC<{ frame: Frame }> = ({ frame }) => {
 }
 
 export const NadeView: React.FC<{ nade: Nade }> = ({ nade }) => {
-  const match = useMatch((state) => state.match)
-  const { X, Y } = vectorToPoint(nade, match)
+  const { X, Y } = vectorToPoint(nade)
   const r = useMatch((state) => smoke2dRadius(state.match))
-  if (!match || !nade.Weapon) return null
+  if (!nade.Weapon) return null
   return nade.Weapon === 505 && nade.Active ? (
     <circle
       cx={X}

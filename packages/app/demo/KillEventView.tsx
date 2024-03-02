@@ -1,19 +1,17 @@
 import React from "react"
 
 import { teamColor, teamOpponentColor, vectorToPoint } from "."
-import { useMatch } from "../hooks/useMatch"
 
 export const KillEventView: React.FC<{
   event: KillEvent
   selected?: boolean
   onClick?: (event: KillEvent) => void
 }> = ({ event, selected, onClick }) => {
-  const match = useMatch((state) => state.match)
   const [hover, setHover] = React.useState(false)
   const active = selected || hover
   const size = active ? 8 : 4
-  const from = vectorToPoint(event.From, match)
-  const { X, Y } = vectorToPoint(event, match)
+  const from = vectorToPoint(event.From)
+  const { X, Y } = vectorToPoint(event)
   return (
     <g
       onMouseOver={() => setHover(true)}
