@@ -19,7 +19,6 @@
     "@shuji-koike/boilerplate": "^1.24.4",
     "@shuji-koike/eslint-config": "^1.24.4",
     "@shuji-koike/storybook": "^1.24.4",
-    "@shuji-koike/vite-react": "^1.24.4",
     "@types/lodash": "^4.14.202",
     "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.19",
