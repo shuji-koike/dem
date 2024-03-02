@@ -11,6 +11,7 @@ import { MapView } from "./MapView"
 import { PlayerList } from "./PlayerList"
 import { HeaderSlot } from "../components/layout"
 import { useMatch } from "../hooks/useMatch"
+import { ThreeView } from "../three"
 
 export const DemoPlayer: React.FC = () => {
   const {
@@ -85,6 +86,7 @@ export const DemoPlayer: React.FC = () => {
           <FrameView />
           <MapEventView />
         </MapView>
+        <ThreeView />
       </article>
       <aside>
         <PlayerList team={Team.CounterTerrorists} />

@@ -52,8 +52,12 @@ export const teamColorVariantMap = new Map([
   [Team.CounterTerrorists, "success"],
 ] as const)
 
+export function getMapData(x: unknown) {
+  return isMapName(x) ? mapData[x] : null
+}
+
 export function mapScale(x: unknown): number {
-  return (isMapName(x) && mapData[x].scale) || 1
+  return getMapData(x)?.scale || 1
 }
 
 export function isMapName(x: unknown): x is keyof typeof mapData {
