@@ -7,6 +7,7 @@ import * as THREE from "three"
 // https://docs.pmnd.rs/react-three-fiber/getting-started/introduction
 // https://blog.maximeheckel.com/posts/the-magical-world-of-particles-with-react-three-fiber-and-shaders/
 // https://qiita.com/Quarter-lab/items/151f06bddea1fc9cf4d7
+// https://discoverthreejs.com/tips-and-tricks/
 
 import { assetsMapRadar } from "../assets"
 import { getMapData, teamColor } from "../demo"
@@ -14,22 +15,28 @@ import { useMatch } from "../hooks/useMatch"
 
 export function ThreeView() {
   const frame = useMatch((state) => state.frame)
+  const light = [1e3, -2e3, 5e2] satisfies THREE.Vector3Tuple
   return (
-    <div css={style}>
+    <div css={style} onWheel={(e) => e.stopPropagation()}>
       <Canvas gl={{ logarithmicDepthBuffer: true, antialias: false }}>
         <OrthographicCamera
           makeDefault
           far={1e10}
-          position={[100, 0, 1e4]}
+          position={[0, 0, 1e4]}
           zoom={0.1}
         />
         <Suspense fallback={null}>
           <Map />
         </Suspense>
         <OrbitControls />
-        <ambientLight intensity={Math.PI / 2} />
         <TrailPoints />
         {frame?.Players.map((e) => <Box key={e.ID} player={e} />)}
+        <mesh position={light}>
+          <boxGeometry args={[100, 100, 100]} />
+          <meshStandardMaterial color="red" />
+        </mesh>
+        <ambientLight />
+        <pointLight position={light} intensity={10} decay={0.1} />
       </Canvas>
     </div>
   )
@@ -37,18 +44,27 @@ export function ThreeView() {
 
 function Map() {
   const match = useMatch((state) => state.match)
+  const round = useMatch((state) => state.round)
   const data = getMapData(match?.MapName)
   const texture = useLoader(
     THREE.TextureLoader,
     (match && assetsMapRadar[match.MapName]) || "",
+  )
+  const minZ = useMemo(
+    () =>
+      round?.Frames.flatMap((frame) => frame?.Players).reduce(
+        (a, b) => Math.min(a, b.Z),
+        0,
+      ) || 0,
+    [round],
   )
   if (!data) return null
   return (
     <mesh
       position={[
         data.pos_x + 512 * data.scale,
-        512 * data.scale - data.pos_y,
-        -400,
+        data.pos_y - 512 * data.scale,
+        minZ - 1,
       ]}
     >
       <planeGeometry
@@ -66,8 +82,8 @@ function Map() {
 
 function Box({ player }: { player: Player }) {
   return (
-    <mesh position={[player.X, player.Y, player.Z]}>
-      <boxGeometry args={[100, 100, 100]} />
+    <mesh position={[player.X, player.Y, player.Z + 50]}>
+      <boxGeometry args={[50, 50, 100]} />
       <meshStandardMaterial color={teamColor(player.Team)} />
     </mesh>
   )
@@ -110,4 +126,5 @@ function TrailPoints() {
 const style = css`
   position: absolute;
   inset: 0;
+  background-color: #000;
 `
