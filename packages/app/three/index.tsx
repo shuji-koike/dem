@@ -1,26 +1,29 @@
 import { css } from "@emotion/react"
 import {
-  OrbitControls,
+  Line,
+  LineProps,
   OrthographicCamera,
   TrackballControls,
 } from "@react-three/drei"
 import { Canvas, useLoader } from "@react-three/fiber"
-import { Suspense, useMemo } from "react"
+import { Suspense, useMemo, useState } from "react"
 import * as THREE from "three"
 
 // https://docs.pmnd.rs/react-three-fiber/getting-started/introduction
 // https://blog.maximeheckel.com/posts/the-magical-world-of-particles-with-react-three-fiber-and-shaders/
 // https://qiita.com/Quarter-lab/items/151f06bddea1fc9cf4d7
 // https://discoverthreejs.com/tips-and-tricks/
+// https://drei.pmnd.rs/?path=/docs/controls-trackballcontrols--docs
 
 import { assetsMapRadar } from "../assets"
-import { getMapData, teamColor } from "../demo"
+import { getMapData, nadeTrajectories, teamColor } from "../demo"
 import { useMatch } from "../hooks/useMatch"
 
 export function ThreeView() {
   const frame = useMatch((state) => state.frame)
   const light = [1e3, -2e3, 5e2] satisfies THREE.Vector3Tuple
-  const vector = frame?.Players.at(0)
+  const [player] = useState<number>()
+  const vector = player && frame?.Players.at(player)
   const target =
     vector && ([vector.X, vector.Y, vector.Z] satisfies THREE.Vector3Tuple)
   return (
@@ -39,11 +42,12 @@ export function ThreeView() {
         {/* <OrbitControls enableDamping={false} target={target} /> */}
         <TrailPoints />
         {frame?.Players.map((e) => <Box key={e.ID} player={e} />)}
+        <Nades />
+        <ambientLight />
         <mesh position={light}>
-          <boxGeometry args={[100, 100, 100]} />
+          <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial />
         </mesh>
-        <ambientLight />
         <pointLight position={light} intensity={10} decay={0.1} />
       </Canvas>
     </div>
@@ -128,6 +132,35 @@ function TrailPoints() {
         />
       </bufferGeometry>
       <pointsMaterial color="#295FCC" size={1} sizeAttenuation />
+    </points>
+  )
+}
+
+export function Nades() {
+  const match = useMatch((state) => state.match)
+  return match?.Rounds?.map((round, i) => <RoundNades key={i} round={round} />)
+}
+
+export function RoundNades({ round }: { round: Round }) {
+  const nades = useMemo(() => nadeTrajectories(round), [round])
+  return [...nades].map(([key, points]) => (
+    <Trajectory key={key} points={points} />
+  ))
+}
+
+export function Trajectory({ points }: { points: LineProps["points"] }) {
+  return (
+    <points>
+      {/* <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={array.length / 3}
+          array={array}
+          itemSize={3}
+        />
+      </bufferGeometry> */}
+      {/* <pointsMaterial color="#f00" size={1} sizeAttenuation /> */}
+      <Line points={points} color="#d00" />
     </points>
   )
 }

@@ -316,6 +316,23 @@ export function smoke2dRadius(match: Match | null | undefined): number {
   return scale ? 144 / scale : NaN
 }
 
+export function nadeTrajectories(round: Round | null | undefined) {
+  const nades = new Map<number, [number, number, number][]>()
+  for (const frame of round?.Frames ?? []) {
+    for (const nade of frame.Nades ?? []) {
+      if (!nades.has(nade.ID)) nades.set(nade.ID, [[nade.X, nade.Y, nade.Z]])
+      nades.get(nade.ID)?.push([nade.X, nade.Y, nade.Z])
+    }
+  }
+  // const ret = new Map<number, Float32Array>()
+  // for (const [key, arr] of nades) {
+  //   const farr = new Float32Array(arr.length * 3)
+  //   for (const e of arr) farr.set([e.X, e.Y, e.Z], arr.indexOf(e) * 3)
+  //   ret.set(key, farr)
+  // }
+  return nades
+}
+
 export const emptyImage =
   "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
 
