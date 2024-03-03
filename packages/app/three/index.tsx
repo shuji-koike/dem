@@ -1,5 +1,9 @@
 import { css } from "@emotion/react"
-import { OrbitControls, OrthographicCamera } from "@react-three/drei"
+import {
+  OrbitControls,
+  OrthographicCamera,
+  TrackballControls,
+} from "@react-three/drei"
 import { Canvas, useLoader } from "@react-three/fiber"
 import { Suspense, useMemo } from "react"
 import * as THREE from "three"
@@ -16,9 +20,12 @@ import { useMatch } from "../hooks/useMatch"
 export function ThreeView() {
   const frame = useMatch((state) => state.frame)
   const light = [1e3, -2e3, 5e2] satisfies THREE.Vector3Tuple
+  const vector = frame?.Players.at(0)
+  const target =
+    vector && ([vector.X, vector.Y, vector.Z] satisfies THREE.Vector3Tuple)
   return (
     <div css={style} onWheel={(e) => e.stopPropagation()}>
-      <Canvas gl={{ logarithmicDepthBuffer: true, antialias: false }}>
+      <Canvas gl={{ logarithmicDepthBuffer: true }}>
         <OrthographicCamera
           makeDefault
           far={1e10}
@@ -28,12 +35,13 @@ export function ThreeView() {
         <Suspense fallback={null}>
           <Map />
         </Suspense>
-        <OrbitControls />
+        <TrackballControls rotateSpeed={10} target={target} />
+        {/* <OrbitControls enableDamping={false} target={target} /> */}
         <TrailPoints />
         {frame?.Players.map((e) => <Box key={e.ID} player={e} />)}
         <mesh position={light}>
           <boxGeometry args={[100, 100, 100]} />
-          <meshStandardMaterial color="red" />
+          <meshStandardMaterial />
         </mesh>
         <ambientLight />
         <pointLight position={light} intensity={10} decay={0.1} />
@@ -81,6 +89,7 @@ function Map() {
 }
 
 function Box({ player }: { player: Player }) {
+  if (!player.Hp) return null
   return (
     <mesh position={[player.X, player.Y, player.Z + 50]}>
       <boxGeometry args={[50, 50, 100]} />
