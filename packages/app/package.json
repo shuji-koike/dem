@@ -14,6 +14,7 @@
     "@mui/icons-material": "^5.15.11",
     "@mui/lab": "5.0.0-alpha.166",
     "@mui/material": "^5.15.11",
+    "@react-three/drei": "^9.99.5",
     "@react-three/fiber": "^8.15.19",
     "@sentry/react": "^7.105.0",
     "@sentry/tracing": "^7.105.0",

@@ -86,8 +86,8 @@ export const DemoPlayer: React.FC = () => {
           <FrameView />
           <MapEventView />
         </MapView>
-        <ThreeView />
       </article>
+      <ThreeView />
       <aside>
         <PlayerList team={Team.CounterTerrorists} />
       </aside>
