@@ -14,6 +14,7 @@ import * as THREE from "three"
 // https://qiita.com/Quarter-lab/items/151f06bddea1fc9cf4d7
 // https://discoverthreejs.com/tips-and-tricks/
 // https://drei.pmnd.rs/?path=/docs/controls-trackballcontrols--docs
+// https://docs.pmnd.rs/react-three-fiber/tutorials/typescript
 
 import { assetsMapRadar } from "../assets"
 import { getMapData, nadeTrajectories, teamColor } from "../demo"
@@ -150,7 +151,7 @@ export function RoundNades({ round }: { round: Round }) {
 
 export function Trajectory({ points }: { points: LineProps["points"] }) {
   return (
-    <points>
+    <>
       {/* <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -161,7 +162,7 @@ export function Trajectory({ points }: { points: LineProps["points"] }) {
       </bufferGeometry> */}
       {/* <pointsMaterial color="#f00" size={1} sizeAttenuation /> */}
       <Line points={points} color="#d00" />
-    </points>
+    </>
   )
 }
 
