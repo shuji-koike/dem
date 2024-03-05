@@ -5,7 +5,7 @@ go 1.22.0
 require (
 	github.com/golang/geo v0.0.0-20230421003525-6adc56603217
 	github.com/google/uuid v1.6.0
-	github.com/markus-wa/demoinfocs-golang/v4 v4.0.4
+	github.com/markus-wa/demoinfocs-golang/v4 v4.0.5
 	github.com/nwaples/rardecode v1.1.3
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/shuji-koike/goutil v1.0.0
