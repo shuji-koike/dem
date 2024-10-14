@@ -32,6 +32,6 @@
     "react-router-dom": "^6.22.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.9",
-    "vite-plugin-static-copy": "^1.0.2"
+    "vite-plugin-static-copy": "^2.0.0"
   }
 }
