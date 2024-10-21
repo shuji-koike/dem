@@ -15,7 +15,7 @@
     "@mui/lab": "5.0.0-alpha.170",
     "@mui/material": "^5.15.15",
     "@react-three/fiber": "^8.16.2",
-    "@sentry/react": "^7.110.1",
+    "@sentry/react": "^8.35.0",
     "@sentry/tracing": "^7.110.1",
     "@types/three": "^0.163.0",
     "firebase": "^10.11.0",
