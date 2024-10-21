@@ -3,9 +3,9 @@
   "version": "v1.0.3-beta",
   "private": true,
   "engines": {
-    "node": "20.12.2"
+    "node": "20.18.0"
   },
-  "packageManager": "pnpm@8.15.7",
+  "packageManager": "pnpm@8.15.9",
   "scripts": {
     "start": "vite dev",
     "build": "vite build",
@@ -13,25 +13,25 @@
     "storybook": "start-storybook -p 6006"
   },
   "devDependencies": {
-    "@emotion/react": "^11.11.4",
-    "@firebase/app-compat": "^0.2.31",
-    "@sentry/vite-plugin": "^2.16.1",
-    "@shuji-koike/boilerplate": "^1.24.5",
-    "@shuji-koike/eslint-config": "^1.24.5",
-    "@shuji-koike/storybook": "^1.24.5",
-    "@types/lodash": "^4.17.0",
-    "@types/react": "^18.2.79",
-    "@types/react-dom": "^18.2.25",
+    "@emotion/react": "^11.13.3",
+    "@firebase/app-compat": "^0.2.44",
+    "@sentry/vite-plugin": "^2.22.6",
+    "@shuji-koike/boilerplate": "^1.25.1",
+    "@shuji-koike/eslint-config": "^1.25.1",
+    "@shuji-koike/storybook": "^1.25.1",
+    "@types/lodash": "^4.17.12",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
     "@types/react-router-dom": "^5.3.3",
-    "@vitejs/plugin-react": "^4.2.1",
-    "firebase-tools": "^13.7.2",
+    "@vitejs/plugin-react": "^4.3.3",
+    "firebase-tools": "^13.22.1",
     "lodash": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router": "^6.22.3",
-    "react-router-dom": "^6.22.3",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.9",
-    "vite-plugin-static-copy": "^1.0.2"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^6.27.0",
+    "react-router-dom": "^6.27.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9",
+    "vite-plugin-static-copy": "^1.0.6"
   }
 }
