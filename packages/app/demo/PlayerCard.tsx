@@ -98,14 +98,10 @@ export const $PlayerCard = React.memo(
       (acc, key) =>
         acc &&
         (Array.isArray(prev.player[key])
-          ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            prev.player[key]?.join()
+          ? prev.player[key]?.join()
           : prev.player[key]) ===
           (Array.isArray(next.player[key])
-            ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              next.player[key]?.join()
+            ? next.player[key]?.join()
             : next.player[key]),
       true,
     )
