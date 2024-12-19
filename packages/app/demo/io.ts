@@ -10,7 +10,7 @@ import {
 import { Archive } from "libarchive.js"
 import archiveWorker from "libarchive.js/dist/worker-bundle.js?url"
 import initGzip, { compress, decompress } from "wasm-gzip"
-import gzipWasm from "wasm-gzip/wasm_gzip_bg.wasm?url"
+import gzipWasm from "wasm-gzip/wasm_gzip.wasm?url"
 
 import mainWasm from "/static/main.wasm?url"
 import GoWorker from "/static/worker.js?worker"
