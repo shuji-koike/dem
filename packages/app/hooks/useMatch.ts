@@ -87,7 +87,7 @@ export const matchStore = createStore<MatchState>((set, get) => ({
         )
       : set(({ round }) => ({
           frame,
-          currentFrame: frame ? round?.Frames.indexOf(frame) ?? 0 : 0,
+          currentFrame: frame ? (round?.Frames.indexOf(frame) ?? 0) : 0,
         })),
   setTick: (tick) =>
     set(({ match }) => ({
