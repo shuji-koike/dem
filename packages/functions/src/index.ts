@@ -1,5 +1,5 @@
 import axios from "axios"
-import { config, logger, region } from "firebase-functions"
+import { config, logger, region } from "firebase-functions/v1"
 
 const { https } = region("asia-northeast1")
 
