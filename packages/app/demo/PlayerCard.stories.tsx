@@ -1,4 +1,4 @@
-import { Story } from "@storybook/react"
+import { StoryFn } from "@storybook/react"
 import React from "react"
 
 import { PlayerCard } from "./PlayerCard"
@@ -25,7 +25,7 @@ export const Primary = {
   },
 }
 
-export const List: Story = () => (
+export const List: StoryFn = () => (
   <>
     {players.map((e) => (
       <PlayerCard key={e.ID} player={e} />
